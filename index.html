@@ -14,6 +14,7 @@
   font-style: normal;
   font-display: swap;
 }
+
 /* ===== CSS Variables ===== */
 :root {
   --black: #000000;
@@ -29,12 +30,14 @@
   --font-body: 'Noto Sans SC', sans-serif;
   --font-mono: 'Share Tech Mono', monospace;
 }
+
 /* ===== Reset ===== */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { font-family: var(--font-body); background: var(--black); color: var(--white); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 a { color: inherit; text-decoration: none; }
 button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
 /* ===== CRT Splash Screen ===== */
 #splash { position: fixed; inset: 0; z-index: 9999; background: #000; display: flex; align-items: center; justify-content: center; transition: opacity 0.8s ease, visibility 0.8s ease; }
 #splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
@@ -53,6 +56,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .splash-enter.visible { opacity: 1; }
 .splash-enter button { font-family: var(--font-mono); font-size: 18px; color: var(--crt-green); border: 1px solid var(--crt-green); padding: 12px 40px; text-shadow: 0 0 5px var(--crt-green); box-shadow: 0 0 10px rgba(51,255,102,0.2), inset 0 0 10px rgba(51,255,102,0.1); transition: all 0.3s ease; letter-spacing: 2px; }
 .splash-enter button:hover { background: rgba(51,255,102,0.1); box-shadow: 0 0 20px rgba(51,255,102,0.4), inset 0 0 15px rgba(51,255,102,0.2); }
+
 /* ===== Top Navigation ===== */
 .top-nav { position: fixed; top: 0; left: 0; right: 0; height: 80px; background: var(--off-white); display: flex; align-items: center; justify-content: space-between; padding: 0 50px; z-index: 100; border-bottom: 1px solid rgba(0,0,0,0.06); }
 .top-nav .logo { font-family: var(--font-display); font-size: 36px; color: var(--black); letter-spacing: -1px; cursor: pointer; line-height: 1; }
@@ -62,6 +66,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .menu-btn.active span:nth-child(1) { transform: rotate(45deg) translate(7px, 7px); }
 .menu-btn.active span:nth-child(2) { opacity: 0; }
 .menu-btn.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+
 /* ===== Fullscreen Menu Overlay ===== */
 #menu-overlay { position: fixed; inset: 0; background: var(--black); z-index: 99; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease; }
 #menu-overlay.active { opacity: 1; visibility: visible; }
@@ -72,10 +77,12 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 #menu-overlay.active a:nth-child(3) { transition-delay: 0.3s; }
 #menu-overlay a:hover { color: var(--gray); }
 .menu-footer { position: absolute; bottom: 40px; left: 50px; right: 50px; display: flex; justify-content: space-between; font-size: 13px; color: var(--gray); letter-spacing: 1px; }
+
 /* ===== Main Content ===== */
 #main { padding-top: 80px; min-height: 100vh; }
 .view { display: none; min-height: calc(100vh - 80px); }
 .view.active { display: block; }
+
 /* ===== View: Home ===== */
 #view-home { background: var(--black); position: relative; min-height: calc(100vh - 80px); display: flex; flex-direction: column; justify-content: center; padding: 0 50px; overflow: hidden; }
 .hero-title { font-family: var(--font-display); font-size: clamp(60px, 13.5vw, 210px); color: var(--white); line-height: 0.88; letter-spacing: -2px; text-transform: uppercase; white-space: nowrap; overflow: hidden; width: 100%; }
@@ -92,6 +99,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .hero-social a:hover { opacity: 1; }
 .hero-social svg { width: 26px; height: 26px; fill: var(--white); }
 .hero-copyright { font-size: 12px; color: var(--gray); text-align: right; line-height: 1.7; }
+
 /* ===== View: Work ===== */
 #view-work { background: var(--black); padding: 0 50px 60px; }
 .work-header { display: grid; grid-template-columns: 1fr 2fr 1fr; align-items: start; padding: 35px 0 25px; border-bottom: 1px solid var(--gray-dark); }
@@ -113,6 +121,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .work-card-info { padding-top: 14px; }
 .work-card-title { font-size: 16px; font-weight: 500; color: var(--white); margin-bottom: 3px; }
 .work-card-author { font-size: 13px; color: var(--gray); }
+
 /* ===== View: Work Category ===== */
 #view-work-category { background: var(--black); padding: 0 50px 60px; }
 .category-header { display: flex; align-items: center; justify-content: space-between; padding: 35px 0 25px; border-bottom: 1px solid var(--gray-dark); margin-bottom: 40px; }
@@ -120,6 +129,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .category-back:hover { color: var(--white); }
 .category-title { font-family: var(--font-display); font-size: clamp(36px, 5vw, 64px); color: var(--white); letter-spacing: -1px; }
 .category-count { font-size: 14px; color: var(--gray); }
+
 /* ===== View: About ===== */
 #view-about { background: var(--black); padding: 0 50px 60px; }
 .about-hero { padding-top: 40px; }
@@ -132,6 +142,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .about-bottom { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 50px; margin-top: 70px; padding-top: 35px; border-top: 1px solid var(--gray-dark); }
 .about-bottom p { font-size: 14px; color: var(--gray-light); line-height: 1.9; }
 .about-bottom p strong { color: var(--white); font-weight: 500; }
+
 /* ===== Work History ===== */
 .work-history { margin-top: 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 1px solid var(--gray-dark); }
 .history-col { padding: 50px 40px 50px 0; }
@@ -146,11 +157,13 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .history-info { flex: 1; }
 .history-name { font-size: 17px; font-weight: 500; color: var(--white); margin-bottom: 4px; text-decoration: underline; text-underline-offset: 3px; }
 .history-meta { font-size: 13px; color: var(--gray); }
+
 /* ===== Download Resume ===== */
 .resume-section { margin-top: 80px; display: flex; flex-direction: column; align-items: center; gap: 30px; padding-bottom: 20px; }
 .resume-btn { font-family: var(--font-display); font-size: 22px; color: var(--white); background: var(--black); border: 2px solid var(--white); border-radius: 60px; padding: 22px 70px; letter-spacing: 2px; transition: all 0.3s ease; cursor: pointer; }
 .resume-btn:hover { background: var(--white); color: var(--black); }
 .resume-copyright { font-family: var(--font-display); font-size: 20px; color: var(--white); text-align: center; letter-spacing: 0.5px; }
+
 /* ===== View: Clients ===== */
 #view-clients { background: var(--black); padding: 0 50px 0; min-height: calc(100vh - 80px); display: flex; flex-direction: column; }
 .clients-header { margin-bottom: 60px; padding-top: 40px; }
@@ -166,6 +179,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .client-slot:hover img { filter: brightness(0) invert(0.9); }
 .client-slot .upload-hint { position: absolute; bottom: 12px; left: 0; right: 0; text-align: center; font-size: 13px; color: var(--gray-dark); opacity: 0; transition: opacity 0.3s ease; }
 .client-slot:hover .upload-hint { opacity: 1; }
+
 /* ===== Clients Footer ===== */
 .clients-footer { background: var(--black); border-top: 1px solid var(--gray-dark); padding: 45px 50px; margin: 60px -50px 0; display: flex; justify-content: space-between; align-items: center; }
 .clients-footer-social { display: flex; gap: 22px; }
@@ -174,37 +188,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .clients-footer-social svg { width: 30px; height: 30px; fill: var(--white); }
 .clients-footer-center { font-family: var(--font-display); font-size: 18px; color: var(--white); text-align: center; line-height: 1.4; }
 .clients-footer-right { font-family: var(--font-display); font-size: 18px; color: var(--white); text-align: right; line-height: 1.4; }
-/* ===== Admin Panel ===== */
-#view-admin { background: #1a1a1a; padding: 30px 40px 60px; color: #e0e0e0; font-family: 'Noto Sans SC', sans-serif; }
-.admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #333; }
-.admin-header h2 { font-family: 'Impact', sans-serif; font-size: 32px; color: #fff; letter-spacing: 1px; }
-.admin-actions { display: flex; gap: 12px; }
-.admin-btn { padding: 10px 24px; font-size: 14px; border-radius: 4px; cursor: pointer; transition: all 0.2s; border: none; font-family: inherit; }
-.admin-btn-save { background: #fff; color: #000; }
-.admin-btn-save:hover { background: #ccc; }
-.admin-btn-reset { background: transparent; color: #888; border: 1px solid #444; }
-.admin-btn-reset:hover { color: #fff; border-color: #888; }
-.admin-btn-back { background: transparent; color: #888; border: 1px solid #444; }
-.admin-btn-back:hover { color: #fff; border-color: #888; }
-.admin-section { margin-bottom: 35px; }
-.admin-section-title { font-size: 13px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #2a2a2a; }
-.admin-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-.admin-field { display: flex; flex-direction: column; gap: 6px; }
-.admin-field.full { grid-column: 1 / -1; }
-.admin-field label { font-size: 12px; color: #999; letter-spacing: 0.5px; }
-.admin-field input, .admin-field textarea { background: #111; border: 1px solid #333; color: #e0e0e0; padding: 10px 12px; font-size: 14px; border-radius: 4px; font-family: inherit; transition: border-color 0.2s; }
-.admin-field input:focus, .admin-field textarea:focus { outline: none; border-color: #666; }
-.admin-field textarea { min-height: 70px; resize: vertical; line-height: 1.6; }
-.admin-array-item { background: #111; border: 1px solid #2a2a2a; border-radius: 4px; padding: 15px; margin-bottom: 10px; }
-.admin-array-item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-.admin-array-item-title { font-size: 13px; color: #aaa; font-weight: 600; }
-.admin-array-remove { background: none; border: none; color: #666; cursor: pointer; font-size: 18px; padding: 0 6px; }
-.admin-array-remove:hover { color: #ff6666; }
-.admin-array-add { background: transparent; border: 1px dashed #444; color: #888; padding: 10px; width: 100%; border-radius: 4px; cursor: pointer; font-size: 13px; transition: all 0.2s; }
-.admin-array-add:hover { border-color: #888; color: #fff; }
-.admin-save-toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: #fff; color: #000; padding: 14px 30px; border-radius: 4px; font-size: 14px; font-weight: 600; z-index: 10000; transition: transform 0.3s ease; }
-.admin-save-toast.show { transform: translateX(-50%) translateY(0); }
-.admin-entry-hint { position: fixed; bottom: 15px; right: 15px; font-size: 11px; color: #444; z-index: 50; font-family: 'Share Tech Mono', monospace; }
+
 /* ===== Responsive ===== */
 @media (max-width: 1024px) {
   .work-grid { grid-template-columns: repeat(2, 1fr); }
@@ -214,10 +198,6 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .work-history { grid-template-columns: 1fr; }
   .history-col:last-child { border-left: none; border-top: 1px solid var(--gray-dark); margin-left: 0; padding: 50px 0 50px 0; }
   .history-col { padding-right: 0; }
-}
-@media (max-width: 768px) {
-  .admin-grid { grid-template-columns: 1fr; }
-  #view-admin { padding: 20px; }
 }
 @media (max-width: 640px) {
   .top-nav { padding: 0 20px; height: 64px; }
@@ -231,6 +211,36 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .work-header { grid-template-columns: 1fr; gap: 20px; }
   .clients-footer { flex-direction: column; gap: 20px; text-align: center; padding: 30px 20px; margin: 40px -20px 0; }
 }
+
+/* ===== Edit Mode (WYSIWYG) ===== */
+body.edit-mode { cursor: default; }
+body.edit-mode a { cursor: text; }
+#editToolbar { display: none; position: fixed; top: 0; left: 0; right: 0; height: 52px; background: #1a1a1a; border-bottom: 2px solid #33ff66; z-index: 10000; align-items: center; justify-content: space-between; padding: 0 24px; font-family: 'Share Tech Mono', monospace; }
+#editToolbar.show { display: flex; }
+.edit-toolbar-left { display: flex; align-items: center; gap: 16px; }
+.edit-toolbar-title { color: #33ff66; font-size: 14px; letter-spacing: 2px; text-shadow: 0 0 5px rgba(51,255,102,0.5); }
+.edit-toolbar-status { color: #888; font-size: 12px; }
+.edit-toolbar-right { display: flex; gap: 10px; }
+.edit-btn { padding: 8px 20px; font-size: 13px; border-radius: 4px; cursor: pointer; font-family: 'Share Tech Mono', monospace; letter-spacing: 1px; transition: all 0.2s; border: 1px solid #444; background: transparent; color: #ccc; }
+.edit-btn:hover { border-color: #888; color: #fff; }
+.edit-btn-save { background: #33ff66; color: #000; border-color: #33ff66; font-weight: bold; }
+.edit-btn-save:hover { background: #22ee55; }
+.edit-btn-exit { border-color: #666; }
+.edit-btn-reset { border-color: #664444; color: #ff8888; }
+.edit-btn-reset:hover { border-color: #ff6666; color: #ff6666; }
+body.edit-mode [data-editable] { outline: 1px dashed rgba(51,255,102,0.4); outline-offset: 3px; transition: outline-color 0.2s, background 0.2s; cursor: text; position: relative; }
+body.edit-mode [data-editable]:hover { outline-color: rgba(51,255,102,0.8); background: rgba(51,255,102,0.05); }
+body.edit-mode [data-editable]:focus { outline: 2px solid #33ff66; outline-offset: 3px; background: rgba(51,255,102,0.08); }
+.editable-image-wrap { position: relative; cursor: pointer; display: inline-block; }
+body.edit-mode .editable-image-wrap::after { content: '点击替换图片'; position: absolute; inset: 0; background: rgba(0,0,0,0.6); color: #33ff66; display: flex; align-items: center; justify-content: center; font-family: 'Share Tech Mono', monospace; font-size: 13px; letter-spacing: 1px; opacity: 0; transition: opacity 0.2s; pointer-events: none; text-shadow: 0 0 5px rgba(51,255,102,0.5); }
+body.edit-mode .editable-image-wrap:hover::after { opacity: 1; }
+body.edit-mode .editable-image-wrap { outline: 1px dashed rgba(51,255,102,0.4); outline-offset: 2px; }
+body.edit-mode .editable-image-wrap:hover { outline-color: #33ff66; }
+body.edit-mode .client-slot { outline: 1px dashed rgba(51,255,102,0.3); outline-offset: -2px; }
+body.edit-mode .client-slot:hover { outline-color: #33ff66; }
+#editSaveToast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: #33ff66; color: #000; padding: 12px 28px; border-radius: 4px; font-size: 14px; font-weight: bold; z-index: 10001; transition: transform 0.3s ease; font-family: 'Share Tech Mono', monospace; letter-spacing: 1px; }
+#editSaveToast.show { transform: translateX(-50%) translateY(0); }
+#editEntryHint { position: fixed; bottom: 12px; right: 12px; font-size: 11px; color: #333; z-index: 50; font-family: 'Share Tech Mono', monospace; opacity: 0.5; }
 </style>
 </head>
 <body>
@@ -321,7 +331,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
       <div class="about-header" data-editable="aboutHeader">ZHISHAO</div>
       <div class="about-content">
         <div class="about-image">
-          <img src="https://aka.doubaocdn.com/s/TiKkkfW6XY" alt="Urban scene">
+          <div class="editable-image-wrap" data-image-wrap="aboutPhoto"><img src="https://aka.doubaocdn.com/s/TiKkkfW6XY" alt="Urban scene" data-image-key="aboutPhoto"></div>
           <div class="timestamp">2026/ 8/ 28 17:18</div>
         </div>
         <div class="about-text"><span data-editable="aboutText">你好，我是志韶Ciao。设计师。小红书博主。拥有一只黑色美卡犬和两只猫。喜欢运动和时尚。</span></div>
@@ -355,7 +365,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
     <div class="clients-grid" id="clientsGrid"></div>
     <div class="clients-footer">
       <div class="clients-footer-social">
-        <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+        <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.78 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
         <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
         <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
       </div>
@@ -363,19 +373,19 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
       <div class="clients-footer-right"><span data-editable="clientsFooterRight">&copy; 2026, ZHISHAOCUI,<br>All Rights Reserved.</span></div>
     </div>
   </section>
-  <section class="view" id="view-admin">
-    <div class="admin-header">
-      <h2>CONTENT MANAGER</h2>
-      <div class="admin-actions">
-        <button class="admin-btn admin-btn-back" onclick="navigate('home')">返回网站</button>
-        <button class="admin-btn admin-btn-reset" onclick="resetContent()">恢复默认</button>
-        <button class="admin-btn admin-btn-save" onclick="saveContent()">保存更改</button>
-      </div>
+  <div id="editToolbar">
+    <div class="edit-toolbar-left">
+      <span class="edit-toolbar-title">EDIT MODE</span>
+      <span class="edit-toolbar-status" id="editStatus">点击文字直接编辑，点击图片替换</span>
     </div>
-    <div id="adminForm"></div>
-  </section>
-  <div class="admin-save-toast" id="saveToast">已保存，刷新页面后生效</div>
-  <div class="admin-entry-hint">访问 #/admin 进入后台</div>
+    <div class="edit-toolbar-right">
+      <button class="edit-btn edit-btn-reset" onclick="resetAllContent()">恢复默认</button>
+      <button class="edit-btn edit-btn-exit" onclick="exitEditMode()">退出编辑</button>
+      <button class="edit-btn edit-btn-save" onclick="saveAllContent()">保存</button>
+    </div>
+  </div>
+  <div id="editSaveToast">已保存</div>
+  <div id="editEntryHint">访问 #/edit 进入编辑模式</div>
 </div>
 <script>
 const CONTENT_KEY = 'zhishao_site_content';
@@ -416,6 +426,15 @@ const DEFAULT_CONTENT = {
 function getContent() { try { const saved = JSON.parse(localStorage.getItem(CONTENT_KEY) || '{}'); return deepMerge(DEFAULT_CONTENT, saved); } catch(e) { return JSON.parse(JSON.stringify(DEFAULT_CONTENT)); } }
 function deepMerge(base, override) { const result = JSON.parse(JSON.stringify(base)); for (const key in override) { if (override[key] && typeof override[key] === 'object' && !Array.isArray(override[key])) { result[key] = deepMerge(result[key] || {}, override[key]); } else { result[key] = override[key]; } } return result; }
 let siteContent = getContent();
+
+const IMAGE_KEY = 'zhishao_site_images';
+let editMode = false;
+let unsavedChanges = false;
+
+function getImages() { try { return JSON.parse(localStorage.getItem(IMAGE_KEY) || '{}'); } catch(e) { return {}; } }
+function saveImages(imgs) { try { localStorage.setItem(IMAGE_KEY, JSON.stringify(imgs)); } catch(e) { alert('图片存储空间不足，请删除一些图片后重试。'); } }
+function applyImages() { const imgs = getImages(); document.querySelectorAll('img[data-image-key]').forEach(img => { const key = img.dataset.imageKey; if (imgs[key]) img.src = imgs[key]; }); }
+
 function applyContent() {
   siteContent = getContent();
   document.querySelectorAll('[data-editable]').forEach(el => { const key = el.dataset.editable; if (siteContent[key] !== undefined) el.innerHTML = siteContent[key]; });
@@ -425,69 +444,121 @@ function applyContent() {
   renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
   renderHistoryList(document.getElementById('workExperienceList'), siteContent.workExperience);
   renderHistoryList(document.getElementById('projectList'), siteContent.projectExperience);
+  applyImages();
 }
-function renderWorkGrid(container, items) { if (!container) return; container.innerHTML = items.map(item => '<div class="work-card"><div class="work-card-image"><img src="' + item.img + '" alt="' + item.title + '" loading="lazy"></div><div class="work-card-info"><div class="work-card-title">' + item.title + '</div><div class="work-card-author">' + item.author + '</div></div></div>').join(''); }
-function renderHistoryList(container, items) { if (!container) return; container.innerHTML = items.map(item => '<div class="history-item"><div class="history-thumb"><img src="' + item.img + '" alt="' + item.name + '" loading="lazy"></div><div class="history-info"><div class="history-name">' + item.name + '</div><div class="history-meta">' + item.meta + '</div></div></div>').join(''); }
-const CLIENT_COUNT = 24; const STORAGE_KEY = 'zhishao_client_logos';
+
+function renderWorkGrid(container, items) {
+  if (!container) return;
+  const imgs = getImages();
+  container.innerHTML = items.map((item, idx) => {
+    const key = 'work_' + idx;
+    const src = imgs[key] || item.img;
+    return '<div class="work-card"><div class="work-card-image"><img src="' + src + '" alt="' + item.title + '" loading="lazy" data-image-key="' + key + '"></div><div class="work-card-info"><div class="work-card-title">' + item.title + '</div><div class="work-card-author">' + item.author + '</div></div></div>';
+  }).join('');
+}
+
+function renderHistoryList(container, items) {
+  if (!container) return;
+  const prefix = container.id === 'workExperienceList' ? 'workexp_' : 'projexp_';
+  const imgs = getImages();
+  container.innerHTML = items.map((item, idx) => {
+    const key = prefix + idx;
+    const src = imgs[key] || item.img;
+    return '<div class="history-item"><div class="history-thumb"><img src="' + src + '" alt="' + item.name + '" loading="lazy" data-image-key="' + key + '"></div><div class="history-info"><div class="history-name">' + item.name + '</div><div class="history-meta">' + item.meta + '</div></div></div>';
+  }).join('');
+}
+
+const CLIENT_COUNT = 24;
+const STORAGE_KEY = 'zhishao_client_logos';
 function renderClients() { const grid = document.getElementById('clientsGrid'); if (!grid) return; const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); let html = ''; for (let i = 0; i < CLIENT_COUNT; i++) { const logo = saved[i]; html += '<div class="client-slot" data-index="' + i + '" onclick="uploadClientLogo(' + i + ')">' + (logo ? '<img src="' + logo + '" alt="Client ' + (i+1) + '">' : '<div class="placeholder">+</div><div class="upload-hint">' + siteContent.clientUploadHint + '</div>') + '</div>'; } grid.innerHTML = html; }
 function uploadClientLogo(index) { const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*'; input.onchange = (e) => { const file = e.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (ev) => { const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); saved[index] = ev.target.result; localStorage.setItem(STORAGE_KEY, JSON.stringify(saved)); renderClients(); }; reader.readAsDataURL(file); }; input.click(); }
+
 function downloadResume() { alert('简历 PDF 即将上线，敬请期待。\n后续上传 resume.pdf 后即可下载。'); }
+
 function navigate(path) { location.hash = '/' + path; }
 function showView(path) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  if (path === 'admin') { renderAdminForm(); document.getElementById('view-admin').classList.add('active'); }
-  else if (path.startsWith('work/')) { const cat = path.split('/')[1]; const catName = siteContent.categories[cat] || '作品'; const catItems = siteContent.workItems.filter(i => i.cat === cat); document.getElementById('categoryTitle').textContent = catName; document.getElementById('categoryCount').textContent = catItems.length + siteContent.categoryCountSuffix; renderWorkGrid(document.getElementById('categoryGrid'), catItems); document.getElementById('view-work-category').classList.add('active'); }
+  if (path === 'edit') { document.getElementById('view-home').classList.add('active'); enterEditMode(); return; }
+  if (path.startsWith('work/')) { const cat = path.split('/')[1]; const catName = siteContent.categories[cat] || '作品'; const catItems = siteContent.workItems.filter(i => i.cat === cat); document.getElementById('categoryTitle').textContent = catName; document.getElementById('categoryCount').textContent = catItems.length + siteContent.categoryCountSuffix; renderWorkGrid(document.getElementById('categoryGrid'), catItems); document.getElementById('view-work-category').classList.add('active'); }
   else { const target = document.getElementById('view-' + path); if (target) target.classList.add('active'); }
   window.scrollTo(0, 0);
 }
 window.addEventListener('hashchange', () => { const hash = location.hash.replace('#/', '') || 'home'; showView(hash); });
+
 function toggleMenu() { const overlay = document.getElementById('menu-overlay'); const btn = document.getElementById('menuBtn'); overlay.classList.toggle('active'); btn.classList.toggle('active'); }
+
 function startCRT() { const lines = document.querySelectorAll('.crt-line'); let delay = 0; lines.forEach((line) => { const text = line.dataset.text; if (text === '') { delay += 200; return; } setTimeout(() => { line.classList.add('visible'); typeLine(line, text); }, delay); delay += text.length * 22 + 350; }); setTimeout(() => { document.getElementById('splashEnter').classList.add('visible'); }, delay + 200); }
 function typeLine(element, html) { if (html.includes('<')) { element.innerHTML = html; return; } element.textContent = ''; let i = 0; const interval = setInterval(() => { if (i < html.length) { element.textContent += html[i]; i++; } else { clearInterval(interval); } }, 18); }
 function enterSite() { const splash = document.getElementById('splash'); splash.classList.add('hidden'); setTimeout(() => { splash.style.display = 'none'; }, 800); }
 document.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !document.getElementById('splash').classList.contains('hidden')) enterSite(); });
-const ADMIN_FIELDS = [
-  { section: '全局导航', fields: [ { key: 'logoText', label: '顶部 Logo 文字', type: 'text' }, { key: 'navWork', label: '导航 - 作品项目', type: 'text' }, { key: 'navAbout', label: '导航 - 关于我', type: 'text' }, { key: 'navClients', label: '导航 - 客户名单', type: 'text' }, { key: 'menuFooterLeft', label: '菜单底部左侧', type: 'text' }, { key: 'menuFooterRight', label: '菜单底部右侧', type: 'text' } ]},
-  { section: '首页', fields: [ { key: 'heroTitle', label: '首屏大标题', type: 'text', full: true }, { key: 'heroCopyright1', label: '首页版权第一行', type: 'text' }, { key: 'heroCopyright2', label: '首页版权第二行', type: 'text' } ]},
-  { section: '作品页', fields: [ { key: 'workLogo', label: '作品页 Logo', type: 'text' }, { key: 'workSearch', label: '搜索按钮文字', type: 'text' }, { key: 'workFeaturedTitle', label: '精选作品标题', type: 'text' }, { key: 'categoryBack', label: '返回分类按钮', type: 'text' }, { key: 'categoryCountSuffix', label: '作品数量后缀', type: 'text' } ]},
-  { section: '作品分类名称', fields: [ { key: 'categories.graphic', label: '分类1 - 平面设计', type: 'text' }, { key: 'categories.brand', label: '分类2 - 品牌', type: 'text' }, { key: 'categories.ecommerce', label: '分类3 - 电商', type: 'text' }, { key: 'categories.aigc', label: '分类4 - AIGC', type: 'text' }, { key: 'categories.packaging', label: '分类5 - 包装', type: 'text' } ]},
-  { section: '关于我', fields: [ { key: 'aboutHeader', label: '关于我大标题', type: 'text' }, { key: 'aboutText', label: '个人介绍（大字体）', type: 'textarea', full: true }, { key: 'aboutBottom1', label: '底部介绍第一段', type: 'textarea', full: true }, { key: 'aboutBottom2', label: '底部介绍第二段', type: 'textarea', full: true }, { key: 'aboutBottom3', label: '底部介绍第三段', type: 'textarea', full: true }, { key: 'historyWorkTitle', label: '工作经历标题', type: 'text' }, { key: 'historyProjectTitle', label: '项目经历标题', type: 'text' }, { key: 'resumeBtnText', label: '下载简历按钮', type: 'text' }, { key: 'resumeCopyright', label: '简历区版权', type: 'text' } ]},
-  { section: '客户名单', fields: [ { key: 'clientsYear', label: '年份范围', type: 'text' }, { key: 'clientsTitle', label: '页面标题', type: 'text' }, { key: 'clientUploadHint', label: '上传提示文字', type: 'text' }, { key: 'clientsFooterCenter', label: '页脚中间文字', type: 'text' }, { key: 'clientsFooterRight', label: '页脚右侧文字', type: 'text' } ]}
-];
-function getNestedValue(obj, path) { return path.split('.').reduce((o, k) => o ? o[k] : undefined, obj); }
-function setNestedValue(obj, path, value) { const keys = path.split('.'); let cur = obj; for (let i = 0; i < keys.length - 1; i++) { if (!cur[keys[i]]) cur[keys[i]] = {}; cur = cur[keys[i]]; } cur[keys[keys.length - 1]] = value; }
-function renderAdminForm() {
-  const form = document.getElementById('adminForm'); let html = '';
-  ADMIN_FIELDS.forEach(section => { html += '<div class="admin-section"><div class="admin-section-title">' + section.section + '</div><div class="admin-grid">'; section.fields.forEach(field => { const val = getNestedValue(siteContent, field.key) || ''; const fullClass = field.full ? ' full' : ''; html += '<div class="admin-field' + fullClass + '"><label>' + field.label + '</label>'; if (field.type === 'textarea') { html += '<textarea data-admin-key="' + field.key + '">' + val + '</textarea>'; } else { html += '<input type="text" data-admin-key="' + field.key + '" value="' + val.replace(/"/g, '&quot;') + '">'; } html += '</div>'; }); html += '</div></div>'; });
-  html += '<div class="admin-section"><div class="admin-section-title">作品列表</div><div id="adminWorkItems"></div><button class="admin-array-add" onclick="addWorkItem()">+ 添加作品</button></div>';
-  html += '<div class="admin-section"><div class="admin-section-title">工作经历</div><div id="adminWorkExp"></div><button class="admin-array-add" onclick="addWorkExp()">+ 添加经历</button></div>';
-  html += '<div class="admin-section"><div class="admin-section-title">项目经历</div><div id="adminProjectExp"></div><button class="admin-array-add" onclick="addProjectExp()">+ 添加项目</button></div>';
-  form.innerHTML = html; renderAdminArrays();
+
+function enterEditMode() {
+  editMode = true; unsavedChanges = false;
+  document.body.classList.add('edit-mode');
+  document.getElementById('editToolbar').classList.add('show');
+  document.getElementById('editEntryHint').style.display = 'none';
+  document.querySelectorAll('[data-editable]').forEach(el => { el.contentEditable = 'true'; el.spellcheck = false; el.addEventListener('blur', onTextBlur); el.addEventListener('input', () => { unsavedChanges = true; }); });
+  setupImageEditing();
+  updateEditStatus();
 }
-function renderAdminArrays() {
-  const wc = document.getElementById('adminWorkItems'); if (wc) wc.innerHTML = siteContent.workItems.map((item, idx) => '<div class="admin-array-item"><div class="admin-array-item-header"><span class="admin-array-item-title">作品 ' + (idx+1) + '</span><button class="admin-array-remove" onclick="removeWorkItem(' + idx + ')">&times;</button></div><div class="admin-grid"><div class="admin-field"><label>标题</label><input type="text" data-array="workItems" data-index="' + idx + '" data-field="title" value="' + item.title.replace(/"/g, '&quot;') + '"></div><div class="admin-field"><label>作者</label><input type="text" data-array="workItems" data-index="' + idx + '" data-field="author" value="' + item.author.replace(/"/g, '&quot;') + '"></div><div class="admin-field"><label>分类</label><input type="text" data-array="workItems" data-index="' + idx + '" data-field="cat" value="' + item.cat + '"></div><div class="admin-field full"><label>图片 URL</label><input type="text" data-array="workItems" data-index="' + idx + '" data-field="img" value="' + item.img + '"></div></div></div>').join('');
-  const we = document.getElementById('adminWorkExp'); if (we) we.innerHTML = siteContent.workExperience.map((item, idx) => '<div class="admin-array-item"><div class="admin-array-item-header"><span class="admin-array-item-title">经历 ' + (idx+1) + '</span><button class="admin-array-remove" onclick="removeWorkExp(' + idx + ')">&times;</button></div><div class="admin-grid"><div class="admin-field"><label>名称</label><input type="text" data-array="workExperience" data-index="' + idx + '" data-field="name" value="' + item.name.replace(/"/g, '&quot;') + '"></div><div class="admin-field"><label>时间/职位</label><input type="text" data-array="workExperience" data-index="' + idx + '" data-field="meta" value="' + item.meta.replace(/"/g, '&quot;') + '"></div><div class="admin-field full"><label>图片 URL</label><input type="text" data-array="workExperience" data-index="' + idx + '" data-field="img" value="' + item.img + '"></div></div></div>').join('');
-  const pe = document.getElementById('adminProjectExp'); if (pe) pe.innerHTML = siteContent.projectExperience.map((item, idx) => '<div class="admin-array-item"><div class="admin-array-item-header"><span class="admin-array-item-title">项目 ' + (idx+1) + '</span><button class="admin-array-remove" onclick="removeProjectExp(' + idx + ')">&times;</button></div><div class="admin-grid"><div class="admin-field"><label>名称</label><input type="text" data-array="projectExperience" data-index="' + idx + '" data-field="name" value="' + item.name.replace(/"/g, '&quot;') + '"></div><div class="admin-field"><label>时间/类型</label><input type="text" data-array="projectExperience" data-index="' + idx + '" data-field="meta" value="' + item.meta.replace(/"/g, '&quot;') + '"></div><div class="admin-field full"><label>图片 URL</label><input type="text" data-array="projectExperience" data-index="' + idx + '" data-field="img" value="' + item.img + '"></div></div></div>').join('');
+function exitEditMode() {
+  if (unsavedChanges) { if (!confirm('有未保存的更改，确定退出吗？')) return; }
+  editMode = false;
+  document.body.classList.remove('edit-mode');
+  document.getElementById('editToolbar').classList.remove('show');
+  document.getElementById('editEntryHint').style.display = 'block';
+  document.querySelectorAll('[data-editable]').forEach(el => { el.contentEditable = 'false'; el.removeEventListener('blur', onTextBlur); });
+  location.hash = '#/home';
 }
-function collectAdminData() {
-  const data = {};
-  document.querySelectorAll('[data-admin-key]').forEach(input => setNestedValue(data, input.dataset.adminKey, input.value));
-  const arrays = { workItems: [], workExperience: [], projectExperience: [] };
-  document.querySelectorAll('[data-array]').forEach(input => { const arr = input.dataset.array; const idx = parseInt(input.dataset.index); const field = input.dataset.field; if (!arrays[arr][idx]) arrays[arr][idx] = {}; arrays[arr][idx][field] = input.value; });
-  data.workItems = arrays.workItems.filter(i => i && i.title);
-  data.workExperience = arrays.workExperience.filter(i => i && i.name);
-  data.projectExperience = arrays.projectExperience.filter(i => i && i.name);
-  return data;
+function onTextBlur(e) { unsavedChanges = true; updateEditStatus(); }
+function updateEditStatus() { const status = document.getElementById('editStatus'); if (status) { status.textContent = unsavedChanges ? '有未保存的更改' : '已保存 - 点击文字编辑，点击图片替换'; status.style.color = unsavedChanges ? '#ffaa33' : '#888'; } }
+
+function setupImageEditing() {
+  document.querySelectorAll('img[data-image-key]').forEach(img => {
+    const wrap = img.closest('.editable-image-wrap') || img.parentElement;
+    if (wrap) { wrap.classList.add('editable-image-wrap'); wrap.onclick = (e) => { e.preventDefault(); e.stopPropagation(); uploadImageByKey(img.dataset.imageKey); }; }
+  });
+  document.querySelectorAll('.work-card-image img').forEach((img, idx) => {
+    const key = 'work_' + idx; img.dataset.imageKey = key;
+    const wrap = img.parentElement; wrap.classList.add('editable-image-wrap');
+    wrap.onclick = (e) => { e.preventDefault(); e.stopPropagation(); uploadImageByKey(key); };
+  });
+  document.querySelectorAll('.history-col').forEach((col, colIdx) => {
+    const prefix = colIdx === 0 ? 'workexp_' : 'projexp_';
+    col.querySelectorAll('.history-thumb img').forEach((img, idx) => {
+      const key = prefix + idx; img.dataset.imageKey = key;
+      const wrap = img.parentElement; wrap.classList.add('editable-image-wrap');
+      wrap.onclick = (e) => { e.preventDefault(); e.stopPropagation(); uploadImageByKey(key); };
+    });
+  });
 }
-function saveContent() { const data = collectAdminData(); localStorage.setItem(CONTENT_KEY, JSON.stringify(data)); siteContent = getContent(); applyContent(); renderClients(); const toast = document.getElementById('saveToast'); toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 2500); }
-function resetContent() { if (confirm('确定要恢复所有文字为默认值吗？此操作不可撤销。')) { localStorage.removeItem(CONTENT_KEY); siteContent = getContent(); applyContent(); renderAdminForm(); renderClients(); alert('已恢复默认值。'); } }
-function addWorkItem() { const data = collectAdminData(); data.workItems.push({ title: '新作品', author: 'ZHISHAOCUI', cat: 'graphic', img: 'https://aka.doubaocdn.com/s/AZDhFfhkIC' }); localStorage.setItem(CONTENT_KEY, JSON.stringify(data)); siteContent = getContent(); renderAdminArrays(); }
-function removeWorkItem(idx) { const data = collectAdminData(); data.workItems.splice(idx, 1); localStorage.setItem(CONTENT_KEY, JSON.stringify(data)); siteContent = getContent(); renderAdminArrays(); }
-function addWorkExp() { const data = collectAdminData(); data.workExperience.push({ name: '新经历', meta: '时间 / 职位', img: 'https://aka.doubaocdn.com/s/AZDhFfhkIC' }); localStorage.setItem(CONTENT_KEY, JSON.stringify(data)); siteContent = getContent(); renderAdminArrays(); }
-function removeWorkExp(idx) { const data = collectAdminData(); data.workExperience.splice(idx, 1); localStorage.setItem(CONTENT_KEY, JSON.stringify(data)); siteContent = getContent(); renderAdminArrays(); }
-function addProjectExp() { const data = collectAdminData(); data.projectExperience.push({ name: '新项目', meta: '时间 / 类型', img: 'https://aka.doubaocdn.com/s/AZDhFfhkIC' }); localStorage.setItem(CONTENT_KEY, JSON.stringify(data)); siteContent = getContent(); renderAdminArrays(); }
-function removeProjectExp(idx) { const data = collectAdminData(); data.projectExperience.splice(idx, 1); localStorage.setItem(CONTENT_KEY, JSON.stringify(data)); siteContent = getContent(); renderAdminArrays(); }
-document.addEventListener('DOMContentLoaded', () => { applyContent(); renderClients(); const hash = location.hash.replace('#/', '') || 'home'; showView(hash); startCRT(); });
+
+function uploadImageByKey(key) {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/jpeg,image/png,image/svg+xml,application/pdf,.jpg,.jpeg,.png,.svg,.pdf';
+  input.onchange = (e) => {
+    const file = e.target.files[0]; if (!file) return;
+    if (file.type === 'application/pdf') {
+      const reader = new FileReader();
+      reader.onload = (ev) => { const imgs = getImages(); imgs[key] = ev.target.result; saveImages(imgs); const imgEl = document.querySelector('img[data-image-key="' + key + '"]'); if (imgEl) { const parent = imgEl.parentElement; parent.innerHTML = '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#222;color:#888;font-size:12px;font-family:monospace;">PDF: ' + file.name + '</div>'; } unsavedChanges = true; updateEditStatus(); showSaveToast('PDF 已上传'); };
+      reader.readAsDataURL(file);
+    } else {
+      const reader = new FileReader();
+      reader.onload = (ev) => { const img = new Image(); img.onload = () => { const canvas = document.createElement('canvas'); const maxDim = 1600; let w = img.width, h = img.height; if (w > maxDim || h > maxDim) { if (w > h) { h = h * maxDim / w; w = maxDim; } else { w = w * maxDim / h; h = maxDim; } } canvas.width = w; canvas.height = h; const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, w, h); const dataUrl = canvas.toDataURL('image/jpeg', 0.85); const imgs = getImages(); imgs[key] = dataUrl; saveImages(imgs); const imgEl = document.querySelector('img[data-image-key="' + key + '"]'); if (imgEl) imgEl.src = dataUrl; unsavedChanges = true; updateEditStatus(); showSaveToast('图片已替换'); }; img.src = ev.target.result; };
+      reader.readAsDataURL(file);
+    }
+  };
+  input.click();
+}
+
+function showSaveToast(msg) { const toast = document.getElementById('editSaveToast'); toast.textContent = msg || '已保存'; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 2000); }
+function collectTextContent() { const data = {}; document.querySelectorAll('[data-editable]').forEach(el => { const key = el.dataset.editable; data[key] = el.innerHTML; }); return data; }
+function saveAllContent() { const textData = collectTextContent(); const existing = getContent(); for (const key in textData) { existing[key] = textData[key]; } localStorage.setItem(CONTENT_KEY, JSON.stringify(existing)); unsavedChanges = false; updateEditStatus(); showSaveToast('全部已保存'); }
+function resetAllContent() { if (!confirm('确定要恢复所有文字和图片为默认值吗？此操作不可撤销。')) return; localStorage.removeItem(CONTENT_KEY); localStorage.removeItem(IMAGE_KEY); localStorage.removeItem(STORAGE_KEY); siteContent = getContent(); applyContent(); renderClients(); applyImages(); document.querySelectorAll('[data-editable]').forEach(el => { el.contentEditable = 'true'; }); setupImageEditing(); unsavedChanges = false; updateEditStatus(); showSaveToast('已恢复默认'); }
+document.addEventListener('keydown', (e) => { if ((e.ctrlKey || e.metaKey) && e.key === 's' && editMode) { e.preventDefault(); saveAllContent(); } });
+
+document.addEventListener('DOMContentLoaded', () => { applyContent(); renderClients(); applyImages(); const hash = location.hash.replace('#/', '') || 'home'; showView(hash); startCRT(); });
 </script>
 </body>
 </html>
