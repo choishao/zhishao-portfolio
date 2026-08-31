@@ -679,59 +679,10 @@ button {
   letter-spacing: 2px;
   text-transform: uppercase;
 }
-.detail-hero-title {
-  font-family: var(--font-display);
-  font-size: clamp(60px, 10vw, 160px);
-  color: var(--white);
-  line-height: 0.9;
-  letter-spacing: -3px;
-  margin-bottom: 40px;
-  text-transform: uppercase;
-}
-.detail-meta-row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
-  padding: 30px 0;
-  border-top: 1px solid var(--gray-dark);
-  border-bottom: 1px solid var(--gray-dark);
-  margin-bottom: 60px;
-}
-.detail-meta-item .meta-label {
-  font-size: 12px;
-  color: var(--gray);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-bottom: 8px;
-}
-.detail-meta-item .meta-value {
-  font-size: 18px;
-  color: var(--white);
-  font-weight: 500;
-}
-.detail-hero-image {
-  width: 100%;
-  aspect-ratio: 16/9;
-  overflow: hidden;
-  background: var(--gray-dark);
-  margin-bottom: 60px;
-}
-.detail-hero-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.detail-description {
-  max-width: 800px;
-  margin: 0 auto 80px;
-  font-size: 18px;
-  line-height: 2;
-  color: var(--gray-light);
-}
 .detail-gallery {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 50px;
 }
 .detail-gallery-item {
   width: 100%;
@@ -785,32 +736,7 @@ body.edit-mode .add-gallery-btn {
   border-color: var(--white);
   color: var(--white);
 }
-.detail-next-project {
-  margin-top: 80px;
-  padding-top: 40px;
-  border-top: 1px solid var(--gray-dark);
-  text-align: center;
-}
-.detail-next-label {
-  font-size: 13px;
-  color: var(--gray);
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  margin-bottom: 15px;
-}
-.detail-next-title {
-  font-family: var(--font-display);
-  font-size: clamp(36px, 5vw, 72px);
-  color: var(--white);
-  cursor: pointer;
-  transition: color 0.3s ease;
-  letter-spacing: -1px;
-}
-.detail-next-title:hover {
-  color: var(--gray);
-}
 @media (max-width: 768px) {
-  .detail-meta-row { grid-template-columns: repeat(2, 1fr); gap: 20px; }
   #view-work-detail { padding: 0 20px 60px; }
 }
 
@@ -1416,7 +1342,7 @@ body.edit-mode .editable-image-wrap::after {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Share Tech Mono', monospace;
+  font-family: 'Noto Sans SC', sans-serif;
   font-size: 13px;
   letter-spacing: 1px;
   opacity: 0;
@@ -1475,6 +1401,221 @@ body.edit-mode .client-slot:hover {
   z-index: 50;
   font-family: 'Share Tech Mono', monospace;
   opacity: 0.5;
+}
+
+
+/* ===== Media Library Modal ===== */
+#mediaLibraryModal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 20000;
+  flex-direction: column;
+}
+#mediaLibraryModal.show { display: flex; }
+.media-library-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 30px;
+  border-bottom: 1px solid #333;
+}
+.media-library-title {
+  font-family: 'Impact', 'Noto Sans SC', sans-serif;
+  font-size: 28px;
+  color: #fff;
+  letter-spacing: 1px;
+}
+.media-library-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.media-library-btn {
+  padding: 10px 22px;
+  border: 1px solid #444;
+  background: transparent;
+  color: #ccc;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-family: 'Noto Sans SC', sans-serif;
+  transition: all 0.2s;
+}
+.media-library-btn:hover { border-color: #33ff66; color: #33ff66; }
+.media-library-btn-primary {
+  background: #33ff66;
+  color: #000;
+  border-color: #33ff66;
+  font-weight: bold;
+}
+.media-library-btn-primary:hover { background: #22ee55; color: #000; }
+.media-library-close {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #444;
+  background: transparent;
+  color: #888;
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.media-library-close:hover { border-color: #ff6666; color: #ff6666; }
+.media-library-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 30px;
+}
+.media-library-dropzone {
+  border: 2px dashed #444;
+  border-radius: 8px;
+  padding: 50px;
+  text-align: center;
+  color: #666;
+  font-size: 16px;
+  margin-bottom: 30px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.media-library-dropzone:hover, .media-library-dropzone.drag-over {
+  border-color: #33ff66;
+  color: #33ff66;
+  background: rgba(51,255,102,0.03);
+}
+.media-library-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+}
+.media-library-item {
+  position: relative;
+  aspect-ratio: 1;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.media-library-item:hover { border-color: #33ff66; }
+.media-library-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.media-library-item .file-icon {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #666;
+  font-family: monospace;
+}
+.media-library-item .delete-lib-img {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  background: rgba(255,0,0,0.8);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+.media-library-item:hover .delete-lib-img { display: flex; }
+.media-library-empty {
+  text-align: center;
+  color: #555;
+  padding: 60px;
+  font-size: 15px;
+}
+
+/* ===== Drag overlay ===== */
+#dragOverlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(51,255,102,0.1);
+  border: 4px dashed #33ff66;
+  z-index: 30000;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+#dragOverlay.show { display: flex; }
+#dragOverlay span {
+  font-family: 'Impact', 'Noto Sans SC', sans-serif;
+  font-size: 48px;
+  color: #33ff66;
+  text-shadow: 0 0 20px rgba(51,255,102,0.5);
+  letter-spacing: 4px;
+}
+
+/* ===== Category edit mode ===== */
+body.edit-mode .work-categories a {
+  position: relative;
+  padding-right: 30px;
+}
+body.edit-mode .work-categories a .cat-delete-btn {
+  display: inline-flex;
+}
+.cat-delete-btn {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  background: rgba(255,0,0,0.6);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 12px;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.cat-delete-btn:hover { background: #ff3333; }
+.add-category-btn {
+  display: none;
+  text-align: left;
+  font-size: 15px;
+  color: #33ff66;
+  padding: 8px 0;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+body.edit-mode .add-category-btn { display: block; }
+.add-category-btn:hover { text-decoration: underline; }
+
+/* ===== Search icon ===== */
+.search-with-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.search-with-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
 }
 
 </style>
@@ -1566,14 +1707,15 @@ body.edit-mode .client-slot:hover {
     <div class="work-header">
       <div class="work-logo" onclick="navigate('home')" data-editable="workLogo">visuelle.</div>
       <div class="work-categories" id="workCategories">
-        <a href="#/work/graphic" onclick="navigate('work/graphic')">平面设计</a>
-        <a href="#/work/brand" onclick="navigate('work/brand')">品牌</a>
-        <a href="#/work/ecommerce" onclick="navigate('work/ecommerce')">电商</a>
-        <a href="#/work/aigc" onclick="navigate('work/aigc')">AIGC</a>
-        <a href="#/work/packaging" onclick="navigate('work/packaging')">包装</a>
+        <a href="#/work/graphic" onclick="navigate('work/graphic')" data-cat-key="graphic">平面设计</a>
+        <a href="#/work/brand" onclick="navigate('work/brand')" data-cat-key="brand">品牌</a>
+        <a href="#/work/ecommerce" onclick="navigate('work/ecommerce')" data-cat-key="ecommerce">电商</a>
+        <a href="#/work/aigc" onclick="navigate('work/aigc')" data-cat-key="aigc">AIGC</a>
+        <a href="#/work/packaging" onclick="navigate('work/packaging')" data-cat-key="packaging">包装</a>
+        <button class="add-category-btn" onclick="addCategory()">+ 添加分类</button>
       </div>
       <div class="work-tools">
-        <span data-editable="workSearch">搜索</span>
+        <span class="search-with-icon" data-editable="workSearch"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>搜索</span>
       </div>
     </div>
     <div class="work-featured">
@@ -1604,35 +1746,8 @@ body.edit-mode .client-slot:hover {
       </div>
       <div class="detail-cat-label" id="detailCatLabel">GRAPHIC DESIGN</div>
     </div>
-    <div class="detail-hero-title" id="detailTitle" data-editable="detailTitle">PROJECT TITLE</div>
-    <div class="detail-meta-row">
-      <div class="detail-meta-item">
-        <div class="meta-label">Client / 客户</div>
-        <div class="meta-value" id="detailClient" data-editable="detailClient">Client Name</div>
-      </div>
-      <div class="detail-meta-item">
-        <div class="meta-label">Year / 年份</div>
-        <div class="meta-value" id="detailYear" data-editable="detailYear">2025</div>
-      </div>
-      <div class="detail-meta-item">
-        <div class="meta-label">Category / 类别</div>
-        <div class="meta-value" id="detailCategory" data-editable="detailCategory">Graphic Design</div>
-      </div>
-      <div class="detail-meta-item">
-        <div class="meta-label">Role / 角色</div>
-        <div class="meta-value" id="detailRole" data-editable="detailRole">Designer</div>
-      </div>
-    </div>
-    <div class="detail-hero-image editable-image-wrap" id="detailHeroImageWrap">
-      <img src="https://aka.doubaocdn.com/s/AZDhFfhkIC" alt="Project hero" id="detailHeroImg" data-image-key="detailHero">
-    </div>
-    <div class="detail-description" id="detailDescription" data-editable="detailDescription">Project description goes here. Describe the concept, process, and outcome of this project in detail.</div>
     <div class="detail-gallery" id="detailGallery"></div>
     <button class="add-gallery-btn" onclick="addDetailImage()">+ 添加图片</button>
-    <div class="detail-next-project">
-      <div class="detail-next-label">Next Project / 下一个项目</div>
-      <div class="detail-next-title" id="detailNextTitle" onclick="goNextProject()">NEXT PROJECT</div>
-    </div>
   </section>
 
 
@@ -1670,7 +1785,7 @@ body.edit-mode .client-slot:hover {
 
     <!-- ===== Download Resume ===== -->
     <div class="resume-section">
-      <button class="resume-btn" id="resumeBtn" onclick="handleResumeClick()" data-editable="resumeBtnText">下载PDF简历</button>
+      <button class="resume-btn" id="resumeBtn" onclick="handleResumeClick()">下载PDF简历</button>
       <div class="resume-copyright" data-editable="resumeCopyright">&copy; 2026. ZHISHAOCUI, Cui Zhishao, All rights reserved.</div>
     </div>
   </section>
@@ -1717,10 +1832,33 @@ body.edit-mode .client-slot:hover {
   <div class="edit-toolbar-right">
     <button class="edit-btn edit-btn-reset" onclick="resetAllContent()">恢复默认</button>
     <button class="edit-btn edit-btn-exit" onclick="exitEditMode()">退出编辑</button>
+    <button class="edit-btn" onclick="openMediaLibrary()">管理库</button>
     <button class="edit-btn edit-btn-save" onclick="saveAllContent()">保存</button>
   </div>
 </div>
 <div id="editSaveToast">已保存</div>
+<!-- ===== Media Library Modal ===== -->
+<div id="mediaLibraryModal">
+  <div class="media-library-header">
+    <div class="media-library-title">MEDIA LIBRARY / 管理库</div>
+    <div class="media-library-actions">
+      <button class="media-library-btn media-library-btn-primary" onclick="document.getElementById('mediaLibraryInput').click()">批量上传</button>
+      <input type="file" id="mediaLibraryInput" multiple accept="image/jpeg,image/png,image/gif,image/svg+xml,image/webp,application/pdf,.jpg,.jpeg,.png,.gif,.svg,.webp,.pdf" style="display:none" onchange="handleMediaLibraryUpload(event)">
+      <button class="media-library-close" onclick="closeMediaLibrary()">×</button>
+    </div>
+  </div>
+  <div class="media-library-body">
+    <div class="media-library-dropzone" id="mediaDropzone" onclick="document.getElementById('mediaLibraryInput').click()">
+      拖拽图片到此处，或点击选择文件批量上传<br>
+      <span style="font-size:13px;color:#555">支持 JPG / PNG / GIF / SVG / PDF / WEBP</span>
+    </div>
+    <div class="media-library-grid" id="mediaLibraryGrid"></div>
+  </div>
+</div>
+
+<!-- ===== Global Drag Overlay ===== -->
+<div id="dragOverlay"><span>释放以上传图片</span></div>
+
 <div id="editEntryHint">访问 #/edit 进入编辑模式</div>
 
   
@@ -1830,15 +1968,13 @@ function applyContent() {
       el.innerHTML = siteContent[key];
     }
   });
+  // 简历按钮文字(非编辑模式)
+  const resumeBtn = document.getElementById('resumeBtn');
+  if (resumeBtn && !editMode) resumeBtn.textContent = siteContent.resumeBtnText || '下载PDF简历';
   // 浏览器标题
   document.title = siteContent.logoText + ' \u2014 Designer Portfolio';
   // 作品分类导航
-  const catContainer = document.getElementById('workCategories');
-  if (catContainer) {
-    catContainer.innerHTML = Object.entries(siteContent.categories).map(([key, name]) =>
-      '<a href="#/work/' + key + '" onclick="navigate(\'work/' + key + '\')">' + name + '</a>'
-    ).join('');
-  }
+  renderCategories();
   // 渲染作品和经历
   renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
   renderHistoryList(document.getElementById('workExperienceList'), siteContent.workExperience);
@@ -1847,6 +1983,64 @@ function applyContent() {
   applyImages();
   // 应用社交链接
   applySocialLinks();
+}
+
+// ===== 渲染分类(支持编辑模式) =====
+function renderCategories() {
+  const catContainer = document.getElementById('workCategories');
+  if (!catContainer) return;
+  let html = Object.entries(siteContent.categories).map(([key, name]) => {
+    if (editMode) {
+      return '<a href="#/work/' + key + '" data-cat-key="' + key + '" data-editable="cat_' + key + '" onclick="return handleCategoryClick(event, \'' + key + '\')">' + name + '</a>' +
+        '<button class="cat-delete-btn" onclick="event.stopPropagation();deleteCategory(\'' + key + '\')">×</button>';
+    }
+    return '<a href="#/work/' + key + '" onclick="navigate(\'work/' + key + '\')">' + name + '</a>';
+  }).join('');
+  if (editMode) html += '<button class="add-category-btn" onclick="addCategory()">+ 添加分类</button>';
+  catContainer.innerHTML = html;
+  if (editMode) {
+    catContainer.querySelectorAll('[data-editable]').forEach(el => {
+      el.contentEditable = 'true';
+      el.spellcheck = false;
+      el.onblur = onTextBlur;
+      el.oninput = () => { unsavedChanges = true; };
+    });
+  }
+}
+
+function handleCategoryClick(e, key) {
+  if (editMode) {
+    e.preventDefault();
+    return false;
+  }
+  navigate('work/' + key);
+  return false;
+}
+
+function addCategory() {
+  const name = prompt('输入新分类名称：', '新分类');
+  if (!name) return;
+  const key = 'cat_' + Date.now();
+  siteContent.categories[key] = name;
+  const existing = getContent();
+  existing.categories = siteContent.categories;
+  localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
+  renderCategories();
+  unsavedChanges = true;
+  updateEditStatus();
+  showSaveToast('分类已添加');
+}
+
+function deleteCategory(key) {
+  if (!confirm('确定删除分类「' + siteContent.categories[key] + '」吗？该分类下的作品不会被删除。')) return;
+  delete siteContent.categories[key];
+  const existing = getContent();
+  existing.categories = siteContent.categories;
+  localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
+  renderCategories();
+  unsavedChanges = true;
+  updateEditStatus();
+  showSaveToast('分类已删除');
 }
 
 // ===== Render Work Grid =====
@@ -1904,49 +2098,32 @@ function openWorkDetail(idx) {
 function renderWorkDetail(idx) {
   const item = siteContent.workItems[idx];
   if (!item) return;
-  document.getElementById('detailTitle').textContent = item.title;
-  document.getElementById('detailClient').textContent = item.client || '—';
-  document.getElementById('detailYear').textContent = item.year || '—';
-  const catName = siteContent.categories[item.cat] || item.cat || '—';
-  document.getElementById('detailCategory').textContent = catName;
-  document.getElementById('detailCatLabel').textContent = (catName + '').toUpperCase();
-  document.getElementById('detailRole').textContent = item.role || 'Designer';
-  document.getElementById('detailDescription').textContent = item.fullDescription || item.desc || '';
-  // Hero image
   const imgs = getImages();
-  const heroKey = 'detail_hero_' + idx;
-  const heroSrc = imgs[heroKey] || item.img;
-  const heroImg = document.getElementById('detailHeroImg');
-  heroImg.src = heroSrc;
-  heroImg.dataset.imageKey = heroKey;
-  const heroWrap = document.getElementById('detailHeroImageWrap');
-  heroWrap.dataset.imageWrap = heroKey;
-  // Gallery
-  const gallery = item.gallery || [];
+  // 顶部分类标签
+  const catName = siteContent.categories[item.cat] || item.cat || '—';
+  const catLabel = document.getElementById('detailCatLabel');
+  if (catLabel) catLabel.textContent = (catName + '').toUpperCase();
+  // 所有图片合并到gallery流中(hero + gallery)
+  const allImages = [item.img].concat(item.gallery || []);
   const galleryContainer = document.getElementById('detailGallery');
-  galleryContainer.innerHTML = gallery.map((src, gIdx) => {
-    const gKey = 'detail_gallery_' + idx + '_' + gIdx;
+  galleryContainer.innerHTML = allImages.map((src, gIdx) => {
+    const gKey = 'detail_img_' + idx + '_' + gIdx;
     const gSrc = imgs[gKey] || src;
     return '<div class="detail-gallery-item">' +
-      '<button class="remove-img-btn" onclick="removeDetailImage(' + gIdx + ')">×</button>' +
+      (editMode ? '<button class="remove-img-btn" onclick="removeDetailImage(' + gIdx + ')">×</button>' : '') +
       '<div class="editable-image-wrap" data-image-wrap="' + gKey + '" style="display:block;">' +
-        '<img src="' + gSrc + '" alt="Gallery ' + (gIdx+1) + '" data-image-key="' + gKey + '">' +
+        '<img src="' + gSrc + '" alt="Image ' + (gIdx+1) + '" data-image-key="' + gKey + '">' +
       '</div>' +
     '</div>';
   }).join('');
-  // Next project
-  const nextIdx = (idx + 1) % siteContent.workItems.length;
-  document.getElementById('detailNextTitle').textContent = siteContent.workItems[nextIdx].title;
-  // Setup editables for dynamic content
   if (editMode) {
-    setupEditables();
     setupImageEditing();
   }
 }
 function addDetailImage() {
   const input = document.createElement('input');
   input.type = 'file';
-  input.accept = 'image/jpeg,image/png,image/svg+xml,.jpg,.jpeg,.png,.svg';
+  input.accept = 'image/jpeg,image/png,image/gif,image/svg+xml,image/webp,.jpg,.jpeg,.png,.gif,.svg,.webp';
   input.onchange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -1981,7 +2158,18 @@ function addDetailImage() {
 }
 function removeDetailImage(gIdx) {
   if (!confirm('确定删除这张图片吗？')) return;
-  siteContent.workItems[currentDetailIndex].gallery.splice(gIdx, 1);
+  const item = siteContent.workItems[currentDetailIndex];
+  if (gIdx === 0) {
+    // 删除的是hero image，用gallery第一张替代
+    if (item.gallery && item.gallery.length > 0) {
+      item.img = item.gallery.shift();
+    } else {
+      item.img = 'https://aka.doubaocdn.com/s/AZDhFfhkIC';
+    }
+  } else {
+    // 删除gallery中的图片(gIdx-1因为索引0是hero)
+    if (item.gallery) item.gallery.splice(gIdx - 1, 1);
+  }
   const existing = getContent();
   existing.workItems = siteContent.workItems;
   localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
@@ -2304,6 +2492,37 @@ function setupEditables() {
     el.spellcheck = false;
     el.onblur = onTextBlur;
     el.oninput = () => { unsavedChanges = true; };
+    // 单击聚焦编辑，双击执行原跳转
+    el.onclick = (e) => {
+      if (editMode) {
+        e.preventDefault();
+        e.stopPropagation();
+        el.focus();
+        // 选中全部文字方便编辑
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    };
+    el.ondblclick = (e) => {
+      if (editMode) {
+        e.preventDefault();
+        e.stopPropagation();
+        // 双击执行导航/跳转
+        const href = el.getAttribute('href') || el.closest('a')?.getAttribute('href');
+        const onclick = el.getAttribute('onclick') || el.closest('a')?.getAttribute('onclick');
+        if (href && href !== '#') {
+          const hash = href.replace('#/', '');
+          if (hash) showView(hash);
+        } else if (onclick) {
+          // 提取navigate调用
+          const match = onclick.match(/navigate\('([^']+)'\)/);
+          if (match) showView(match[1]);
+        }
+      }
+    };
   });
 }
 
@@ -2313,19 +2532,22 @@ function enterEditMode() {
   document.body.classList.add('edit-mode');
   document.getElementById('editToolbar').classList.add('show');
   document.getElementById('editEntryHint').style.display = 'none';
-  // Make all editable text contenteditable
-  setupEditables();
-  // Make all images clickable for replacement
-  setupImageEditing();
-  // Update resume button text in edit mode
+  // 简历按钮
   const resumeBtn = document.getElementById('resumeBtn');
   if (resumeBtn) resumeBtn.textContent = '上传PDF简历';
-  // Show add project button if on category page
+  // 渲染分类为可编辑模式
+  renderCategories();
+  // 文字可编辑
+  setupEditables();
+  // 图片可替换
+  setupImageEditing();
+  // 拖拽上传
+  setupDragAndDrop();
+  // 作品分类页显示添加按钮
   const addBtn = document.getElementById('addProjectBtn');
   if (addBtn && document.getElementById('view-work-category').classList.contains('active')) {
     addBtn.style.display = 'block';
   }
-  // Update status
   updateEditStatus();
 }
 
@@ -2339,14 +2561,19 @@ function exitEditMode() {
   document.getElementById('editEntryHint').style.display = 'block';
   document.querySelectorAll('[data-editable]').forEach(el => {
     el.contentEditable = 'false';
-    el.removeEventListener('blur', onTextBlur);
+    el.onclick = null;
+    el.ondblclick = null;
   });
-  // Restore resume button text
+  // 恢复简历按钮文字
   const resumeBtn = document.getElementById('resumeBtn');
   if (resumeBtn) resumeBtn.textContent = siteContent.resumeBtnText || '下载PDF简历';
-  // Hide add project button
+  // 恢复分类为普通模式
+  renderCategories();
+  // 隐藏添加按钮
   const addBtn = document.getElementById('addProjectBtn');
   if (addBtn) addBtn.style.display = 'none';
+  // 移除拖拽
+  teardownDragAndDrop();
   location.hash = '#/home';
 }
 
@@ -2373,6 +2600,28 @@ function setupImageEditing() {
         e.preventDefault();
         e.stopPropagation();
         uploadImageByKey(img.dataset.imageKey);
+      };
+      // 拖拽上传
+      wrap.ondragover = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        wrap.style.outlineColor = '#33ff66';
+        wrap.style.background = 'rgba(51,255,102,0.1)';
+      };
+      wrap.ondragleave = (e) => {
+        e.preventDefault();
+        wrap.style.outlineColor = '';
+        wrap.style.background = '';
+      };
+      wrap.ondrop = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        wrap.style.outlineColor = '';
+        wrap.style.background = '';
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          handleImageFile(files[0], img.dataset.imageKey);
+        }
       };
     }
   });
@@ -2405,62 +2654,65 @@ function setupImageEditing() {
   });
 }
 
+function handleImageFile(file, key) {
+  if (!file) return;
+  // PDF直接存储
+  if (file.type === 'application/pdf') {
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const imgs = getImages();
+      imgs[key] = ev.target.result;
+      saveImages(imgs);
+      const imgEl = document.querySelector('img[data-image-key="' + key + '"]');
+      if (imgEl) {
+        const parent = imgEl.parentElement;
+        parent.innerHTML = '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#222;color:#888;font-size:12px;font-family:monospace;">PDF: ' + file.name + '</div>';
+      }
+      unsavedChanges = true;
+      updateEditStatus();
+      showSaveToast('PDF 已上传');
+    };
+    reader.readAsDataURL(file);
+    return;
+  }
+  // 图片压缩存储
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const maxDim = 1920;
+      let w = img.width, h = img.height;
+      if (w > maxDim || h > maxDim) {
+        if (w > h) { h = h * maxDim / w; w = maxDim; }
+        else { w = w * maxDim / h; h = maxDim; }
+      }
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.88);
+      const imgs = getImages();
+      imgs[key] = dataUrl;
+      saveImages(imgs);
+      const imgEl = document.querySelector('img[data-image-key="' + key + '"]');
+      if (imgEl) imgEl.src = dataUrl;
+      unsavedChanges = true;
+      updateEditStatus();
+      showSaveToast('图片已替换');
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
 function uploadImageByKey(key) {
   const input = document.createElement('input');
   input.type = 'file';
-  input.accept = 'image/jpeg,image/png,image/svg+xml,application/pdf,.jpg,.jpeg,.png,.svg,.pdf';
+  input.accept = 'image/jpeg,image/png,image/gif,image/svg+xml,image/webp,application/pdf,.jpg,.jpeg,.png,.gif,.svg,.webp,.pdf';
   input.onchange = (e) => {
     const file = e.target.files[0];
-    if (!file) return;
-    // For PDF, store as base64 directly
-    if (file.type === 'application/pdf') {
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        const imgs = getImages();
-        imgs[key] = ev.target.result;
-        saveImages(imgs);
-        // Show PDF placeholder in img tag won't work, use object
-        const imgEl = document.querySelector('img[data-image-key="' + key + '"]');
-        if (imgEl) {
-          const parent = imgEl.parentElement;
-          parent.innerHTML = '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#222;color:#888;font-size:12px;font-family:monospace;">PDF: ' + file.name + '</div>';
-        }
-        unsavedChanges = true;
-        updateEditStatus();
-        showSaveToast('PDF 已上传');
-      };
-      reader.readAsDataURL(file);
-    } else {
-      // For images, compress and store
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        const img = new Image();
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          const maxDim = 1600;
-          let w = img.width, h = img.height;
-          if (w > maxDim || h > maxDim) {
-            if (w > h) { h = h * maxDim / w; w = maxDim; }
-            else { w = w * maxDim / h; h = maxDim; }
-          }
-          canvas.width = w;
-          canvas.height = h;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, w, h);
-          const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-          const imgs = getImages();
-          imgs[key] = dataUrl;
-          saveImages(imgs);
-          const imgEl = document.querySelector('img[data-image-key="' + key + '"]');
-          if (imgEl) imgEl.src = dataUrl;
-          unsavedChanges = true;
-          updateEditStatus();
-          showSaveToast('图片已替换');
-        };
-        img.src = ev.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
+    handleImageFile(file, key);
   };
   input.click();
 }
@@ -2476,6 +2728,16 @@ function collectTextContent() {
   const data = {};
   document.querySelectorAll('[data-editable]').forEach(el => {
     const key = el.dataset.editable;
+    // 跳过简历按钮(无data-editable，这里防御性检查)
+    if (el.id === 'resumeBtn') return;
+    // 分类编辑: cat_前缀
+    if (key.startsWith('cat_')) {
+      const catKey = key.replace('cat_', '');
+      if (siteContent.categories[catKey] !== undefined) {
+        siteContent.categories[catKey] = el.textContent.trim();
+      }
+      return;
+    }
     data[key] = el.innerHTML;
   });
   return data;
@@ -2487,6 +2749,8 @@ function saveAllContent() {
   for (const key in textData) {
     existing[key] = textData[key];
   }
+  // 保存分类修改
+  existing.categories = siteContent.categories;
   // Save work item dynamic fields
   document.querySelectorAll('.project-item').forEach(item => {
     const idx = parseInt(item.dataset.idx);
@@ -2532,11 +2796,13 @@ function resetAllContent() {
   applyContent();
   renderClients();
   applyImages();
-  // Re-enter edit mode to refresh contenteditable
-  document.querySelectorAll('[data-editable]').forEach(el => {
-    el.contentEditable = 'true';
-  });
-  setupImageEditing();
+  renderCategories();
+  if (editMode) {
+    document.querySelectorAll('[data-editable]').forEach(el => {
+      el.contentEditable = 'true';
+    });
+    setupImageEditing();
+  }
   unsavedChanges = false;
   updateEditStatus();
   showSaveToast('已恢复默认');
@@ -2558,6 +2824,200 @@ document.addEventListener('DOMContentLoaded', () => {
   showView(hash);
   startCRT();
 });
+
+// ============================================================
+// ===== Media Library (管理库) =====
+// ============================================================
+function openMediaLibrary() {
+  document.getElementById('mediaLibraryModal').classList.add('show');
+  renderMediaLibrary();
+  // 管理库拖拽区
+  const dropzone = document.getElementById('mediaDropzone');
+  if (dropzone) {
+    dropzone.ondragover = (e) => { e.preventDefault(); dropzone.classList.add('drag-over'); };
+    dropzone.ondragleave = () => { dropzone.classList.remove('drag-over'); };
+    dropzone.ondrop = (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('drag-over');
+      handleMediaLibraryFiles(e.dataTransfer.files);
+    };
+  }
+}
+
+function closeMediaLibrary() {
+  document.getElementById('mediaLibraryModal').classList.remove('show');
+}
+
+function handleMediaLibraryUpload(event) {
+  handleMediaLibraryFiles(event.target.files);
+  event.target.value = '';
+}
+
+function handleMediaLibraryFiles(files) {
+  if (!files || files.length === 0) return;
+  const imgs = getImages();
+  let count = 0;
+  Array.from(files).forEach((file, idx) => {
+    const key = 'lib_' + Date.now() + '_' + idx;
+    if (file.type === 'application/pdf') {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        imgs[key] = ev.target.result;
+        saveImages(imgs);
+        count++;
+        if (count >= files.length) { renderMediaLibrary(); showSaveToast('已上传 ' + count + ' 个文件'); }
+      };
+      reader.readAsDataURL(file);
+    } else {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const maxDim = 1600;
+          let w = img.width, h = img.height;
+          if (w > maxDim || h > maxDim) {
+            if (w > h) { h = h * maxDim / w; w = maxDim; }
+            else { w = w * maxDim / h; h = maxDim; }
+          }
+          canvas.width = w;
+          canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          imgs[key] = canvas.toDataURL('image/jpeg', 0.85);
+          saveImages(imgs);
+          count++;
+          if (count >= files.length) { renderMediaLibrary(); showSaveToast('已上传 ' + count + ' 张图片'); }
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+}
+
+function renderMediaLibrary() {
+  const imgs = getImages();
+  const grid = document.getElementById('mediaLibraryGrid');
+  if (!grid) return;
+  const keys = Object.keys(imgs);
+  if (keys.length === 0) {
+    grid.innerHTML = '<div class="media-library-empty">管理库为空，上传图片后将显示在这里</div>';
+    return;
+  }
+  grid.innerHTML = keys.map(key => {
+    const src = imgs[key];
+    const isPdf = src.startsWith('data:application/pdf');
+    return '<div class="media-library-item" data-lib-key="' + key + '" title="' + key + '">' +
+      '<button class="delete-lib-img" onclick="event.stopPropagation();deleteFromLibrary(\'' + key + '\')">×</button>' +
+      (isPdf
+        ? '<div class="file-icon">PDF</div>'
+        : '<img src="' + src + '" alt="' + key + '" loading="lazy">') +
+    '</div>';
+  }).join('');
+  // 点击管理库图片可拖拽到页面替换
+  grid.querySelectorAll('.media-library-item').forEach(item => {
+    item.draggable = true;
+    item.ondragstart = (e) => {
+      e.dataTransfer.setData('text/lib-key', item.dataset.libKey);
+      e.dataTransfer.effectAllowed = 'copy';
+    };
+  });
+}
+
+function deleteFromLibrary(key) {
+  if (!confirm('确定从管理库删除这个文件吗？')) return;
+  const imgs = getImages();
+  delete imgs[key];
+  saveImages(imgs);
+  renderMediaLibrary();
+  showSaveToast('已删除');
+}
+
+// ============================================================
+// ===== Global Drag & Drop (全局拖拽上传) =====
+// ============================================================
+let dragCounter = 0;
+
+function setupDragAndDrop() {
+  document.addEventListener('dragover', handleGlobalDragOver);
+  document.addEventListener('dragleave', handleGlobalDragLeave);
+  document.addEventListener('drop', handleGlobalDrop);
+}
+
+function teardownDragAndDrop() {
+  document.removeEventListener('dragover', handleGlobalDragOver);
+  document.removeEventListener('dragleave', handleGlobalDragLeave);
+  document.removeEventListener('drop', handleGlobalDrop);
+  const overlay = document.getElementById('dragOverlay');
+  if (overlay) overlay.classList.remove('show');
+  dragCounter = 0;
+}
+
+function handleGlobalDragOver(e) {
+  if (!editMode) return;
+  e.preventDefault();
+  if (e.dataTransfer.types.includes('Files')) {
+    const overlay = document.getElementById('dragOverlay');
+    if (overlay) overlay.classList.add('show');
+  }
+}
+
+function handleGlobalDragLeave(e) {
+  if (!editMode) return;
+  if (e.clientX <= 0 || e.clientY <= 0 || e.clientX >= window.innerWidth || e.clientY >= window.innerHeight) {
+    const overlay = document.getElementById('dragOverlay');
+    if (overlay) overlay.classList.remove('show');
+  }
+}
+
+function handleGlobalDrop(e) {
+  if (!editMode) return;
+  e.preventDefault();
+  const overlay = document.getElementById('dragOverlay');
+  if (overlay) overlay.classList.remove('show');
+  // 检查是否拖到了图片区域(由图片区域自己的ondrop处理)
+  const target = e.target;
+  if (target.closest('.editable-image-wrap') || target.closest('.media-library-item')) return;
+  // 检查是否是从管理库拖拽过来的
+  const libKey = e.dataTransfer.getData('text/lib-key');
+  if (libKey) {
+    // 从管理库拖到非图片区域，不做处理
+    return;
+  }
+  // 全局拖放：如果有文件，上传到管理库
+  const files = e.dataTransfer.files;
+  if (files.length > 0) {
+    handleMediaLibraryFiles(files);
+    openMediaLibrary();
+  }
+}
+
+// 管理库图片拖到页面图片区域时的处理
+document.addEventListener('DOMContentLoaded', () => {
+  // 监听所有editable-image-wrap的drop，支持从管理库拖拽
+  document.addEventListener('drop', (e) => {
+    if (!editMode) return;
+    const libKey = e.dataTransfer.getData('text/lib-key');
+    if (!libKey) return;
+    const wrap = e.target.closest('.editable-image-wrap');
+    if (!wrap) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const img = wrap.querySelector('img[data-image-key]');
+    if (!img) return;
+    const targetKey = img.dataset.imageKey;
+    const imgs = getImages();
+    if (imgs[libKey]) {
+      imgs[targetKey] = imgs[libKey];
+      saveImages(imgs);
+      img.src = imgs[libKey];
+      unsavedChanges = true;
+      updateEditStatus();
+      showSaveToast('已从管理库应用图片');
+    }
+  }, true);
+});
+
 </script>
 
 </body>
