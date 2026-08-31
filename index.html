@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ZHISHAOCUI — Designer Portfolio</title>
-<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Share+Tech+Mono&display=swap">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Share+Tech+Mono&display=swap">
 <style>
 /* ===== Font Face: Impact ===== */
 @font-face {
@@ -14,6 +14,14 @@
   font-style: normal;
   font-display: swap;
 }
+
+/* ===== Font Face: PingFang SC ===== */
+@font-face { font-family: 'PingFang SC'; src: url('https://aka.doubaocdn.com/s/91HWIfwT81') format('truetype'); font-weight: 200; font-style: normal; font-display: swap; }
+@font-face { font-family: 'PingFang SC'; src: url('https://aka.doubaocdn.com/s/fGkpCAMi6r') format('truetype'); font-weight: 300; font-style: normal; font-display: swap; }
+@font-face { font-family: 'PingFang SC'; src: url('https://aka.doubaocdn.com/s/VNpTr64AAB') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'PingFang SC'; src: url('https://aka.doubaocdn.com/s/kepUhcygDL') format('truetype'); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: 'PingFang SC'; src: url('https://aka.doubaocdn.com/s/fkxYLUgAR5') format('truetype'); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'PingFang SC'; src: url('https://aka.doubaocdn.com/s/WIH67yzEla') format('truetype'); font-weight: 900; font-style: normal; font-display: swap; }
 
 /* ===== CSS Variables ===== */
 :root {
@@ -26,8 +34,8 @@
   --off-white: #f5f5f5;
   --crt-green: #33ff66;
   --crt-amber: #ffaa33;
-  --font-display: 'Impact', 'Noto Sans SC', sans-serif;
-  --font-body: 'Noto Sans SC', sans-serif;
+  --font-display: 'Impact', 'PingFang SC', sans-serif;
+  --font-body: 'PingFang SC', sans-serif;
   --font-mono: 'Share Tech Mono', monospace;
 }
 
@@ -679,6 +687,55 @@ button {
   letter-spacing: 2px;
   text-transform: uppercase;
 }
+.detail-hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(60px, 10vw, 160px);
+  color: var(--white);
+  line-height: 0.9;
+  letter-spacing: -3px;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+}
+.detail-meta-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  padding: 30px 0;
+  border-top: 1px solid var(--gray-dark);
+  border-bottom: 1px solid var(--gray-dark);
+  margin-bottom: 60px;
+}
+.detail-meta-item .meta-label {
+  font-size: 12px;
+  color: var(--gray);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.detail-meta-item .meta-value {
+  font-size: 18px;
+  color: var(--white);
+  font-weight: 500;
+}
+.detail-hero-image {
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  background: var(--gray-dark);
+  margin-bottom: 60px;
+}
+.detail-hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.detail-description {
+  max-width: 800px;
+  margin: 0 auto 80px;
+  font-size: 18px;
+  line-height: 2;
+  color: var(--gray-light);
+}
 .detail-gallery {
   display: flex;
   flex-direction: column;
@@ -736,7 +793,32 @@ body.edit-mode .add-gallery-btn {
   border-color: var(--white);
   color: var(--white);
 }
+.detail-next-project {
+  margin-top: 80px;
+  padding-top: 40px;
+  border-top: 1px solid var(--gray-dark);
+  text-align: center;
+}
+.detail-next-label {
+  font-size: 13px;
+  color: var(--gray);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+}
+.detail-next-title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 72px);
+  color: var(--white);
+  cursor: pointer;
+  transition: color 0.3s ease;
+  letter-spacing: -1px;
+}
+.detail-next-title:hover {
+  color: var(--gray);
+}
 @media (max-width: 768px) {
+  .detail-meta-row { grid-template-columns: repeat(2, 1fr); gap: 20px; }
   #view-work-detail { padding: 0 20px 60px; }
 }
 
@@ -1342,7 +1424,7 @@ body.edit-mode .editable-image-wrap::after {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Noto Sans SC', sans-serif;
+  font-family: 'PingFang SC', sans-serif;
   font-size: 13px;
   letter-spacing: 1px;
   opacity: 0;
@@ -1404,6 +1486,42 @@ body.edit-mode .client-slot:hover {
 }
 
 
+/* ===== Work card delete (edit mode) ===== */
+.work-card { position: relative; }
+body.edit-mode .work-card .work-delete-btn { display: flex; }
+.work-card .work-delete-btn {
+  display: none;
+  position: absolute;
+  top: 8px;
+  right: 23px;
+  width: 28px;
+  height: 28px;
+  background: rgba(255,0,0,0.8);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  line-height: 1;
+}
+.add-work-btn {
+  display: none;
+  width: 100%;
+  padding: 30px;
+  border: 2px dashed var(--gray-dark);
+  background: transparent;
+  color: var(--gray);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 40px;
+  font-family: var(--font-body);
+}
+body.edit-mode .add-work-btn { display: block; }
+.add-work-btn:hover { border-color: var(--white); color: var(--white); }
 /* ===== Media Library Modal ===== */
 #mediaLibraryModal {
   display: none;
@@ -1422,7 +1540,7 @@ body.edit-mode .client-slot:hover {
   border-bottom: 1px solid #333;
 }
 .media-library-title {
-  font-family: 'Impact', 'Noto Sans SC', sans-serif;
+  font-family: 'Impact', 'PingFang SC', sans-serif;
   font-size: 28px;
   color: #fff;
   letter-spacing: 1px;
@@ -1440,7 +1558,7 @@ body.edit-mode .client-slot:hover {
   font-size: 14px;
   cursor: pointer;
   border-radius: 4px;
-  font-family: 'Noto Sans SC', sans-serif;
+  font-family: 'PingFang SC', sans-serif;
   transition: all 0.2s;
 }
 .media-library-btn:hover { border-color: #33ff66; color: #33ff66; }
@@ -1542,33 +1660,14 @@ body.edit-mode .client-slot:hover {
   font-size: 15px;
 }
 
-/* ===== Drag overlay ===== */
-#dragOverlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(51,255,102,0.1);
-  border: 4px dashed #33ff66;
-  z-index: 30000;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-}
-#dragOverlay.show { display: flex; }
-#dragOverlay span {
-  font-family: 'Impact', 'Noto Sans SC', sans-serif;
-  font-size: 48px;
-  color: #33ff66;
-  text-shadow: 0 0 20px rgba(51,255,102,0.5);
-  letter-spacing: 4px;
-}
+/* Drag overlay removed */
 
 /* ===== Category edit mode ===== */
 body.edit-mode .work-categories a {
   position: relative;
   padding-right: 30px;
 }
-body.edit-mode .work-categories a .cat-delete-btn {
+body.edit-mode .work-categories .cat-delete-btn {
   display: inline-flex;
 }
 .cat-delete-btn {
@@ -1599,7 +1698,7 @@ body.edit-mode .work-categories a .cat-delete-btn {
   cursor: pointer;
   background: none;
   border: none;
-  font-family: 'Noto Sans SC', sans-serif;
+  font-family: 'PingFang SC', sans-serif;
 }
 body.edit-mode .add-category-btn { display: block; }
 .add-category-btn:hover { text-decoration: underline; }
@@ -1686,7 +1785,7 @@ body.edit-mode .add-category-btn { display: block; }
     <div class="hero-footer">
       <div class="hero-social">
         <a href="#" aria-label="Instagram" data-social="instagram" onclick="return handleSocialClick(event, 'instagram')">
-          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.78 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
         </a>
         <a href="#" aria-label="Twitter" data-social="twitter" onclick="return handleSocialClick(event, 'twitter')">
           <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
@@ -1721,6 +1820,7 @@ body.edit-mode .add-category-btn { display: block; }
     <div class="work-featured">
       <div class="work-featured-title" data-editable="workFeaturedTitle">Selected Works / 精选作品</div>
       <div class="work-grid" id="workGrid"></div>
+    <button class="add-work-btn" onclick="addFeaturedWork()">+ 添加作品</button>
     </div>
   </section>
 
@@ -1804,7 +1904,7 @@ body.edit-mode .add-category-btn { display: block; }
     <div class="clients-footer">
       <div class="clients-footer-social">
         <a href="#" aria-label="Instagram" data-social="instagram" onclick="return handleSocialClick(event, 'instagram')">
-          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.78 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
         </a>
         <a href="#" aria-label="Twitter" data-social="twitter" onclick="return handleSocialClick(event, 'twitter')">
           <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
@@ -1855,9 +1955,6 @@ body.edit-mode .add-category-btn { display: block; }
     <div class="media-library-grid" id="mediaLibraryGrid"></div>
   </div>
 </div>
-
-<!-- ===== Global Drag Overlay ===== -->
-<div id="dragOverlay"><span>释放以上传图片</span></div>
 
 <div id="editEntryHint">访问 #/edit 进入编辑模式</div>
 
@@ -1968,9 +2065,9 @@ function applyContent() {
       el.innerHTML = siteContent[key];
     }
   });
-  // 简历按钮文字(非编辑模式)
+  // 简历按钮文字(非编辑模式固定为下载)
   const resumeBtn = document.getElementById('resumeBtn');
-  if (resumeBtn && !editMode) resumeBtn.textContent = siteContent.resumeBtnText || '下载PDF简历';
+  if (resumeBtn && !editMode) resumeBtn.textContent = '下载PDF简历';
   // 浏览器标题
   document.title = siteContent.logoText + ' \u2014 Designer Portfolio';
   // 作品分类导航
@@ -2050,14 +2147,61 @@ function renderWorkGrid(container, items) {
   container.innerHTML = items.map((item, idx) => {
     const key = 'work_' + idx;
     const src = imgs[key] || item.img;
-    return '<div class="work-card" onclick="openWorkDetail(' + idx + ')">' +
-      '<div class="work-card-image"><img src="' + src + '" alt="' + item.title + '" loading="lazy" data-image-key="' + key + '"></div>' +
+    const titleKey = 'feat_title_' + idx;
+    const authorKey = 'feat_author_' + idx;
+    const cardClick = editMode ? 'onclick="return handleWorkCardClick(event, ' + idx + ')" ondblclick="openWorkDetail(' + idx + ')"' : 'onclick="openWorkDetail(' + idx + ')"';
+    return '<div class="work-card" ' + cardClick + '>' +
+      (editMode ? '<button class="work-delete-btn" onclick="event.stopPropagation();deleteWorkItem(' + idx + ')">×</button>' : '') +
+      '<div class="work-card-image editable-image-wrap" data-image-wrap="' + key + '"><img src="' + src + '" alt="' + item.title + '" loading="lazy" data-image-key="' + key + '"></div>' +
       '<div class="work-card-info">' +
-        '<div class="work-card-title">' + item.title + '</div>' +
-        '<div class="work-card-author">' + item.author + '</div>' +
+        '<div class="work-card-title" data-editable="' + titleKey + '">' + item.title + '</div>' +
+        '<div class="work-card-author" data-editable="' + authorKey + '">' + item.author + '</div>' +
       '</div>' +
     '</div>';
   }).join('');
+}
+
+function handleWorkCardClick(e, idx) {
+  if (editMode) {
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+  }
+  openWorkDetail(idx);
+  return false;
+}
+
+function deleteWorkItem(idx) {
+  if (!confirm('确定删除作品「' + siteContent.workItems[idx].title + '」吗？')) return;
+  siteContent.workItems.splice(idx, 1);
+  const existing = getContent();
+  existing.workItems = siteContent.workItems;
+  localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
+  renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
+  if (editMode) { setupEditables(); setupImageEditing(); }
+  showSaveToast('作品已删除');
+}
+
+function addFeaturedWork() {
+  const newItem = {
+    title: '新作品标题',
+    author: 'ZHISHAOCUI',
+    cat: 'graphic',
+    year: '2026',
+    client: '客户名称',
+    role: 'Designer',
+    desc: '在这里填写项目描述...',
+    fullDescription: '在这里填写项目详细描述...',
+    img: 'https://aka.doubaocdn.com/s/AZDhFfhkIC',
+    gallery: []
+  };
+  siteContent.workItems.push(newItem);
+  const existing = getContent();
+  existing.workItems = siteContent.workItems;
+  localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
+  renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
+  if (editMode) { setupEditables(); setupImageEditing(); }
+  showSaveToast('已添加新作品');
 }
 
 
@@ -2243,8 +2387,9 @@ function renderClients() {
   let html = '';
   for (let i = 0; i < count; i++) {
     const logo = saved[i];
-    html += '<div class="client-slot" data-index="' + i + '" onclick="' + (clientRemoveMode ? 'removeClientSlot(' + i + ')' : 'uploadClientLogo(' + i + ')') + '">' +
-      '<button class="remove-slot-btn" onclick="event.stopPropagation();removeClientSlot(' + i + ')">×</button>' +
+    const slotClick = editMode ? (clientRemoveMode ? 'removeClientSlot(' + i + ')' : 'uploadClientLogo(' + i + ')') : '';
+    html += '<div class="client-slot" data-index="' + i + '"' + (slotClick ? ' onclick="' + slotClick + '"' : '') + '>' +
+      (editMode ? '<button class="remove-slot-btn" onclick="event.stopPropagation();removeClientSlot(' + i + ')">×</button>' : '') +
       (logo
         ? '<img src="' + logo + '" alt="Client ' + (i+1) + '">'
         : '<div class="placeholder">+</div><div class="upload-hint">' + siteContent.clientUploadHint + '</div>'
@@ -2281,6 +2426,7 @@ function toggleRemoveMode() {
   renderClients();
 }
 function uploadClientLogo(index) {
+  if (!editMode) return;
   const input = document.createElement('input');
   input.type = 'file';
   input.accept = 'image/*';
@@ -2333,47 +2479,62 @@ function handleSocialClick(e, platform) {
   return true;
 }
 
-// ===== Resume: upload in edit mode, download otherwise =====
-const RESUME_KEY = 'zhishao_resume_pdf';
+// ===== Resume: IndexedDB storage (supports up to 20MB) =====
+function openResumeDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open('zhishao_resume_db', 1);
+    req.onupgradeneeded = (e) => { e.target.result.createObjectStore('resume', { keyPath: 'id' }); };
+    req.onsuccess = (e) => resolve(e.target.result);
+    req.onerror = (e) => reject(e.target.error);
+  });
+}
 function handleResumeClick() {
-  if (editMode) {
-    uploadResume();
-  } else {
-    downloadResume();
-  }
+  if (editMode) { uploadResume(); } else { downloadResume(); }
 }
 function uploadResume() {
   const input = document.createElement('input');
   input.type = 'file';
   input.accept = 'application/pdf,.pdf';
-  input.onchange = (e) => {
+  input.onchange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      try {
-        localStorage.setItem(RESUME_KEY, ev.target.result);
-        showSaveToast('简历 PDF 已上传');
-        unsavedChanges = true;
-        updateEditStatus();
-      } catch(err) {
-        alert('文件过大，无法存储。请使用小于 5MB 的 PDF。');
-      }
-    };
-    reader.readAsDataURL(file);
+    if (file.size > 20 * 1024 * 1024) {
+      alert('文件过大，请上传 20MB 以内的 PDF 文件。');
+      return;
+    }
+    try {
+      const db = await openResumeDB();
+      const tx = db.transaction('resume', 'readwrite');
+      tx.objectStore('resume').put({ id: 'resume', data: file, name: file.name });
+      showSaveToast('简历 PDF 已上传');
+      unsavedChanges = true;
+      updateEditStatus();
+    } catch(err) {
+      alert('上传失败：' + err.message);
+    }
   };
   input.click();
 }
-function downloadResume() {
-  const pdf = localStorage.getItem(RESUME_KEY);
-  if (pdf) {
-    const a = document.createElement('a');
-    a.href = pdf;
-    a.download = 'ZHISHAOCUI_Resume.pdf';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  } else {
+async function downloadResume() {
+  try {
+    const db = await openResumeDB();
+    const tx = db.transaction('resume', 'readonly');
+    const req = tx.objectStore('resume').get('resume');
+    req.onsuccess = () => {
+      if (req.result && req.result.data) {
+        const url = URL.createObjectURL(req.result.data);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = req.result.name || 'ZHISHAOCUI_Resume.pdf';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      } else {
+        alert('简历 PDF 即将上线，敬请期待。');
+      }
+    };
+  } catch(err) {
     alert('简历 PDF 即将上线，敬请期待。');
   }
 }
@@ -2767,6 +2928,16 @@ function saveAllContent() {
     }
     if (descEl) existing.workItems[idx].desc = descEl.textContent;
   });
+  // Save featured work card title/author back to workItems
+  document.querySelectorAll('#workGrid .work-card').forEach(card => {
+    const titleEl = card.querySelector('[data-editable^="feat_title_"]');
+    if (!titleEl) return;
+    const idx = parseInt(titleEl.dataset.editable.replace('feat_title_', ''));
+    if (isNaN(idx) || !existing.workItems[idx]) return;
+    const authorEl = card.querySelector('[data-editable^="feat_author_"]');
+    if (titleEl) existing.workItems[idx].title = titleEl.textContent;
+    if (authorEl) existing.workItems[idx].author = authorEl.textContent;
+  });
   // Save history item dynamic fields
   ['workExperience', 'projectExperience'].forEach((arrKey, colIdx) => {
     const prefix = colIdx === 0 ? 'workexp_' : 'projexp_';
@@ -2791,7 +2962,6 @@ function resetAllContent() {
   localStorage.removeItem(IMAGE_KEY);
   localStorage.removeItem(STORAGE_KEY);
   localStorage.removeItem(CLIENT_COUNT_KEY);
-  localStorage.removeItem(RESUME_KEY);
   siteContent = getContent();
   applyContent();
   renderClients();
@@ -2948,33 +3118,24 @@ function teardownDragAndDrop() {
   document.removeEventListener('dragover', handleGlobalDragOver);
   document.removeEventListener('dragleave', handleGlobalDragLeave);
   document.removeEventListener('drop', handleGlobalDrop);
-  const overlay = document.getElementById('dragOverlay');
-  if (overlay) overlay.classList.remove('show');
   dragCounter = 0;
 }
 
 function handleGlobalDragOver(e) {
   if (!editMode) return;
   e.preventDefault();
-  if (e.dataTransfer.types.includes('Files')) {
-    const overlay = document.getElementById('dragOverlay');
-    if (overlay) overlay.classList.add('show');
-  }
+  // overlay removed per user request
 }
 
 function handleGlobalDragLeave(e) {
   if (!editMode) return;
-  if (e.clientX <= 0 || e.clientY <= 0 || e.clientX >= window.innerWidth || e.clientY >= window.innerHeight) {
-    const overlay = document.getElementById('dragOverlay');
-    if (overlay) overlay.classList.remove('show');
-  }
+  // overlay removed per user request
 }
 
 function handleGlobalDrop(e) {
   if (!editMode) return;
   e.preventDefault();
-  const overlay = document.getElementById('dragOverlay');
-  if (overlay) overlay.classList.remove('show');
+  // overlay removed per user request
   // 检查是否拖到了图片区域(由图片区域自己的ondrop处理)
   const target = e.target;
   if (target.closest('.editable-image-wrap') || target.closest('.media-library-item')) return;
