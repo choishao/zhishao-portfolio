@@ -2239,85 +2239,101 @@ function openWorkDetail(idx) {
   currentDetailIndex = idx;
   location.hash = '/work/detail/' + idx;
 }
+function buildDetailGallery(idx) {
+  var item = siteContent.workItems[idx];
+  if (!item) return [];
+  var list = [];
+  // hero（首图，可被 work_N 覆盖）
+  list.push({ type: 'hero', src: imgCache['work_' + idx] || item.img, key: 'work_' + idx });
+  // 旧版 gallery（历史 dataURL，兼容保留显示）
+  (item.gallery || []).forEach(function (g) {
+    list.push({ type: 'legacy', src: g });
+  });
+  // 新版 IDB 高清大图流 detail_img_<idx>_<n>
+  var prefix = 'detail_img_' + idx + '_';
+  Object.keys(imgCache).filter(function (k) { return k.indexOf(prefix) === 0; })
+    .sort(function (a, b) { return parseInt(a.slice(prefix.length), 10) - parseInt(b.slice(prefix.length), 10); })
+    .forEach(function (k) {
+      list.push({ type: 'new', src: imgCache[k], key: k });
+    });
+  return list;
+}
 function renderWorkDetail(idx) {
-  const item = siteContent.workItems[idx];
+  var item = siteContent.workItems[idx];
   if (!item) return;
-  const imgs = getImages();
-  // 顶部分类标签
-  const catName = siteContent.categories[item.cat] || item.cat || '—';
-  const catLabel = document.getElementById('detailCatLabel');
+  var catName = siteContent.categories[item.cat] || item.cat || '—';
+  var catLabel = document.getElementById('detailCatLabel');
   if (catLabel) catLabel.textContent = (catName + '').toUpperCase();
-  // 所有图片合并到gallery流中(hero + gallery)
-  const allImages = [item.img].concat(item.gallery || []);
-  const galleryContainer = document.getElementById('detailGallery');
-  galleryContainer.innerHTML = allImages.map((src, gIdx) => {
-    const gKey = 'detail_img_' + idx + '_' + gIdx;
-    const gSrc = imgs[gKey] || src;
+  var list = buildDetailGallery(idx);
+  var galleryContainer = document.getElementById('detailGallery');
+  galleryContainer.innerHTML = list.map(function (ent, vi) {
+    var keyAttr = ent.key ? ' data-image-wrap="' + ent.key + '"' : '';
+    var imgKeyAttr = ent.key ? ' data-image-key="' + ent.key + '"' : '';
+    var imgTag = '<div class="editable-image-wrap"' + keyAttr + ' style="display:block;">' +
+      '<img src="' + ent.src + '" alt="Image ' + (vi + 1) + '"' + imgKeyAttr + '></div>';
     return '<div class="detail-gallery-item">' +
-      (editMode ? '<button class="remove-img-btn" onclick="removeDetailImage(' + gIdx + ')">×</button>' : '') +
-      '<div class="editable-image-wrap" data-image-wrap="' + gKey + '" style="display:block;">' +
-        '<img src="' + gSrc + '" alt="Image ' + (gIdx+1) + '" data-image-key="' + gKey + '">' +
-      '</div>' +
+      (editMode ? '<button class="remove-img-btn" onclick="removeDetailImage(' + vi + ')">×</button>' : '') +
+      imgTag +
     '</div>';
   }).join('');
-  if (editMode) {
-    setupImageEditing();
-  }
+  if (editMode) { setupImageEditing(); }
 }
 function addDetailImage() {
-  const input = document.createElement('input');
+  var input = document.createElement('input');
   input.type = 'file';
   input.accept = 'image/jpeg,image/png,image/gif,image/svg+xml,image/webp,.jpg,.jpeg,.png,.gif,.svg,.webp';
-  input.onchange = (e) => {
-    const file = e.target.files[0];
+  input.onchange = function (e) {
+    var file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const maxDim = 1920;
-        let w = img.width, h = img.height;
-        if (w > maxDim || h > maxDim) {
-          if (w > h) { h = h * maxDim / w; w = maxDim; }
-          else { w = w * maxDim / h; h = maxDim; }
-        }
-        canvas.width = w;
-        canvas.height = h;
-        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.88);
-        if (!siteContent.workItems[currentDetailIndex].gallery) siteContent.workItems[currentDetailIndex].gallery = [];
-        siteContent.workItems[currentDetailIndex].gallery.push(dataUrl);
-        const existing = getContent();
-        existing.workItems = siteContent.workItems;
-        localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
-        renderWorkDetail(currentDetailIndex);
-        showSaveToast('图片已添加');
-      };
-      img.src = ev.target.result;
-    };
-    reader.readAsDataURL(file);
+    var idx = currentDetailIndex;
+    var item = siteContent.workItems[idx];
+    if (!item) return;
+    var legacyCount = (item.gallery || []).length;
+    var prefix = 'detail_img_' + idx + '_';
+    var newCount = Object.keys(imgCache).filter(function (k) { return k.indexOf(prefix) === 0; }).length;
+    var key = prefix + (legacyCount + newCount);
+    // 原画质 Blob 存入 IndexedDB，可无限添加
+    putImage(key, file);
+    renderWorkDetail(idx);
+    showSaveToast('图片已添加（原画质）');
   };
   input.click();
 }
-function removeDetailImage(gIdx) {
+async function removeDetailImage(vi) {
   if (!confirm('确定删除这张图片吗？')) return;
-  const item = siteContent.workItems[currentDetailIndex];
-  if (gIdx === 0) {
-    // 删除的是hero image，用gallery第一张替代
-    if (item.gallery && item.gallery.length > 0) {
-      item.img = item.gallery.shift();
+  var idx = currentDetailIndex;
+  var item = siteContent.workItems[idx];
+  if (!item) return;
+  var list = buildDetailGallery(idx);
+  if (vi < 0 || vi >= list.length) return;
+  var ent = list[vi];
+  if (vi === 0) {
+    // 删除 hero：清空 work_N 覆盖，并把第一张详情图提升为主图
+    deleteImage('work_' + idx);
+    var first = list[1];
+    if (first) {
+      if (first.type === 'legacy') {
+        item.img = first.src;
+        item.gallery = item.gallery || []; item.gallery.shift();
+      } else if (first.type === 'new') {
+        await copyImage(first.key, 'work_' + idx);
+        await deleteImage(first.key);
+      }
     } else {
       item.img = 'https://aka.doubaocdn.com/s/AZDhFfhkIC';
     }
   } else {
-    // 删除gallery中的图片(gIdx-1因为索引0是hero)
-    if (item.gallery) item.gallery.splice(gIdx - 1, 1);
+    if (ent.type === 'legacy') {
+      item.gallery = item.gallery || [];
+      item.gallery.splice(vi - 1, 1);
+    } else if (ent.type === 'new') {
+      await deleteImage(ent.key);
+    }
   }
-  const existing = getContent();
+  var existing = getContent();
   existing.workItems = siteContent.workItems;
   localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
-  renderWorkDetail(currentDetailIndex);
+  renderWorkDetail(idx);
   showSaveToast('图片已删除');
 }
 function goNextProject() {
@@ -2383,10 +2399,9 @@ function renderClients() {
   const grid = document.getElementById('clientsGrid');
   if (!grid) return;
   const count = getClientCount();
-  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
   let html = '';
   for (let i = 0; i < count; i++) {
-    const logo = saved[i];
+    const logo = imgCache['client_' + i];
     const slotClick = editMode ? (clientRemoveMode ? 'removeClientSlot(' + i + ')' : 'uploadClientLogo(' + i + ')') : '';
     html += '<div class="client-slot" data-index="' + i + '"' + (slotClick ? ' onclick="' + slotClick + '"' : '') + '>' +
       (editMode ? '<button class="remove-slot-btn" onclick="event.stopPropagation();removeClientSlot(' + i + ')">×</button>' : '') +
@@ -2407,14 +2422,14 @@ function removeClientSlot(index) {
   if (!confirm('确定删除这个客户位吗？已上传的logo也会被清除。')) return;
   const count = getClientCount();
   if (count <= 1) { alert('至少保留一个客户位'); return; }
-  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-  // 移除该位置，后面的前移
-  const newSaved = {};
-  for (let i = 0; i < count; i++) {
-    if (i < index) newSaved[i] = saved[i];
-    else if (i > index) newSaved[i-1] = saved[i];
+  // 删除该位，后面的 logo 依次前移
+  deleteImage('client_' + index);
+  for (let i = index + 1; i < count; i++) {
+    if (imgCache['client_' + i]) {
+      copyImage('client_' + i, 'client_' + (i - 1));
+      deleteImage('client_' + i);
+    }
   }
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(newSaved));
   localStorage.setItem(CLIENT_COUNT_KEY, count - 1);
   renderClients();
   showSaveToast('已删除客户位');
@@ -2433,14 +2448,9 @@ function uploadClientLogo(index) {
   input.onchange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-      saved[index] = ev.target.result;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
-      renderClients();
-    };
-    reader.readAsDataURL(file);
+    // 原图存入 IndexedDB
+    putImage('client_' + index, file);
+    renderClients();
   };
   input.click();
 }
@@ -2625,25 +2635,157 @@ document.addEventListener('keydown', (e) => {
 // ===== Admin Form =====
 // ===== WYSIWYG Edit Mode =====
 const IMAGE_KEY = 'zhishao_site_images';
+const IMG_DB_NAME = 'zhishao_img_db';
+const IMG_DB_STORE = 'images';
 let editMode = false;
 let unsavedChanges = false;
+let imgCache = {};
+let imgReady = false;
 
-function getImages() {
-  try { return JSON.parse(localStorage.getItem(IMAGE_KEY) || '{}'); }
-  catch(e) { return {}; }
+// ===== 图片存储：IndexedDB（支持高像素 + 大量图片，不再压缩画质） =====
+function openImgDB() {
+  return new Promise(function (resolve, reject) {
+    var req = indexedDB.open(IMG_DB_NAME, 1);
+    req.onupgradeneeded = function (e) {
+      var db = e.target.result;
+      if (!db.objectStoreNames.contains(IMG_DB_STORE)) {
+        db.createObjectStore(IMG_DB_STORE, { keyPath: 'key' });
+      }
+    };
+    req.onsuccess = function (e) { resolve(e.target.result); };
+    req.onerror = function (e) { reject(e.target.error); };
+  });
 }
 
-function saveImages(imgs) {
-  try { localStorage.setItem(IMAGE_KEY, JSON.stringify(imgs)); }
-  catch(e) { alert('图片存储空间不足，请删除一些图片后重试。'); }
+// 写入单张图片：data 为 File/Blob（原画质）或字符串(dataURL)
+function putImage(key, data) {
+  imgCache[key] = (data instanceof Blob) ? URL.createObjectURL(data) : data;
+  return openImgDB().then(function (db) {
+    return new Promise(function (resolve, reject) {
+      var tx = db.transaction(IMG_DB_STORE, 'readwrite');
+      tx.objectStore(IMG_DB_STORE).put({ key: key, value: data });
+      tx.oncomplete = function () { db.close(); resolve(); };
+      tx.onerror = function (e) { db.close(); reject(e); };
+    });
+  }).catch(function (e) {
+    console.error('putImage failed', e);
+    alert('图片保存失败：浏览器存储不可用或磁盘空间不足。可清理浏览器站点数据后重试。');
+  });
 }
+
+function deleteImage(key) {
+  var old = imgCache[key];
+  if (old && old.indexOf('blob:') === 0) { try { URL.revokeObjectURL(old); } catch (e) {} }
+  delete imgCache[key];
+  return openImgDB().then(function (db) {
+    return new Promise(function (resolve) {
+      var tx = db.transaction(IMG_DB_STORE, 'readwrite');
+      tx.objectStore(IMG_DB_STORE).delete(key);
+      tx.oncomplete = function () { db.close(); resolve(); };
+    });
+  }).catch(function (e) { console.error('deleteImage failed', e); });
+}
+
+function copyImage(srcKey, dstKey) {
+  var srcURL = imgCache[srcKey];
+  if (!srcURL) return Promise.resolve();
+  return fetch(srcURL).then(function (resp) { return resp.blob(); })
+    .then(function (blob) { return putImage(dstKey, blob); })
+    .catch(function (e) { console.error('copyImage failed', e); });
+}
+
+function clearAllImages() {
+  imgCache = {};
+  return openImgDB().then(function (db) {
+    return new Promise(function (resolve) {
+      var tx = db.transaction(IMG_DB_STORE, 'readwrite');
+      tx.objectStore(IMG_DB_STORE).clear();
+      tx.oncomplete = function () { db.close(); resolve(); };
+    });
+  }).catch(function (e) { console.error('clearAllImages failed', e); });
+}
+
+// 启动时从 IndexedDB 读取全部图片到内存缓存，并迁移旧版 localStorage 图片
+function loadImagesFromIDB() {
+  openImgDB().then(function (db) {
+    return new Promise(function (resolve) {
+      var tx = db.transaction(IMG_DB_STORE, 'readonly');
+      var req = tx.objectStore(IMG_DB_STORE).getAll();
+      req.onsuccess = function () {
+        var next = {};
+        (req.result || []).forEach(function (rec) {
+          if (rec.value && rec.value instanceof Blob) {
+            next[rec.key] = URL.createObjectURL(rec.value);
+          } else if (rec.value) {
+            next[rec.key] = rec.value;
+          }
+        });
+        imgCache = next;
+        imgReady = true;
+        migrateLegacyImages();
+        resolve();
+      };
+      req.onerror = function () { resolve(); };
+    });
+  }).then(function () {
+    rerenderAllImages();
+  }).catch(function (e) {
+    console.error('load images failed', e);
+    imgReady = true;
+    rerenderAllImages();
+  });
+}
+
+// 旧版 localStorage 图片迁移到 IndexedDB（作品图 / 客户logo），保留旧数据
+function migrateLegacyImages() {
+  try {
+    var legacy = JSON.parse(localStorage.getItem(IMAGE_KEY) || '{}');
+    if (Object.keys(legacy).length) {
+      Object.keys(legacy).forEach(function (k) {
+        if (!imgCache[k] && legacy[k]) { imgCache[k] = legacy[k]; putImage(k, legacy[k]); }
+      });
+      localStorage.removeItem(IMAGE_KEY);
+    }
+  } catch (e) {}
+  try {
+    var logos = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    if (Object.keys(logos).length) {
+      Object.keys(logos).forEach(function (i) {
+        var k = 'client_' + i;
+        if (!imgCache[k] && logos[i]) { imgCache[k] = logos[i]; putImage(k, logos[i]); }
+      });
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  } catch (e) {}
+}
+
+function getImages() { return imgCache; }
 
 function applyImages() {
-  const imgs = getImages();
-  document.querySelectorAll('img[data-image-key]').forEach(img => {
-    const key = img.dataset.imageKey;
+  var imgs = getImages();
+  document.querySelectorAll('img[data-image-key]').forEach(function (img) {
+    var key = img.dataset.imageKey;
     if (imgs[key]) img.src = imgs[key];
   });
+}
+
+// 图片加载完成后重渲染所有用到图片的模块
+function rerenderAllImages() {
+  renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
+  renderHistoryList(document.getElementById('workExperienceList'), siteContent.workExperience);
+  renderHistoryList(document.getElementById('projectList'), siteContent.projectExperience);
+  renderClients();
+  applyImages();
+  var hash = location.hash.replace('#/', '') || 'home';
+  if (hash.indexOf('work/detail/') === 0) {
+    var dIdx = parseInt(hash.split('/')[2]);
+    renderWorkDetail(dIdx);
+  } else if (hash.indexOf('work/') === 0) {
+    var cat = hash.split('/')[1];
+    var catItems = siteContent.workItems.filter(function (i) { return i.cat === cat; });
+    renderCategoryDetail(document.getElementById('categoryProjects'), catItems, cat);
+  }
+  if (editMode) { setupEditables(); setupImageEditing(); }
 }
 
 
@@ -2817,16 +2959,14 @@ function setupImageEditing() {
 
 function handleImageFile(file, key) {
   if (!file) return;
-  // PDF直接存储
+  // PDF直接存储(dataURL)
   if (file.type === 'application/pdf') {
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const imgs = getImages();
-      imgs[key] = ev.target.result;
-      saveImages(imgs);
-      const imgEl = document.querySelector('img[data-image-key="' + key + '"]');
+    var reader = new FileReader();
+    reader.onload = function (ev) {
+      putImage(key, ev.target.result);
+      var imgEl = document.querySelector('img[data-image-key="' + key + '"]');
       if (imgEl) {
-        const parent = imgEl.parentElement;
+        var parent = imgEl.parentElement;
         parent.innerHTML = '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#222;color:#888;font-size:12px;font-family:monospace;">PDF: ' + file.name + '</div>';
       }
       unsavedChanges = true;
@@ -2836,35 +2976,14 @@ function handleImageFile(file, key) {
     reader.readAsDataURL(file);
     return;
   }
-  // 图片压缩存储
-  const reader = new FileReader();
-  reader.onload = (ev) => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      const maxDim = 1920;
-      let w = img.width, h = img.height;
-      if (w > maxDim || h > maxDim) {
-        if (w > h) { h = h * maxDim / w; w = maxDim; }
-        else { w = w * maxDim / h; h = maxDim; }
-      }
-      canvas.width = w;
-      canvas.height = h;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, w, h);
-      const dataUrl = canvas.toDataURL('image/jpeg', 0.88);
-      const imgs = getImages();
-      imgs[key] = dataUrl;
-      saveImages(imgs);
-      const imgEl = document.querySelector('img[data-image-key="' + key + '"]');
-      if (imgEl) imgEl.src = dataUrl;
-      unsavedChanges = true;
-      updateEditStatus();
-      showSaveToast('图片已替换');
-    };
-    img.src = ev.target.result;
-  };
-  reader.readAsDataURL(file);
+  // 图片：保留原始高像素，直接存 Blob，不压缩
+  putImage(key, file);
+  var src = imgCache[key];
+  var imgEl = document.querySelector('img[data-image-key="' + key + '"]');
+  if (imgEl && src) imgEl.src = src;
+  unsavedChanges = true;
+  updateEditStatus();
+  showSaveToast('图片已上传（原画质）');
 }
 
 function uploadImageByKey(key) {
@@ -2959,9 +3078,8 @@ function saveAllContent() {
 function resetAllContent() {
   if (!confirm('确定要恢复所有文字和图片为默认值吗？此操作不可撤销。')) return;
   localStorage.removeItem(CONTENT_KEY);
-  localStorage.removeItem(IMAGE_KEY);
-  localStorage.removeItem(STORAGE_KEY);
   localStorage.removeItem(CLIENT_COUNT_KEY);
+  clearAllImages();
   siteContent = getContent();
   applyContent();
   renderClients();
@@ -2993,6 +3111,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const hash = location.hash.replace('#/', '') || 'home';
   showView(hash);
   startCRT();
+  loadImagesFromIDB();
 });
 
 // ============================================================
@@ -3025,42 +3144,22 @@ function handleMediaLibraryUpload(event) {
 
 function handleMediaLibraryFiles(files) {
   if (!files || files.length === 0) return;
-  const imgs = getImages();
-  let count = 0;
-  Array.from(files).forEach((file, idx) => {
-    const key = 'lib_' + Date.now() + '_' + idx;
+  var count = 0;
+  Array.from(files).forEach(function (file, idx) {
+    var key = 'lib_' + Date.now() + '_' + idx;
     if (file.type === 'application/pdf') {
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        imgs[key] = ev.target.result;
-        saveImages(imgs);
+      var reader = new FileReader();
+      reader.onload = function (ev) {
+        putImage(key, ev.target.result);
         count++;
         if (count >= files.length) { renderMediaLibrary(); showSaveToast('已上传 ' + count + ' 个文件'); }
       };
       reader.readAsDataURL(file);
     } else {
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        const img = new Image();
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          const maxDim = 1600;
-          let w = img.width, h = img.height;
-          if (w > maxDim || h > maxDim) {
-            if (w > h) { h = h * maxDim / w; w = maxDim; }
-            else { w = w * maxDim / h; h = maxDim; }
-          }
-          canvas.width = w;
-          canvas.height = h;
-          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-          imgs[key] = canvas.toDataURL('image/jpeg', 0.85);
-          saveImages(imgs);
-          count++;
-          if (count >= files.length) { renderMediaLibrary(); showSaveToast('已上传 ' + count + ' 张图片'); }
-        };
-        img.src = ev.target.result;
-      };
-      reader.readAsDataURL(file);
+      // 原画质存储，不压缩
+      putImage(key, file);
+      count++;
+      if (count >= files.length) { renderMediaLibrary(); showSaveToast('已上传 ' + count + ' 张图片'); }
     }
   });
 }
@@ -3096,9 +3195,7 @@ function renderMediaLibrary() {
 
 function deleteFromLibrary(key) {
   if (!confirm('确定从管理库删除这个文件吗？')) return;
-  const imgs = getImages();
-  delete imgs[key];
-  saveImages(imgs);
+  deleteImage(key);
   renderMediaLibrary();
   showSaveToast('已删除');
 }
@@ -3167,11 +3264,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const img = wrap.querySelector('img[data-image-key]');
     if (!img) return;
     const targetKey = img.dataset.imageKey;
-    const imgs = getImages();
-    if (imgs[libKey]) {
-      imgs[targetKey] = imgs[libKey];
-      saveImages(imgs);
-      img.src = imgs[libKey];
+    if (imgCache[libKey]) {
+      img.src = imgCache[libKey];
+      copyImage(libKey, targetKey);
       unsavedChanges = true;
       updateEditStatus();
       showSaveToast('已从管理库应用图片');
