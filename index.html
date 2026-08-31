@@ -445,59 +445,6 @@ button {
   padding: 0 50px 60px;
 }
 
-.work-header {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  align-items: start;
-  padding: 35px 0 25px;
-  border-bottom: 1px solid var(--gray-dark);
-}
-
-.work-logo {
-  font-family: var(--font-display);
-  font-size: 26px;
-  color: var(--white);
-  cursor: pointer;
-}
-
-.work-categories {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.work-categories a {
-  text-align: left;
-  font-size: 17px;
-  font-weight: 400;
-  color: var(--gray-light);
-  padding: 7px 0;
-  border-bottom: 1px solid var(--gray-dark);
-  transition: color 0.3s ease;
-  letter-spacing: 0.5px;
-  cursor: pointer;
-  display: block;
-}
-
-.work-categories a:hover {
-  color: var(--white);
-}
-
-.work-tools {
-  text-align: right;
-  font-size: 15px;
-  color: var(--gray);
-}
-
-.work-tools span {
-  cursor: pointer;
-  transition: color 0.3s ease;
-}
-
-.work-tools span:hover {
-  color: var(--white);
-}
-
 .work-featured {
   margin-top: 40px;
 }
@@ -1333,10 +1280,6 @@ body.edit-mode .client-slot .remove-slot-btn {
     left: 20px;
     right: 20px;
   }
-  .work-header {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
   .clients-footer {
     flex-direction: column;
     gap: 20px;
@@ -1803,24 +1746,10 @@ body.edit-mode .add-category-btn { display: block; }
 
   <!-- ===== View: Work (Category Overview) ===== -->
   <section class="view" id="view-work">
-    <div class="work-header">
-      <div class="work-logo" onclick="navigate('home')" data-editable="workLogo">visuelle.</div>
-      <div class="work-categories" id="workCategories">
-        <a href="#/work/graphic" onclick="navigate('work/graphic')" data-cat-key="graphic">平面设计</a>
-        <a href="#/work/brand" onclick="navigate('work/brand')" data-cat-key="brand">品牌</a>
-        <a href="#/work/ecommerce" onclick="navigate('work/ecommerce')" data-cat-key="ecommerce">电商</a>
-        <a href="#/work/aigc" onclick="navigate('work/aigc')" data-cat-key="aigc">AIGC</a>
-        <a href="#/work/packaging" onclick="navigate('work/packaging')" data-cat-key="packaging">包装</a>
-        <button class="add-category-btn" onclick="addCategory()">+ 添加分类</button>
-      </div>
-      <div class="work-tools">
-        <span class="search-with-icon" data-editable="workSearch"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>搜索</span>
-      </div>
-    </div>
     <div class="work-featured">
       <div class="work-featured-title" data-editable="workFeaturedTitle">Selected Works / 精选作品</div>
       <div class="work-grid" id="workGrid"></div>
-    <button class="add-work-btn" onclick="addFeaturedWork()">+ 添加作品</button>
+      <button class="add-work-btn" onclick="addFeaturedWork()">+ 添加作品</button>
     </div>
   </section>
 
