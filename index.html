@@ -1605,47 +1605,6 @@ body.edit-mode .add-work-btn { display: block; }
 
 /* Drag overlay removed */
 
-/* ===== Category edit mode ===== */
-body.edit-mode .work-categories a {
-  position: relative;
-  padding-right: 30px;
-}
-body.edit-mode .work-categories .cat-delete-btn {
-  display: inline-flex;
-}
-.cat-delete-btn {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 20px;
-  height: 20px;
-  background: rgba(255,0,0,0.6);
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 12px;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-}
-.cat-delete-btn:hover { background: #ff3333; }
-.add-category-btn {
-  display: none;
-  text-align: left;
-  font-size: 15px;
-  color: #33ff66;
-  padding: 8px 0;
-  cursor: pointer;
-  background: none;
-  border: none;
-  font-family: 'PingFang SC', sans-serif;
-}
-body.edit-mode .add-category-btn { display: block; }
-.add-category-btn:hover { text-decoration: underline; }
-
 /* ===== Search icon ===== */
 .search-with-icon {
   display: inline-flex;
@@ -2724,18 +2683,13 @@ function setupEditables() {
     el.spellcheck = false;
     el.onblur = onTextBlur;
     el.oninput = () => { unsavedChanges = true; };
-    // 单击聚焦编辑，双击执行原跳转
+    // 单击自由编辑（光标随点击位置），双击执行原跳转
     el.onclick = (e) => {
       if (editMode) {
         e.preventDefault();
         e.stopPropagation();
         el.focus();
-        // 选中全部文字方便编辑
-        const range = document.createRange();
-        range.selectNodeContents(el);
-        const sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
+        // 不执行全选，让用户自由移动光标编辑或删除
       }
     };
     el.ondblclick = (e) => {
