@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" href="https://aka.doubaocdn.com/s/UTJOxBwB2j">
+<link rel="icon" type="image/png" href="https://aka.doubaocdn.com/s/QE1PxV5KOC">
 <title>ZHISHAOCUI — Designer Portfolio</title>
 <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Share+Tech+Mono&display=swap">
 <style>
@@ -444,6 +444,59 @@ button {
 #view-work {
   background: var(--black);
   padding: 0 50px 60px;
+}
+
+.work-header {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  align-items: start;
+  padding: 35px 0 25px;
+  border-bottom: 1px solid var(--gray-dark);
+}
+
+.work-logo {
+  font-family: var(--font-display);
+  font-size: 26px;
+  color: var(--white);
+  cursor: pointer;
+}
+
+.work-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.work-categories a {
+  text-align: left;
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--gray-light);
+  padding: 7px 0;
+  border-bottom: 1px solid var(--gray-dark);
+  transition: color 0.3s ease;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  display: block;
+}
+
+.work-categories a:hover {
+  color: var(--white);
+}
+
+.work-tools {
+  text-align: right;
+  font-size: 15px;
+  color: var(--gray);
+}
+
+.work-tools span {
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.work-tools span:hover {
+  color: var(--white);
 }
 
 .work-featured {
@@ -1281,6 +1334,10 @@ body.edit-mode .client-slot .remove-slot-btn {
     left: 20px;
     right: 20px;
   }
+  .work-header {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
   .clients-footer {
     flex-direction: column;
     gap: 20px;
@@ -1606,6 +1663,47 @@ body.edit-mode .add-work-btn { display: block; }
 
 /* Drag overlay removed */
 
+/* ===== Category edit mode ===== */
+body.edit-mode .work-categories a {
+  position: relative;
+  padding-right: 30px;
+}
+body.edit-mode .work-categories .cat-delete-btn {
+  display: inline-flex;
+}
+.cat-delete-btn {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  background: rgba(255,0,0,0.6);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 12px;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.cat-delete-btn:hover { background: #ff3333; }
+.add-category-btn {
+  display: none;
+  text-align: left;
+  font-size: 15px;
+  color: #33ff66;
+  padding: 8px 0;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: 'PingFang SC', sans-serif;
+}
+body.edit-mode .add-category-btn { display: block; }
+.add-category-btn:hover { text-decoration: underline; }
+
 /* ===== Search icon ===== */
 .search-with-icon {
   display: inline-flex;
@@ -1709,7 +1807,7 @@ body.edit-mode .add-work-btn { display: block; }
     <div class="work-featured">
       <div class="work-featured-title" data-editable="workFeaturedTitle">Selected Works / 精选作品</div>
       <div class="work-grid" id="workGrid"></div>
-      <button class="add-work-btn" onclick="addFeaturedWork()">+ 添加作品</button>
+    <button class="add-work-btn" onclick="addFeaturedWork()">+ 添加作品</button>
     </div>
   </section>
 
@@ -2338,12 +2436,6 @@ function uploadClientLogo(index) {
     const file = e.target.files[0];
     if (!file) return;
     // 原图存入 IndexedDB
-    putImage('client_' + index, file);
-    renderClients();
-  };
-  input.onchange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
     putImage('client_' + index, file);
     renderClients();
   };
