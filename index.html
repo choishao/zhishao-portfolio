@@ -340,11 +340,12 @@ button {
   background: var(--black);
   position: relative;
   min-height: calc(100vh - 80px);
-  display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 0 50px;
   overflow: hidden;
+}
+#view-home.active { display: flex;
 }
 
 .hero-title {
@@ -1066,6 +1067,81 @@ body.edit-mode .add-gallery-btn {
   text-align: center;
   letter-spacing: 0.5px;
 }
+
+/* ===== Cargo-style About Page (Test Studio template) ===== */
+#view-about {
+  background: #0d0d0d;
+  min-height: 100vh;
+  padding: 60px 20px 80px;
+  justify-content: center;
+  align-items: flex-start;
+}
+#view-about.active { display: flex; }
+.cargo-card {
+  width: 100%;
+  max-width: 680px;
+  background: #1c1c1c;
+  border: 1px solid #2e2e2e;
+  border-radius: 18px;
+  padding: 36px 40px 40px;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.55);
+  font-family: var(--font-mono);
+  color: #c8c8c8;
+  animation: cargoFadeIn 0.6s ease;
+}
+@keyframes cargoFadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.cargo-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+}
+.cargo-topbar-left { color: #e0e0e0; font-weight: 500; }
+.cargo-topbar-right { display: flex; gap: 18px; }
+.cargo-topbar-right a {
+  color: #c8c8c8; text-decoration: none; transition: color 0.2s, text-decoration 0.2s;
+}
+.cargo-topbar-right a:hover { color: #fff; text-decoration: underline; }
+.cargo-hero-img {
+  width: 100%; height: auto; display: block;
+  filter: grayscale(100%) contrast(1.05);
+  margin-bottom: 12px;
+  transition: filter 0.4s ease;
+}
+.cargo-hero-img:hover { filter: grayscale(80%) contrast(1.05); }
+.cargo-caption {
+  font-size: 12px; color: #888; margin-bottom: 28px; line-height: 1.5;
+}
+.cargo-bio {
+  font-size: 14px; line-height: 1.75; color: #b8b8b8; margin-bottom: 24px;
+}
+.cargo-bio p { margin: 0 0 14px; }
+.cargo-bio p:last-child { margin-bottom: 0; }
+.cargo-partners {
+  font-size: 12px; color: #888; line-height: 1.7;
+  margin-bottom: 32px; padding-top: 20px; border-top: 1px solid #2e2e2e;
+}
+.cargo-contact {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 30px;
+  margin-bottom: 32px; padding-top: 24px; border-top: 1px solid #2e2e2e;
+}
+.cargo-contact-col { font-size: 12px; line-height: 1.85; color: #999; }
+.cargo-contact-col strong {
+  color: #d0d0d0; font-weight: 500; display: block; margin-bottom: 6px;
+}
+.cargo-bottom {
+  display: flex; gap: 24px; font-size: 12px;
+  padding-top: 20px; border-top: 1px solid #2e2e2e;
+}
+.cargo-bottom a { color: #999; text-decoration: none; transition: color 0.2s; }
+.cargo-bottom a:hover { color: #fff; text-decoration: underline; }
+/* Legacy about page — hidden backup for later restore */
+#view-about-legacy { display: none !important; }
 
 /* ===== View: Clients ===== */
 #view-clients {
@@ -1856,7 +1932,8 @@ body.edit-mode .add-category-btn { display: block; }
 
 
   <!-- ===== View: About ===== -->
-  <section class="view" id="view-about">
+  <!-- ===== Legacy About Page (hidden backup, 可随时恢复) ===== -->
+  <section class="view" id="view-about-legacy">
     <div class="about-hero">
       <div class="about-header" data-editable="aboutHeader">ZHISHAO</div>
       <div class="about-content">
@@ -1891,6 +1968,44 @@ body.edit-mode .add-category-btn { display: block; }
     <div class="resume-section">
       <button class="resume-btn" id="resumeBtn" onclick="handleResumeClick()">下载PDF简历</button>
       <div class="resume-copyright" data-editable="resumeCopyright">&copy; 2026. ZHISHAOCUI, Cui Zhishao, All rights reserved.</div>
+    </div>
+  </section>
+
+  
+  <!-- ===== View: About (Cargo Test Studio template 1:1) ===== -->
+  <section class="view" id="view-about">
+    <div class="cargo-card">
+      <div class="cargo-topbar">
+        <div class="cargo-topbar-left" data-editable="cargoStudioName">ZHISHAOCUI® Studio</div>
+        <div class="cargo-topbar-right">
+          <a href="mailto:hello@zhishaocui.com" data-editable="cargoEmailLink">Email</a>
+          <a href="#" data-editable="cargoIgLink" onclick="return handleSocialClick(event, 'instagram')">Instagram</a>
+        </div>
+      </div>
+      <div class="editable-image-wrap" data-image-wrap="cargoHeroImg">
+        <img src="https://aka.doubaocdn.com/s/TiKkkfW6XY" alt="Studio" class="cargo-hero-img" data-image-key="cargoHeroImg">
+      </div>
+      <div class="cargo-caption" data-editable="cargoCaption">视觉设计师 / 现居杭州 / 专注品牌与平面设计</div>
+      <div class="cargo-bio">
+        <p data-editable="cargoBio1">你好，我是志韶Ciao。设计师。小红书博主。拥有一只黑色美卡犬和两只猫。喜欢运动和时尚。</p>
+        <p data-editable="cargoBio2">ZHISHAOCUI 是一位多学科设计师，现居杭州，来自视觉设计领域。结合多元专业知识，提供卓越的视觉体验，清晰且富有风格地表达复杂的理念。</p>
+        <p data-editable="cargoBio3">以高保真度设计的精湛技艺著称，不断突破创意边界，创作出引人入胜且精致的作品。对细节有敏锐的观察力和对创新的热情。</p>
+      </div>
+      <div class="cargo-partners" data-editable="cargoServices">服务范围：品牌设计 / 平面设计 / 电商视觉 / AIGC创意 / 包装设计</div>
+      <div class="cargo-contact">
+        <div class="cargo-contact-col">
+          <strong data-editable="cargoContactLeftTitle">工作室</strong>
+          <span data-editable="cargoContactLeft">杭州 · 西湖区<br>视觉设计工作室<br>周一至周五 10:00–19:00</span>
+        </div>
+        <div class="cargo-contact-col">
+          <strong data-editable="cargoContactRightTitle">联系</strong>
+          <span data-editable="cargoContactRight">hello@zhishaocui.com<br>微信：zhishaocui<br>小红书：志韶Ciao</span>
+        </div>
+      </div>
+      <div class="cargo-bottom">
+        <a href="mailto:hello@zhishaocui.com" data-editable="cargoBottomEmail">hello@zhishaocui.com</a>
+        <a href="https://zhishaocui.com" data-editable="cargoBottomSite">www.zhishaocui.com</a>
+      </div>
     </div>
   </section>
 
@@ -2029,6 +2144,21 @@ const DEFAULT_CONTENT = {
   ],
   resumeBtnText: '下载PDF简历',
   resumeCopyright: '\u00a9 2026. ZHISHAOCUI, Cui Zhishao, All rights reserved.',
+  // Cargo-style about page
+  cargoStudioName: 'ZHISHAOCUI\u00ae Studio',
+  cargoEmailLink: 'Email',
+  cargoIgLink: 'Instagram',
+  cargoCaption: '视觉设计师 / 现居杭州 / 专注品牌与平面设计',
+  cargoBio1: '你好，我是志韶Ciao。设计师。小红书博主。拥有一只黑色美卡犬和两只猫。喜欢运动和时尚。',
+  cargoBio2: 'ZHISHAOCUI 是一位多学科设计师，现居杭州，来自视觉设计领域。结合多元专业知识，提供卓越的视觉体验，清晰且富有风格地表达复杂的理念。',
+  cargoBio3: '以高保真度设计的精湛技艺著称，不断突破创意边界，创作出引人入胜且精致的作品。对细节有敏锐的观察力和对创新的热情。',
+  cargoServices: '服务范围：品牌设计 / 平面设计 / 电商视觉 / AIGC创意 / 包装设计',
+  cargoContactLeftTitle: '工作室',
+  cargoContactLeft: '杭州 · 西湖区<br>视觉设计工作室<br>周一至周五 10:00–19:00',
+  cargoContactRightTitle: '联系',
+  cargoContactRight: 'hello@zhishaocui.com<br>微信：zhishaocui<br>小红书：志韶Ciao',
+  cargoBottomEmail: 'hello@zhishaocui.com',
+  cargoBottomSite: 'www.zhishaocui.com',
   // 客户名单
   clientsYear: '2015 - 2026',
   clientsTitle: '客户名单',
