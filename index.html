@@ -6,6 +6,7 @@
 <link rel="icon" type="image/png" href="https://aka.doubaocdn.com/s/ZNTutxkqU6">
 <title>ZHISHAOCUI — Designer Portfolio</title>
 <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Share+Tech+Mono&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap">
 <style>
 /* ===== Font Face: Impact ===== */
 @font-face {
@@ -26,6 +27,7 @@
 
 /* ===== CSS Variables ===== */
 :root {
+  --font-cargo: 'Space Grotesk', sans-serif;
   --black: #000000;
   --white: #ffffff;
   --gray: #888888;
@@ -1070,25 +1072,34 @@ body.edit-mode .add-gallery-btn {
 
 /* ===== Cargo-style About Page (Test Studio template) ===== */
 #view-about {
-  background: #0d0d0d;
-  min-height: 100vh;
-  padding: 60px 20px 80px;
+  background: #1a1a1a;
+  height: 100vh;
+  overflow: hidden;
+  padding: 0;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
 }
 #view-about.active { display: flex; }
 .cargo-card {
   width: 100%;
-  max-width: 680px;
-  background: #1c1c1c;
-  border: 1px solid #2e2e2e;
-  border-radius: 18px;
-  padding: 36px 40px 40px;
-  box-shadow: 0 24px 70px rgba(0,0,0,0.55);
-  font-family: var(--font-mono);
-  color: #c8c8c8;
-  animation: cargoFadeIn 0.6s ease;
+  max-width: 440px;
+  height: 82vh;
+  max-height: 720px;
+  background: #2a2a2a;
+  border-radius: 12px;
+  padding: 20px 28px 28px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+  font-family: var(--font-cargo);
+  color: #b0b0b0;
+  animation: cargoFadeIn 0.5s ease;
+  scrollbar-width: thin;
+  scrollbar-color: #555 #2a2a2a;
 }
+.cargo-card::-webkit-scrollbar { width: 4px; }
+.cargo-card::-webkit-scrollbar-track { background: transparent; }
+.cargo-card::-webkit-scrollbar-thumb { background: #555; border-radius: 2px; }
 @keyframes cargoFadeIn {
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
@@ -1101,45 +1112,48 @@ body.edit-mode .add-gallery-btn {
   font-size: 13px;
   letter-spacing: 0.3px;
 }
-.cargo-topbar-left { color: #e0e0e0; font-weight: 500; }
+.cargo-topbar-left { color: #d8d8d8; font-weight: 500; font-size: 13px; }
 .cargo-topbar-right { display: flex; gap: 18px; }
 .cargo-topbar-right a {
-  color: #c8c8c8; text-decoration: none; transition: color 0.2s, text-decoration 0.2s;
+  color: #d8d8d8; text-decoration: underline; transition: opacity 0.2s;
+  font-size: 13px;
 }
-.cargo-topbar-right a:hover { color: #fff; text-decoration: underline; }
+.cargo-topbar-right a:hover { opacity: 0.6; }
 .cargo-hero-img {
   width: 100%; height: auto; display: block;
   filter: grayscale(100%) contrast(1.05);
-  margin-bottom: 12px;
-  transition: filter 0.4s ease;
+  margin-bottom: 10px;
 }
-.cargo-hero-img:hover { filter: grayscale(80%) contrast(1.05); }
+
 .cargo-caption {
-  font-size: 12px; color: #888; margin-bottom: 28px; line-height: 1.5;
+  font-size: 10px; color: #888; margin-bottom: 22px; line-height: 1.4;
 }
 .cargo-bio {
-  font-size: 14px; line-height: 1.75; color: #b8b8b8; margin-bottom: 24px;
+  font-size: 12px; line-height: 1.65; color: #a8a8a8; margin-bottom: 20px;
 }
 .cargo-bio p { margin: 0 0 14px; }
 .cargo-bio p:last-child { margin-bottom: 0; }
 .cargo-partners {
-  font-size: 12px; color: #888; line-height: 1.7;
-  margin-bottom: 32px; padding-top: 20px; border-top: 1px solid #2e2e2e;
+  font-size: 12px; color: #a8a8a8; line-height: 1.65;
+  margin-bottom: 28px;
 }
+.cargo-partners a { color: #d8d8d8; text-decoration: underline; }
+.cargo-partners a:hover { opacity: 0.6; }
 .cargo-contact {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 30px;
-  margin-bottom: 32px; padding-top: 24px; border-top: 1px solid #2e2e2e;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px 28px;
+  margin-bottom: 28px;
 }
-.cargo-contact-col { font-size: 12px; line-height: 1.85; color: #999; }
+.cargo-contact-col { font-size: 11px; line-height: 1.7; color: #999; }
+.cargo-contact-col a { color: #b8b8b8; text-decoration: underline; }
+.cargo-contact-col a:hover { opacity: 0.6; }
 .cargo-contact-col strong {
-  color: #d0d0d0; font-weight: 500; display: block; margin-bottom: 6px;
+  color: #c8c8c8; font-weight: 500; display: block; margin-bottom: 4px; font-size: 12px;
 }
 .cargo-bottom {
-  display: flex; gap: 24px; font-size: 12px;
-  padding-top: 20px; border-top: 1px solid #2e2e2e;
+  display: flex; gap: 20px; font-size: 11px;
 }
-.cargo-bottom a { color: #999; text-decoration: none; transition: color 0.2s; }
-.cargo-bottom a:hover { color: #fff; text-decoration: underline; }
+.cargo-bottom a { color: #b8b8b8; text-decoration: underline; transition: opacity 0.2s; }
+.cargo-bottom a:hover { opacity: 0.6; }
 /* Legacy about page — hidden backup for later restore */
 #view-about-legacy { display: none !important; }
 
@@ -1976,35 +1990,37 @@ body.edit-mode .add-category-btn { display: block; }
   <section class="view" id="view-about">
     <div class="cargo-card">
       <div class="cargo-topbar">
-        <div class="cargo-topbar-left" data-editable="cargoStudioName">ZHISHAOCUI® Studio</div>
+        <div class="cargo-topbar-left" data-editable="cargoStudioName">Test® Studio</div>
         <div class="cargo-topbar-right">
-          <a href="mailto:hello@zhishaocui.com" data-editable="cargoEmailLink">Email</a>
-          <a href="#" data-editable="cargoIgLink" onclick="return handleSocialClick(event, 'instagram')">Instagram</a>
+          <a href="#" data-editable="cargoEmailLink">Email</a>
+          <a href="#" data-editable="cargoIgLink">Instagram</a>
         </div>
       </div>
       <div class="editable-image-wrap" data-image-wrap="cargoHeroImg">
         <img src="https://aka.doubaocdn.com/s/TiKkkfW6XY" alt="Studio" class="cargo-hero-img" data-image-key="cargoHeroImg">
       </div>
-      <div class="cargo-caption" data-editable="cargoCaption">视觉设计师 / 现居杭州 / 专注品牌与平面设计</div>
+      <div class="cargo-caption" data-editable="cargoCaption">Vivamus sed condimentum leo. Nunc efficitur</div>
       <div class="cargo-bio">
-        <p data-editable="cargoBio1">你好，我是志韶Ciao。设计师。小红书博主。拥有一只黑色美卡犬和两只猫。喜欢运动和时尚。</p>
-        <p data-editable="cargoBio2">ZHISHAOCUI 是一位多学科设计师，现居杭州，来自视觉设计领域。结合多元专业知识，提供卓越的视觉体验，清晰且富有风格地表达复杂的理念。</p>
-        <p data-editable="cargoBio3">以高保真度设计的精湛技艺著称，不断突破创意边界，创作出引人入胜且精致的作品。对细节有敏锐的观察力和对创新的热情。</p>
+        <p data-editable="cargoBio1">Aenean lorem urna, tempus ac rhoncus vel, lacinia eu velit. In non quam eu odio molestie consectetur ac quis nisi. Curabitur ultrices metus iaculis nisi auctor, vitae ornare lorem interdum. Nullam faucibus dui et quam iaculis mattis. Proin quis ultricies est, ut posuere tortor.</p>
       </div>
-      <div class="cargo-partners" data-editable="cargoServices">服务范围：品牌设计 / 平面设计 / 电商视觉 / AIGC创意 / 包装设计</div>
+      <div class="cargo-partners" data-editable="cargoPartners">Partners: <a href="#">Ruben Koller</a>, <a href="#">Matteo de Vries</a>, <a href="#">Satoshi Morinaga</a>, <a href="#">Ilan Sakari</a>, <a href="#">Dario Giusti</a>, <a href="#">Koen van Laar</a>, <a href="#">Julien Lombardi</a></div>
       <div class="cargo-contact">
         <div class="cargo-contact-col">
-          <strong data-editable="cargoContactLeftTitle">工作室</strong>
-          <span data-editable="cargoContactLeft">杭州 · 西湖区<br>视觉设计工作室<br>周一至周五 10:00–19:00</span>
+          <strong data-editable="cargoContact1Title">Test Studio Europe</strong>
+          <span data-editable="cargoContact1">Kaiserhof 27<br>60311<br>Frankfurt am Main<br>Germany<br>T: +49 69 7421 380<br>F: +49 69 7421 382<br><a href="mailto:europe@teststudio.eu">europe@teststudio.eu</a></span>
         </div>
         <div class="cargo-contact-col">
-          <strong data-editable="cargoContactRightTitle">联系</strong>
-          <span data-editable="cargoContactRight">hello@zhishaocui.com<br>微信：zhishaocui<br>小红书：志韶Ciao</span>
+          <strong data-editable="cargoContact2Title">Test Studio Americas</strong>
+          <span data-editable="cargoContact2">410 West 14th Street<br>Suite 903<br>New York, NY 10011<br>USA<br>T: +1 212 555 9632<br>F: +1 212 555 9633<br><a href="mailto:americas@teststudio.eu">americas@teststudio.eu</a></span>
         </div>
-      </div>
-      <div class="cargo-bottom">
-        <a href="mailto:hello@zhishaocui.com" data-editable="cargoBottomEmail">hello@zhishaocui.com</a>
-        <a href="https://zhishaocui.com" data-editable="cargoBottomSite">www.zhishaocui.com</a>
+        <div class="cargo-contact-col">
+          <strong data-editable="cargoContact3Title">Test Studio East Asia</strong>
+          <span data-editable="cargoContact3">7/F Meridian House<br>22 Wyndham Street<br>Sheung Wan<br>Hong Kong<br>T: +852 3186 9040<br>F: +852 3186 0044<br><a href="mailto:asia@teststudio.eu">asia@teststudio.eu</a></span>
+        </div>
+        <div class="cargo-contact-col">
+          <strong data-editable="cargoContact4Title">Test Studio Pacific</strong>
+          <span data-editable="cargoContact4">Level 6<br>85 Clarence Street<br>Sydney NSW 2000<br>Australia<br>T: +61 2 8218 4470<br>F: +61 69 7421 382<br><a href="mailto:pacific@teststudio.au">pacific@teststudio.au</a></span>
+        </div>
       </div>
     </div>
   </section>
@@ -2145,20 +2161,20 @@ const DEFAULT_CONTENT = {
   resumeBtnText: '下载PDF简历',
   resumeCopyright: '\u00a9 2026. ZHISHAOCUI, Cui Zhishao, All rights reserved.',
   // Cargo-style about page
-  cargoStudioName: 'ZHISHAOCUI\u00ae Studio',
+  cargoStudioName: 'Test\u00ae Studio',
   cargoEmailLink: 'Email',
   cargoIgLink: 'Instagram',
-  cargoCaption: '视觉设计师 / 现居杭州 / 专注品牌与平面设计',
-  cargoBio1: '你好，我是志韶Ciao。设计师。小红书博主。拥有一只黑色美卡犬和两只猫。喜欢运动和时尚。',
-  cargoBio2: 'ZHISHAOCUI 是一位多学科设计师，现居杭州，来自视觉设计领域。结合多元专业知识，提供卓越的视觉体验，清晰且富有风格地表达复杂的理念。',
-  cargoBio3: '以高保真度设计的精湛技艺著称，不断突破创意边界，创作出引人入胜且精致的作品。对细节有敏锐的观察力和对创新的热情。',
-  cargoServices: '服务范围：品牌设计 / 平面设计 / 电商视觉 / AIGC创意 / 包装设计',
-  cargoContactLeftTitle: '工作室',
-  cargoContactLeft: '杭州 · 西湖区<br>视觉设计工作室<br>周一至周五 10:00–19:00',
-  cargoContactRightTitle: '联系',
-  cargoContactRight: 'hello@zhishaocui.com<br>微信：zhishaocui<br>小红书：志韶Ciao',
-  cargoBottomEmail: 'hello@zhishaocui.com',
-  cargoBottomSite: 'www.zhishaocui.com',
+  cargoCaption: 'Vivamus sed condimentum leo. Nunc efficitur',
+  cargoBio1: 'Aenean lorem urna, tempus ac rhoncus vel, lacinia eu velit. In non quam eu odio molestie consectetur ac quis nisi. Curabitur ultrices metus iaculis nisi auctor, vitae ornare lorem interdum. Nullam faucibus dui et quam iaculis mattis. Proin quis ultricies est, ut posuere tortor.',
+  cargoPartners: 'Partners: Ruben Koller, Matteo de Vries, Satoshi Morinaga, Ilan Sakari, Dario Giusti, Koen van Laar, Julien Lombardi',
+  cargoContact1Title: 'Test Studio Europe',
+  cargoContact1: 'Kaiserhof 27<br>60311<br>Frankfurt am Main<br>Germany<br>T: +49 69 7421 380<br>F: +49 69 7421 382<br>europe@teststudio.eu',
+  cargoContact2Title: 'Test Studio Americas',
+  cargoContact2: '410 West 14th Street<br>Suite 903<br>New York, NY 10011<br>USA<br>T: +1 212 555 9632<br>F: +1 212 555 9633<br>americas@teststudio.eu',
+  cargoContact3Title: 'Test Studio East Asia',
+  cargoContact3: '7/F Meridian House<br>22 Wyndham Street<br>Sheung Wan<br>Hong Kong<br>T: +852 3186 9040<br>F: +852 3186 0044<br>asia@teststudio.eu',
+  cargoContact4Title: 'Test Studio Pacific',
+  cargoContact4: 'Level 6<br>85 Clarence Street<br>Sydney NSW 2000<br>Australia<br>T: +61 2 8218 4470<br>F: +61 69 7421 382<br>pacific@teststudio.au',
   // 客户名单
   clientsYear: '2015 - 2026',
   clientsTitle: '客户名单',
