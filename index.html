@@ -1012,8 +1012,9 @@ body.edit-mode .add-gallery-btn { display: block; }
   letter-spacing: 0.5px;
 }
 
-/* ===== Cargo-style About Page (Test Studio template) ===== */
-#view-about {
+/* ===== Cargo-style About Page (Test Studio template) - hidden backup ===== */
+#view-about-cargo {
+  display: none !important;
   background: #1a1a1a;
   height: 100vh;
   overflow: hidden;
@@ -1021,7 +1022,7 @@ body.edit-mode .add-gallery-btn { display: block; }
   justify-content: center;
   align-items: center;
 }
-#view-about.active { display: flex; }
+#view-about-cargo.active { display: flex; }
 .cargo-card {
   width: 100%;
   max-width: 440px;
@@ -1096,8 +1097,7 @@ body.edit-mode .add-gallery-btn { display: block; }
 }
 .cargo-bottom a { color: #b8b8b8; text-decoration: underline; transition: opacity 0.2s; }
 .cargo-bottom a:hover { opacity: 0.6; }
-/* Legacy about page — hidden backup for later restore */
-#view-about-legacy { display: none !important; }
+/* Legacy about page - now active */
 
 /* ===== View: Clients ===== */
 #view-clients {
@@ -1889,7 +1889,7 @@ body.edit-mode .add-category-btn { display: block; }
 
   <!-- ===== View: About ===== -->
   <!-- ===== Legacy About Page (hidden backup, 可随时恢复) ===== -->
-  <section class="view" id="view-about-legacy">
+  <section class="view" id="view-about">
     <div class="about-hero">
       <div class="about-header" data-editable="aboutHeader">ZHISHAO</div>
       <div class="about-content">
@@ -1928,8 +1928,8 @@ body.edit-mode .add-category-btn { display: block; }
   </section>
 
   
-  <!-- ===== View: About (Cargo Test Studio template 1:1) ===== -->
-  <section class="view" id="view-about">
+  <!-- ===== View: About (Cargo Test Studio template 1:1) - hidden backup ===== -->
+  <section class="view" id="view-about-cargo">
     <div class="cargo-card">
       <div class="cargo-topbar">
         <div class="cargo-topbar-left" data-editable="cargoStudioName">Test® Studio</div>
