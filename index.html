@@ -1757,6 +1757,44 @@ body.edit-mode .add-category-btn { display: block; }
   stroke-width: 2;
 }
 
+
+/* ===== Admin Dashboard (Cargo-style) ===== */
+#view-admin { display:none; position:fixed; inset:0; background:#fff; z-index:5000; font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif; color:#1a1a1a; overflow:hidden; }
+#view-admin.active { display:flex; }
+.admin-topbar { position:absolute; top:0; left:0; right:0; height:40px; display:flex; align-items:center; justify-content:space-between; padding:0 16px; border-bottom:1px solid #e5e5e5; background:#fff; z-index:10; }
+.admin-topbar-left { display:flex; align-items:center; gap:8px; font-size:13px; font-weight:500; }
+.admin-topbar-left .badge { background:#e8e8e8; font-size:10px; padding:1px 5px; border-radius:3px; color:#666; }
+.admin-topbar-right { display:flex; align-items:center; gap:12px; }
+.admin-topbar-right button { background:none; border:none; cursor:pointer; font-size:16px; color:#333; padding:4px; }
+.admin-exit-btn { font-size:12px !important; border:1px solid #ddd !important; padding:4px 10px !important; border-radius:3px; }
+.admin-sidebar { width:180px; border-right:1px solid #e5e5e5; padding-top:50px; padding-bottom:16px; display:flex; flex-direction:column; justify-content:space-between; flex-shrink:0; }
+.admin-nav { padding:0 8px; }
+.admin-nav-item { display:flex; align-items:center; gap:6px; padding:6px 10px; font-size:13px; cursor:pointer; border-radius:4px; color:#333; }
+.admin-nav-item:hover { background:#f5f5f5; }
+.admin-nav-item.active { background:#f0f0f0; font-weight:500; }
+.admin-search { padding:8px; border-top:1px solid #eee; }
+.admin-search input { width:100%; border:none; outline:none; font-size:12px; padding:4px; background:transparent; color:#999; }
+.admin-main { flex:1; padding:50px 24px 24px; overflow-y:auto; }
+.admin-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:20px; }
+.admin-page-card { cursor:pointer; position:relative; }
+.admin-page-card:hover .card-actions { opacity:1; }
+.admin-thumb { width:100%; aspect-ratio:16/10; border:1px solid #e0e0e0; border-radius:2px; overflow:hidden; background:#fafafa; position:relative; }
+.admin-thumb img { width:100%; height:100%; object-fit:cover; }
+.admin-thumb-preview { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:11px; color:#aaa; }
+.admin-card-footer { display:flex; align-items:center; justify-content:space-between; padding:8px 2px 0; }
+.admin-card-name { font-size:13px; color:#333; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.admin-card-eye { color:#999; font-size:14px; cursor:pointer; padding:2px 4px; }
+.admin-card-eye:hover { color:#333; }
+.card-actions { position:absolute; top:6px; right:6px; opacity:0; transition:opacity 0.15s; z-index:5; }
+.card-menu-btn { width:24px; height:24px; background:rgba(255,255,255,0.9); border:1px solid #ddd; border-radius:3px; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center; color:#333; }
+.admin-context-menu { position:fixed; background:#fff; border:1px solid #ddd; border-radius:4px; box-shadow:0 4px 16px rgba(0,0,0,0.12); padding:4px 0; min-width:140px; z-index:10000; display:none; }
+.admin-context-menu.show { display:block; }
+.admin-context-menu-item { padding:8px 16px; font-size:13px; cursor:pointer; color:#333; display:flex; align-items:center; gap:8px; }
+.admin-context-menu-item:hover { background:#f5f5f5; }
+.admin-context-menu-item.danger { color:#d33; }
+.admin-context-menu-divider { height:1px; background:#eee; margin:4px 0; }
+.admin-add-page { border:2px dashed #ddd; aspect-ratio:16/10; border-radius:2px; display:flex; align-items:center; justify-content:center; font-size:28px; color:#ccc; cursor:pointer; }
+.admin-add-page:hover { border-color:#999; color:#666; }
 </style>
 </head>
 <body>
@@ -2001,6 +2039,42 @@ body.edit-mode .add-category-btn { display: block; }
 
 
   <!-- ===== Edit Toolbar (WYSIWYG) ===== -->
+
+<!-- ===== Admin Dashboard ===== -->
+<section class="view" id="view-admin">
+  <div class="admin-topbar">
+    <div class="admin-topbar-left">
+      <span>页面管理</span>
+      <span class="badge">新</span>
+    </div>
+    <div class="admin-topbar-right">
+      <button onclick="exitAdminToSite()" title="返回网站">&#8962;</button>
+      <button class="admin-exit-btn" onclick="exitAdminToSite()">退出后台</button>
+    </div>
+  </div>
+  <div class="admin-sidebar">
+    <div class="admin-nav">
+      <div class="admin-nav-item active" onclick="filterAdminPages('all', this)">&#128196; 全部</div>
+      <div class="admin-nav-item" onclick="filterAdminPages('main', this)">&#128193; 主要页面</div>
+      <div class="admin-nav-item" onclick="filterAdminPages('work', this)">&#128193; 作品页面</div>
+    </div>
+    <div class="admin-search">
+      <input type="text" placeholder="搜索页面..." oninput="searchAdminPages(this.value)">
+    </div>
+  </div>
+  <div class="admin-main">
+    <div class="admin-grid" id="adminGrid"></div>
+  </div>
+</section>
+<!-- Context Menu -->
+<div class="admin-context-menu" id="adminContextMenu">
+  <div class="admin-context-menu-item" onclick="adminAction('edit')">&#9998; 编辑</div>
+  <div class="admin-context-menu-item" onclick="adminAction('duplicate')">&#128203; 重复</div>
+  <div class="admin-context-menu-item" onclick="adminAction('copy')">&#128279; 复制链接</div>
+  <div class="admin-context-menu-divider"></div>
+  <div class="admin-context-menu-item danger" onclick="adminAction('delete')">&#128465; 删除</div>
+</div>
+
 <div id="editToolbar">
   <div class="edit-toolbar-left">
     <span class="edit-toolbar-title">EDIT MODE</span>
@@ -2033,7 +2107,7 @@ body.edit-mode .add-category-btn { display: block; }
   </div>
 </div>
 
-<div id="editEntryHint">访问 #/edit 进入编辑模式</div>
+<div id="editEntryHint">访问 #/edit 进入后台管理</div>
 
   
 
@@ -2666,8 +2740,9 @@ function navigate(path) {
 function showView(path) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   if (path === 'edit') {
-    document.getElementById('view-home').classList.add('active');
-    enterEditMode();
+    if (editMode) exitEditModeSilent();
+    document.getElementById('view-admin').classList.add('active');
+    renderAdminDashboard();
     return;
   }
   if (path.startsWith('work/detail/')) {
@@ -3377,6 +3452,153 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }, true);
 });
+
+
+// ===== Admin Dashboard Functions =====
+var adminPages = [
+  { id: 'home', name: '首页', route: 'home', type: 'main', thumb: '' },
+  { id: 'work', name: '作品项目', route: 'work', type: 'main', thumb: '' },
+  { id: 'about', name: '关于我', route: 'about', type: 'main', thumb: '' },
+  { id: 'clients', name: '客户名单', route: 'clients', type: 'main', thumb: '' },
+];
+var adminCurrentFilter = 'all';
+var adminSearchQuery = '';
+var adminContextTarget = null;
+
+function getAdminPages() {
+  var pages = adminPages.slice();
+  if (siteContent && siteContent.categories) {
+    Object.keys(siteContent.categories).forEach(function(cat) {
+      pages.push({ id: 'work-' + cat, name: siteContent.categories[cat], route: 'work/' + cat, type: 'work', thumb: '' });
+    });
+  }
+  if (siteContent && siteContent.workItems) {
+    siteContent.workItems.forEach(function(item, idx) {
+      pages.push({ id: 'detail-' + idx, name: item.title || ('作品 ' + (idx + 1)), route: 'work/detail/' + idx, type: 'work', thumb: item.cover || '' });
+    });
+  }
+  return pages;
+}
+
+function renderAdminDashboard() {
+  var grid = document.getElementById('adminGrid');
+  if (!grid) return;
+  var pages = getAdminPages();
+  if (adminCurrentFilter !== 'all') {
+    pages = pages.filter(function(p) { return p.type === adminCurrentFilter; });
+  }
+  if (adminSearchQuery) {
+    var q = adminSearchQuery.toLowerCase();
+    pages = pages.filter(function(p) { return p.name.toLowerCase().indexOf(q) >= 0; });
+  }
+  var html = '';
+  pages.forEach(function(page) {
+    var thumbContent = page.thumb
+      ? '<img src="' + page.thumb + '" alt="' + page.name + '">'
+      : '<div class="admin-thumb-preview">' + page.name + '</div>';
+    html += '<div class="admin-page-card" data-page-id="' + page.id + '">'
+      + '<div class="card-actions"><button class="card-menu-btn" onclick="event.stopPropagation();showAdminContextMenu(event,\'' + page.id + '\')">&#8942;</button></div>'
+      + '<div class="admin-thumb" onclick="adminEditPage(\'' + page.route + '\')">' + thumbContent + '</div>'
+      + '<div class="admin-card-footer">'
+      + '<span class="admin-card-name">' + page.name + '</span>'
+      + '<span class="admin-card-eye" onclick="event.stopPropagation();adminPreviewPage(\'' + page.route + '\')" title="预览">&#128065;</span>'
+      + '</div></div>';
+  });
+  grid.innerHTML = html;
+}
+
+function filterAdminPages(type, el) {
+  adminCurrentFilter = type;
+  document.querySelectorAll('.admin-nav-item').forEach(function(n) { n.classList.remove('active'); });
+  el.classList.add('active');
+  renderAdminDashboard();
+}
+
+function searchAdminPages(q) {
+  adminSearchQuery = q;
+  renderAdminDashboard();
+}
+
+function adminEditPage(route) {
+  hideAdminContextMenu();
+  document.getElementById('view-admin').classList.remove('active');
+  showView(route);
+  enterEditMode();
+}
+
+function adminPreviewPage(route) {
+  hideAdminContextMenu();
+  document.getElementById('view-admin').classList.remove('active');
+  showView(route);
+}
+
+function showAdminContextMenu(e, pageId) {
+  e.preventDefault();
+  adminContextTarget = pageId;
+  var menu = document.getElementById('adminContextMenu');
+  menu.style.left = e.clientX + 'px';
+  menu.style.top = e.clientY + 'px';
+  menu.classList.add('show');
+}
+
+function hideAdminContextMenu() {
+  var menu = document.getElementById('adminContextMenu');
+  if (menu) menu.classList.remove('show');
+  adminContextTarget = null;
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.admin-context-menu') && !e.target.closest('.card-menu-btn')) {
+    hideAdminContextMenu();
+  }
+});
+
+function adminAction(action) {
+  if (!adminContextTarget) return;
+  var pages = getAdminPages();
+  var page = null;
+  for (var i = 0; i < pages.length; i++) {
+    if (pages[i].id === adminContextTarget) { page = pages[i]; break; }
+  }
+  if (!page) { hideAdminContextMenu(); return; }
+  if (action === 'edit') {
+    adminEditPage(page.route);
+  } else if (action === 'duplicate') {
+    alert('复制页面：' + page.name + '（功能开发中）');
+    hideAdminContextMenu();
+  } else if (action === 'copy') {
+    var url = window.location.origin + window.location.pathname + '#/' + page.route;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url).then(function() { alert('链接已复制：' + url); }).catch(function() { prompt('复制以下链接：', url); });
+    } else { prompt('复制以下链接：', url); }
+    hideAdminContextMenu();
+  } else if (action === 'delete') {
+    if (confirm('确定删除页面「' + page.name + '」吗？')) {
+      if (page.type === 'work' && page.id.indexOf('detail-') === 0) {
+        var idx = parseInt(page.id.replace('detail-', ''));
+        siteContent.workItems.splice(idx, 1);
+        if (typeof saveSiteContent === 'function') saveSiteContent();
+        renderAdminDashboard();
+      } else { alert('系统页面不可删除'); }
+    }
+    hideAdminContextMenu();
+  }
+}
+
+function exitAdminToSite() {
+  document.getElementById('view-admin').classList.remove('active');
+  hideAdminContextMenu();
+  showView('home');
+  window.location.hash = '#/home';
+}
+
+function exitEditModeSilent() {
+  editMode = false;
+  document.body.classList.remove('edit-mode');
+  var toolbar = document.getElementById('editToolbar');
+  if (toolbar) toolbar.classList.remove('show');
+  document.querySelectorAll('[data-editable]').forEach(function(el) { el.contentEditable = 'false'; });
+}
 
 </script>
 
