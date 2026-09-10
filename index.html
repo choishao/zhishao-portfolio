@@ -1845,8 +1845,8 @@ body.edit-mode .add-category-btn { display: block; }
 .font-section { margin-bottom:28px; }
 .font-section-label { font-size:13px; color:#888; margin-bottom:12px; text-transform:uppercase; letter-spacing:1px; }
 .font-current { display:flex; align-items:center; gap:12px; padding:12px 16px; background:#222; border-radius:6px; margin-bottom:12px; }
-.font-current-name { font-size:15px; flex:1; }
-.font-current-preview { font-size:20px; font-weight:600; }
+.font-current-name { font-size:15px; flex:1; color:#fff; }
+.font-current-preview { font-size:20px; font-weight:600; color:#fff; }
 .font-upload-area { border:1px solid #d9d9d9; border-radius:8px; padding:24px; text-align:center; cursor:pointer; transition:all 0.15s; background:#fafafa; }
 .font-upload-area:hover { border-color:#1a1a1a; background:#f5f5f5; }
 .font-upload-area.drag-over { border-color:#1a1a1a; background:#f0f0f0; }
@@ -1855,6 +1855,8 @@ body.edit-mode .add-category-btn { display: block; }
 .font-reset-btn { background:none; border:1px solid #555; color:#aaa; padding:6px 14px; border-radius:4px; cursor:pointer; font-size:12px; }
 .font-reset-btn:hover { border-color:#888; color:#fff; }
 .font-apply-all-notice { padding:12px 16px; background:rgba(76,175,80,0.1); border:1px solid rgba(76,175,80,0.3); border-radius:6px; font-size:13px; color:#8BC34A; margin-top:16px; }
+.font-confirm-btn { width:100%; padding:12px; background:#1a1a1a; color:#fff; border:none; border-radius:8px; font-size:15px; font-weight:500; cursor:pointer; margin-top:16px; transition:background 0.15s; }
+.font-confirm-btn:hover { background:#000; }
 
 
 /* Global font enforcement - ensures custom fonts apply to ALL pages */
@@ -2226,6 +2228,7 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
       <div class="font-apply-all-notice">
         &#10003; 字体上传后将自动应用到网站全部页面（首页/作品/关于我/客户名单/后台）
       </div>
+      <button class="font-confirm-btn" onclick="closeFontManager()">确定</button>
     </div>
   </div>
 </div>
