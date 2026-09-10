@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test Moodboard</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    background: #1a1a1a;
+    color: #ccc;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    padding: 12px 16px 40px;
+  }
+
+  /* ===== Top Bar ===== */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 40px;
+  }
+  .moodboard-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #ddd;
+    border: 1px solid #555;
+    padding: 4px 10px;
+    cursor: text;
+    outline: none;
+  }
+  .moodboard-title:focus { border-color: #888; }
+  .info-btn {
+    width: 28px;
+    height: 28px;
+    border: 1px solid #555;
+    background: transparent;
+    color: #ccc;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .info-btn:hover { border-color: #888; color: #fff; }
+
+  /* ===== Edit Mode Toggle ===== */
+  .edit-toggle {
+    position: fixed;
+    top: 12px;
+    right: 16px;
+    z-index: 100;
+    border: 1px solid #555;
+    background: transparent;
+    color: #ccc;
+    padding: 5px 12px;
+    font-size: 10px;
+    font-family: inherit;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .edit-toggle:hover { border-color: #888; color: #fff; }
+  .edit-toggle.active { background: #fff; color: #000; border-color: #fff; }
+
+  /* ===== Gallery Row ===== */
+  .gallery-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    margin-bottom: 50px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .gallery-row::-webkit-scrollbar { display: none; }
+
+  .gallery-item {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .item-image-wrap {
+    position: relative;
+    background: transparent;
+    border: none;
+  }
+  .item-image-wrap img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Edit mode overlays */
+  body.edit-mode .item-image-wrap:hover .img-overlay { opacity: 1; }
+  .img-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 5;
+  }
+  .img-overlay button {
+    background: rgba(255,255,255,0.9);
+    border: none;
+    color: #000;
+    padding: 4px 8px;
+    font-size: 9px;
+    font-family: inherit;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+  .img-overlay button:hover { background: #fff; }
+  .img-overlay .del-btn { background: rgba(255,60,60,0.9); color: #fff; }
+
+  .item-meta {
+    margin-top: 8px;
+    font-size: 10px;
+    line-height: 1.4;
+    padding-right: 8px;
+  }
+  .item-meta .code {
+    color: #ddd;
+    font-weight: 500;
+    outline: none;
+    cursor: text;
+  }
+  .item-meta .name {
+    color: #999;
+    outline: none;
+    cursor: text;
+  }
+  .item-meta .src {
+    color: #777;
+    font-size: 9px;
+    outline: none;
+    cursor: text;
+  }
+  body.edit-mode .item-meta span:hover { background: rgba(255,255,255,0.08); }
+
+  /* Add item button */
+  .add-item-btn {
+    display: none;
+    flex-shrink: 0;
+    width: 80px;
+    min-height: 100px;
+    border: 1px dashed #555;
+    background: transparent;
+    color: #666;
+    font-size: 20px;
+    cursor: pointer;
+    align-self: stretch;
+    margin-left: 4px;
+  }
+  body.edit-mode .add-item-btn { display: flex; align-items: center; justify-content: center; }
+  .add-item-btn:hover { border-color: #888; color: #aaa; }
+
+  .add-row-btn {
+    display: none;
+    width: 100%;
+    border: 1px dashed #444;
+    background: transparent;
+    color: #555;
+    padding: 12px;
+    font-size: 10px;
+    font-family: inherit;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 50px;
+  }
+  body.edit-mode .add-row-btn { display: block; }
+  .add-row-btn:hover { border-color: #666; color: #888; }
+
+  /* ===== Bottom Bar ===== */
+  .bottom-bar {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .bottom-bar span {
+    border: 1px solid #555;
+    padding: 4px 10px;
+    font-size: 10px;
+    color: #aaa;
+    outline: none;
+    cursor: text;
+  }
+  .bottom-bar span:focus { border-color: #888; }
+
+  /* Hidden file input */
+  .hidden-file-input { display: none; }
+
+  /* ===== Detail View ===== */
+  #detailView {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #111;
+    z-index: 200;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+  }
+  #detailView.active { display: flex; }
+  .detail-back {
+    position: absolute;
+    top: 20px;
+    left: 24px;
+    background: transparent;
+    border: 1px solid #555;
+    color: #ccc;
+    padding: 6px 14px;
+    font-size: 11px;
+    font-family: inherit;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .detail-back:hover { border-color: #888; color: #fff; }
+  .detail-image-wrap {
+    max-width: 80vw;
+    max-height: 75vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .detail-image-wrap img {
+    max-width: 100%;
+    max-height: 75vh;
+    object-fit: contain;
+    display: block;
+  }
+  .detail-image-placeholder {
+    width: 400px;
+    height: 300px;
+    background: #2a2a2a;
+    border: 1px solid #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    font-size: 11px;
+  }
+  .detail-meta {
+    margin-top: 24px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .detail-meta .d-code {
+    color: #ddd;
+    font-weight: 500;
+    font-size: 14px;
+    outline: none;
+  }
+  .detail-meta .d-name {
+    color: #999;
+    margin-top: 4px;
+    outline: none;
+  }
+  .detail-meta .d-src {
+    color: #666;
+    font-size: 10px;
+    margin-top: 2px;
+    outline: none;
+  }
+  body.edit-mode .detail-meta div:hover { background: rgba(255,255,255,0.06); }
+  .detail-replace-hint {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #555;
+    font-size: 10px;
+    display: none;
+  }
+  body.edit-mode .detail-replace-hint { display: block; }
+</style>
+</head>
+<body>
+
+<!-- Edit Mode Toggle -->
+<button class="edit-toggle" id="editToggle" onclick="toggleEditMode()">Edit</button>
+
+<!-- Top Bar -->
+<div class="top-bar">
+  <span class="moodboard-title" contenteditable="false" data-field="title">Test Moodboard</span>
+  <button class="info-btn">i</button>
+</div>
+
+<!-- Gallery Container -->
+<div id="galleryContainer"></div>
+
+<!-- Add Row Button -->
+<button class="add-row-btn" onclick="addRow()">+ Add Row</button>
+
+<!-- Bottom Bar -->
+<div class="bottom-bar">
+  <span contenteditable="false" data-field="version">v 1.2</span>
+  <span contenteditable="false" data-field="timestamp" id="timestamp">17:08:17</span>
+</div>
+
+<!-- Hidden file input -->
+<input type="file" class="hidden-file-input" id="fileInput" accept="image/jpeg,image/png,image/jpg" onchange="handleFileUpload(event)">
+
+<!-- Detail View (secondary page) -->
+<div id="detailView">
+  <button class="detail-back" onclick="closeDetail()">&larr; Back</button>
+  <div class="detail-image-wrap" id="detailImageWrap"></div>
+  <div class="detail-meta">
+    <div class="d-code" id="detailCode" contenteditable="false"></div>
+    <div class="d-name" id="detailName" contenteditable="false"></div>
+    <div class="d-src" id="detailSrc" contenteditable="false"></div>
+  </div>
+  <div class="detail-replace-hint">Edit mode: click image to replace</div>
+</div>
+
+<script>
+// ===== Default Data =====
+const defaultData = {
+  title: 'Test Moodboard',
+  version: 'v 1.2',
+  rows: [
+    [
+      { code: '2-34', name: 'F. Kuenstler', src: 'SRC', w: 110, h: 200, img: '' },
+      { code: 'BB09', name: 'R. Dijkstra', src: 'SRC', w: 130, h: 170, img: '' },
+      { code: '5454-8', name: 'J. Tschichold', src: 'SRC', w: 120, h: 190, img: '' },
+      { code: '65-4', name: 'Printed Card', src: 'SRC', w: 120, h: 130, img: '' },
+      { code: '6785', name: 'T. Schutte', src: 'SRC', w: 110, h: 110, img: '' },
+      { code: '23-4', name: 'T. De Cordier', src: 'SRC', w: 100, h: 160, img: '' },
+      { code: '3-3', name: 'J. Rhoades', src: 'SRC', w: 110, h: 210, img: '' },
+      { code: '88', name: 'C. Parmiggiani', src: 'SRC', w: 130, h: 160, img: '' },
+      { code: '8J', name: 'G. Debord', src: 'SRC', w: 120, h: 200, img: '' },
+      { code: 'Z0-01', name: 'O. Piene', src: 'SRC', w: 120, h: 150, img: '' }
+    ],
+    [
+      { code: 'SS88', name: 'S. Ford', src: 'SRC', w: 120, h: 200, img: '' },
+      { code: '345', name: 'R. Filliou', src: 'SRC', w: 130, h: 110, img: '' },
+      { code: '001AB', name: 'W. Elliott', src: 'SRC', w: 120, h: 180, img: '' },
+      { code: '98DF', name: 'M. Broodthaers', src: 'SRC', w: 130, h: 130, img: '' },
+      { code: '000', name: 'M. Mullican', src: 'SRC', w: 120, h: 200, img: '' },
+      { code: 'TT5', name: 'K. Bosse', src: 'SRC', w: 130, h: 170, img: '' },
+      { code: '999U', name: 'T. Raworth', src: 'SRC', w: 110, h: 200, img: '' },
+      { code: '678', name: 'A. Kaprow', src: 'SRC', w: 120, h: 180, img: '' },
+      { code: '98F', name: 'L. Garnier', src: 'SRC', w: 130, h: 140, img: '' },
+      { code: 'HD001', name: 'H. Darboven', src: 'SRC', w: 130, h: 200, img: '' }
+    ],
+    [
+      { code: 'v 1.3', name: 'B-CAR', src: 'SRC', w: 110, h: 140, img: '' },
+      { code: 'M401', name: 'R. Law', src: 'SRC', w: 120, h: 110, img: '' },
+      { code: 'U016', name: 'Sample', src: 'SRC', w: 130, h: 190, img: '' },
+      { code: 'J394', name: 'Text', src: 'SRC', w: 110, h: 130, img: '' },
+      { code: 'J405', name: 'Mullican', src: 'SRC', w: 120, h: 200, img: '' },
+      { code: 'Q007', name: 'Photo', src: 'SRC', w: 110, h: 140, img: '' },
+      { code: 'E240', name: 'Werbung', src: 'SRC', w: 130, h: 170, img: '' },
+      { code: 'T024', name: 'Art', src: 'SRC', w: 120, h: 180, img: '' }
+    ]
+  ]
+};
+
+let data = loadData();
+let editMode = false;
+let currentUploadTarget = null; // {row, item}
+let currentDetail = null; // {row, item}
+const MAX_ITEMS_PER_ROW = 10;
+
+// ===== Persistence =====
+function loadData() {
+  try {
+    const saved = localStorage.getItem('moodboard_data');
+    if (saved) return JSON.parse(saved);
+  } catch(e) {}
+  return JSON.parse(JSON.stringify(defaultData));
+}
+function saveData() {
+  try {
+    localStorage.setItem('moodboard_data', JSON.stringify(data));
+  } catch(e) {
+    console.warn('Save failed (storage may be full):', e);
+  }
+}
+
+// ===== Render =====
+function render() {
+  const container = document.getElementById('galleryContainer');
+  container.innerHTML = '';
+  data.rows.forEach((row, rowIdx) => {
+    const rowEl = document.createElement('div');
+    rowEl.className = 'gallery-row';
+    row.forEach((item, itemIdx) => {
+      rowEl.appendChild(createItem(item, rowIdx, itemIdx));
+    });
+    // Add item button (edit mode only, max 10 per row)
+    if (row.length < MAX_ITEMS_PER_ROW) {
+      const addBtn = document.createElement('button');
+      addBtn.className = 'add-item-btn';
+      addBtn.textContent = '+';
+      addBtn.onclick = () => addItem(rowIdx);
+      rowEl.appendChild(addBtn);
+    }
+    container.appendChild(rowEl);
+  });
+  // Update top/bottom text
+  document.querySelector('[data-field="title"]').textContent = data.title;
+  document.querySelector('[data-field="version"]').textContent = data.version;
+}
+
+function createItem(item, rowIdx, itemIdx) {
+  const el = document.createElement('div');
+  el.className = 'gallery-item';
+
+  const wrap = document.createElement('div');
+  wrap.className = 'item-image-wrap';
+  wrap.style.width = item.w + 'px';
+
+  if (item.img) {
+    const img = document.createElement('img');
+    img.src = item.img;
+    img.alt = item.code || 'image';
+    wrap.appendChild(img);
+  } else {
+    wrap.style.height = item.h + 'px';
+    wrap.style.background = '#2a2a2a';
+    wrap.style.border = '1px solid #333';
+    wrap.style.display = 'flex';
+    wrap.style.alignItems = 'center';
+    wrap.style.justifyContent = 'center';
+    wrap.style.color = '#555';
+    wrap.style.fontSize = '9px';
+    wrap.textContent = 'No Image';
+  }
+
+  // Click to open detail (non-edit mode only)
+  wrap.style.cursor = 'pointer';
+  wrap.onclick = () => {
+    if (!editMode) showDetail(rowIdx, itemIdx);
+  };
+
+  // Edit overlay
+  const overlay = document.createElement('div');
+  overlay.className = 'img-overlay';
+  const replaceBtn = document.createElement('button');
+  replaceBtn.textContent = 'Replace';
+  replaceBtn.onclick = (e) => { e.stopPropagation(); currentUploadTarget = {row: rowIdx, item: itemIdx}; document.getElementById('fileInput').click(); };
+  const delBtn = document.createElement('button');
+  delBtn.className = 'del-btn';
+  delBtn.textContent = 'Delete';
+  delBtn.onclick = (e) => { e.stopPropagation(); deleteItem(rowIdx, itemIdx); };
+  overlay.appendChild(replaceBtn);
+  overlay.appendChild(delBtn);
+  wrap.appendChild(overlay);
+
+  // Meta
+  const meta = document.createElement('div');
+  meta.className = 'item-meta';
+  const code = document.createElement('div');
+  code.className = 'code';
+  code.contentEditable = editMode;
+  code.textContent = item.code;
+  code.onblur = () => { item.code = code.textContent; saveData(); };
+  const name = document.createElement('div');
+  name.className = 'name';
+  name.contentEditable = editMode;
+  name.textContent = item.name;
+  name.onblur = () => { item.name = name.textContent; saveData(); };
+  const src = document.createElement('div');
+  src.className = 'src';
+  src.contentEditable = editMode;
+  src.textContent = item.src;
+  src.onblur = () => { item.src = src.textContent; saveData(); };
+  meta.appendChild(code);
+  meta.appendChild(name);
+  meta.appendChild(src);
+
+  el.appendChild(wrap);
+  el.appendChild(meta);
+  return el;
+}
+
+// ===== Edit Mode =====
+function toggleEditMode() {
+  editMode = !editMode;
+  document.body.classList.toggle('edit-mode', editMode);
+  document.getElementById('editToggle').classList.toggle('active', editMode);
+  document.getElementById('editToggle').textContent = editMode ? 'Done' : 'Edit';
+  // Toggle contenteditable on all text
+  document.querySelectorAll('.moodboard-title, .bottom-bar span, .item-meta span, .item-meta div').forEach(el => {
+    el.contentEditable = editMode;
+  });
+  render();
+  // Refresh detail view if open
+  if (currentDetail && document.getElementById('detailView').classList.contains('active')) {
+    showDetail(currentDetail.row, currentDetail.item);
+  }
+}
+
+// Text field handlers
+document.querySelectorAll('[data-field]').forEach(el => {
+  el.addEventListener('blur', () => {
+    const field = el.dataset.field;
+    if (field === 'title') data.title = el.textContent;
+    if (field === 'version') data.version = el.textContent;
+    saveData();
+  });
+});
+
+// ===== Image Upload =====
+function handleFileUpload(e) {
+  const file = e.target.files[0];
+  if (!file || !currentUploadTarget) return;
+  const target = { row: currentUploadTarget.row, item: currentUploadTarget.item };
+  if (!['image/jpeg','image/png','image/jpg'].includes(file.type)) {
+    alert('Only JPG and PNG formats supported');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    data.rows[target.row][target.item].img = ev.target.result;
+    saveData();
+    render();
+  };
+  reader.onerror = () => { alert('Failed to read image file'); };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+  currentUploadTarget = null;
+}
+
+// ===== Add / Delete =====
+function addItem(rowIdx) {
+  if (data.rows[rowIdx].length >= MAX_ITEMS_PER_ROW) {
+    alert('Maximum 10 images per row');
+    return;
+  }
+  data.rows[rowIdx].push({ code: 'NEW', name: 'Name', src: 'SRC', w: 120, h: 160, img: '' });
+  saveData();
+  render();
+}
+function deleteItem(rowIdx, itemIdx) {
+  if (!confirm('Delete this item?')) return;
+  data.rows[rowIdx].splice(itemIdx, 1);
+  saveData();
+  render();
+}
+function addRow() {
+  data.rows.push([{ code: 'NEW', name: 'Name', src: 'SRC', w: 120, h: 160, img: '' }]);
+  saveData();
+  render();
+}
+
+// ===== Detail View =====
+function showDetail(rowIdx, itemIdx) {
+  currentDetail = { row: rowIdx, item: itemIdx };
+  const item = data.rows[rowIdx][itemIdx];
+  const view = document.getElementById('detailView');
+  const imgWrap = document.getElementById('detailImageWrap');
+
+  imgWrap.innerHTML = '';
+  if (item.img) {
+    const img = document.createElement('img');
+    img.src = item.img;
+    img.alt = item.code || 'image';
+    imgWrap.appendChild(img);
+    // In edit mode, click image to replace
+    if (editMode) {
+      img.style.cursor = 'pointer';
+      img.onclick = () => {
+        currentUploadTarget = { row: rowIdx, item: itemIdx };
+        document.getElementById('fileInput').click();
+      };
+    }
+  } else {
+    const ph = document.createElement('div');
+    ph.className = 'detail-image-placeholder';
+    ph.textContent = 'No Image';
+    imgWrap.appendChild(ph);
+  }
+
+  const codeEl = document.getElementById('detailCode');
+  const nameEl = document.getElementById('detailName');
+  const srcEl = document.getElementById('detailSrc');
+  codeEl.textContent = item.code;
+  nameEl.textContent = item.name;
+  srcEl.textContent = item.src;
+  codeEl.contentEditable = editMode;
+  nameEl.contentEditable = editMode;
+  srcEl.contentEditable = editMode;
+  codeEl.onblur = () => { item.code = codeEl.textContent; saveData(); render(); };
+  nameEl.onblur = () => { item.name = nameEl.textContent; saveData(); render(); };
+  srcEl.onblur = () => { item.src = srcEl.textContent; saveData(); render(); };
+
+  view.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDetail() {
+  currentDetail = null;
+  document.getElementById('detailView').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// Close detail on Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && document.getElementById('detailView').classList.contains('active')) {
+    closeDetail();
+  }
+});
+
+// ===== Live Clock =====
+function updateClock() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2,'0');
+  const m = String(now.getMinutes()).padStart(2,'0');
+  const s = String(now.getSeconds()).padStart(2,'0');
+  document.getElementById('timestamp').textContent = h + ':' + m + ':' + s;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ===== Init =====
+render();
+</script>
+</body>
+</html>
