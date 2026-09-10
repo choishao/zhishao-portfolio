@@ -3062,6 +3062,16 @@ function setupEditables() {
         e.stopPropagation();
         el.focus();
         // 不执行全选，让用户自由移动光标编辑或删除
+      } else {
+        // 非编辑模式：执行原导航（如点击左上角logo回首页）
+        var onclickAttr = el.getAttribute('onclick');
+        if (onclickAttr) {
+          var navMatch = onclickAttr.match(/navigate\('([^']+)'\)/);
+          if (navMatch) {
+            e.preventDefault();
+            location.hash = '/' + navMatch[1];
+          }
+        }
       }
     };
     el.ondblclick = (e) => {
@@ -3367,6 +3377,10 @@ document.addEventListener('DOMContentLoaded', () => {
   showView(hash);
   loadImagesFromIDB();
   loadCustomFonts();
+  // Auto-enter edit mode if opened via ?mode=edit (from admin dashboard new tab)
+  if (window.location.search.indexOf('mode=edit') !== -1) {
+    setTimeout(function() { enterEditMode(); }, 150);
+  }
 });
 
 // ============================================================
@@ -3599,9 +3613,8 @@ function searchAdminPages(q) {
 
 function adminEditPage(route) {
   hideAdminContextMenu();
-  document.getElementById('view-admin').classList.remove('active');
-  showView(route);
-  enterEditMode();
+  var editUrl = window.location.origin + window.location.pathname + '?mode=edit#/' + route;
+  window.open(editUrl, '_blank');
 }
 
 function adminPreviewPage(route) {
