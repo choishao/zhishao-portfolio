@@ -39,6 +39,8 @@
   --crt-amber: #ffaa33;
   --font-display: 'Impact', 'PingFang SC', sans-serif;
   --font-body: 'PingFang SC', sans-serif;
+  --font-display-custom: '';
+  --font-body-custom: '';
   --font-mono: 'Share Tech Mono', monospace;
 }
 
@@ -1464,7 +1466,7 @@ body.edit-mode .editable-image-wrap::after {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'PingFang SC', sans-serif;
+  font-family: var(--font-body);
   font-size: 13px;
   letter-spacing: 1px;
   opacity: 0;
@@ -1580,7 +1582,7 @@ body.edit-mode .add-work-btn { display: block; }
   border-bottom: 1px solid #333;
 }
 .media-library-title {
-  font-family: 'Impact', 'PingFang SC', sans-serif;
+  font-family: var(--font-display);
   font-size: 28px;
   color: #fff;
   letter-spacing: 1px;
@@ -1598,7 +1600,7 @@ body.edit-mode .add-work-btn { display: block; }
   font-size: 14px;
   cursor: pointer;
   border-radius: 4px;
-  font-family: 'PingFang SC', sans-serif;
+  font-family: var(--font-body);
   transition: all 0.2s;
 }
 .media-library-btn:hover { border-color: #33ff66; color: #33ff66; }
@@ -1738,7 +1740,7 @@ body.edit-mode .work-categories .cat-delete-btn {
   cursor: pointer;
   background: none;
   border: none;
-  font-family: 'PingFang SC', sans-serif;
+  font-family: var(--font-body);
 }
 body.edit-mode .add-category-btn { display: block; }
 .add-category-btn:hover { text-decoration: underline; }
@@ -1795,6 +1797,36 @@ body.edit-mode .add-category-btn { display: block; }
 .admin-context-menu-divider { height:1px; background:#eee; margin:4px 0; }
 .admin-add-page { border:2px dashed #ddd; aspect-ratio:16/10; border-radius:2px; display:flex; align-items:center; justify-content:center; font-size:28px; color:#ccc; cursor:pointer; }
 .admin-add-page:hover { border-color:#999; color:#666; }
+
+/* ===== Font Management Modal ===== */
+#fontManagerModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:10000; align-items:center; justify-content:center; }
+#fontManagerModal.show { display:flex; }
+.font-manager { background:#1a1a1a; border:1px solid #333; border-radius:8px; width:560px; max-width:90vw; max-height:85vh; overflow-y:auto; color:#fff; font-family:'PingFang SC',sans-serif; }
+.font-manager-header { display:flex; justify-content:space-between; align-items:center; padding:20px 24px; border-bottom:1px solid #333; }
+.font-manager-title { font-size:18px; font-weight:600; }
+.font-manager-close { background:none; border:none; color:#888; font-size:24px; cursor:pointer; line-height:1; }
+.font-manager-close:hover { color:#fff; }
+.font-manager-body { padding:24px; }
+.font-section { margin-bottom:28px; }
+.font-section-label { font-size:13px; color:#888; margin-bottom:12px; text-transform:uppercase; letter-spacing:1px; }
+.font-current { display:flex; align-items:center; gap:12px; padding:12px 16px; background:#222; border-radius:6px; margin-bottom:12px; }
+.font-current-name { font-size:15px; flex:1; }
+.font-current-preview { font-size:20px; font-weight:600; }
+.font-upload-area { border:2px dashed #444; border-radius:6px; padding:24px; text-align:center; cursor:pointer; transition:all 0.2s; }
+.font-upload-area:hover { border-color:#666; background:#222; }
+.font-upload-area.drag-over { border-color:#4CAF50; background:rgba(76,175,80,0.1); }
+.font-upload-text { font-size:14px; color:#aaa; }
+.font-upload-hint { font-size:12px; color:#666; margin-top:6px; }
+.font-reset-btn { background:none; border:1px solid #555; color:#aaa; padding:6px 14px; border-radius:4px; cursor:pointer; font-size:12px; }
+.font-reset-btn:hover { border-color:#888; color:#fff; }
+.font-apply-all-notice { padding:12px 16px; background:rgba(76,175,80,0.1); border:1px solid rgba(76,175,80,0.3); border-radius:6px; font-size:13px; color:#8BC34A; margin-top:16px; }
+
+
+/* Global font enforcement - ensures custom fonts apply to ALL pages */
+* { font-family: inherit; }
+body, body * { font-family: var(--font-body); }
+h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work-card-title, .project-item-title, .clients-title, .about-header, .category-title, .detail-cat-label, .marquee-text { font-family: var(--font-display); }
+
 </style>
 </head>
 <body>
@@ -2084,6 +2116,7 @@ body.edit-mode .add-category-btn { display: block; }
     <button class="edit-btn edit-btn-reset" onclick="resetAllContent()">恢复默认</button>
     <button class="edit-btn edit-btn-exit" onclick="exitEditMode()">退出编辑</button>
     <button class="edit-btn" onclick="openMediaLibrary()">管理库</button>
+    <button class="edit-btn" onclick="openFontManager()">字体管理</button>
     <button class="edit-btn edit-btn-save" onclick="saveAllContent()">保存</button>
   </div>
 </div>
@@ -2104,6 +2137,48 @@ body.edit-mode .add-category-btn { display: block; }
       <span style="font-size:13px;color:#555">支持 JPG / PNG / GIF / SVG / PDF / WEBP</span>
     </div>
     <div class="media-library-grid" id="mediaLibraryGrid"></div>
+  </div>
+</div>
+
+
+<!-- ===== Font Manager Modal ===== -->
+<div id="fontManagerModal">
+  <div class="font-manager">
+    <div class="font-manager-header">
+      <span class="font-manager-title">字体管理 / Font Manager</span>
+      <button class="font-manager-close" onclick="closeFontManager()">&times;</button>
+    </div>
+    <div class="font-manager-body">
+      <div class="font-section">
+        <div class="font-section-label">英文字体 / English Font (标题展示用)</div>
+        <div class="font-current">
+          <span class="font-current-name" id="currentEnFontName">默认: Impact</span>
+          <span class="font-current-preview" id="currentEnFontPreview" style="font-family:var(--font-display);">Aa</span>
+          <button class="font-reset-btn" onclick="resetFont('en')">恢复默认</button>
+        </div>
+        <div class="font-upload-area" id="enFontDropzone" onclick="document.getElementById('enFontInput').click()">
+          <div class="font-upload-text">点击或拖拽上传英文字体</div>
+          <div class="font-upload-hint">支持 .ttf / .otf / .woff / .woff2 格式</div>
+        </div>
+        <input type="file" id="enFontInput" accept=".ttf,.otf,.woff,.woff2,font/ttf,font/otf,font/woff,font/woff2" style="display:none" onchange="handleFontUpload(event, 'en')">
+      </div>
+      <div class="font-section">
+        <div class="font-section-label">中文字体 / Chinese Font (正文用)</div>
+        <div class="font-current">
+          <span class="font-current-name" id="currentZhFontName">默认: 苹方 PingFang SC</span>
+          <span class="font-current-preview" id="currentZhFontPreview" style="font-family:var(--font-body);">文字</span>
+          <button class="font-reset-btn" onclick="resetFont('zh')">恢复默认</button>
+        </div>
+        <div class="font-upload-area" id="zhFontDropzone" onclick="document.getElementById('zhFontInput').click()">
+          <div class="font-upload-text">点击或拖拽上传中文字体</div>
+          <div class="font-upload-hint">支持 .ttf / .otf / .woff / .woff2 格式</div>
+        </div>
+        <input type="file" id="zhFontInput" accept=".ttf,.otf,.woff,.woff2,font/ttf,font/otf,font/woff,font/woff2" style="display:none" onchange="handleFontUpload(event, 'zh')">
+      </div>
+      <div class="font-apply-all-notice">
+        &#10003; 字体上传后将自动应用到网站全部页面（首页/作品/关于我/客户名单/后台）
+      </div>
+    </div>
   </div>
 </div>
 
@@ -3291,6 +3366,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const hash = location.hash.replace('#/', '') || 'home';
   showView(hash);
   loadImagesFromIDB();
+  loadCustomFonts();
 });
 
 // ============================================================
@@ -3456,10 +3532,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ===== Admin Dashboard Functions =====
 var adminPages = [
-  { id: 'home', name: '首页', route: 'home', type: 'main', thumb: 'data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='200'%3E%3Crect width='320' height='200' fill='%23000'/%3E%3Ctext x='160' y='105' font-family='Impact,Arial' font-size='36' fill='%23fff' text-anchor='middle' font-weight='bold'%3EDESIGN%3C/text%3E%3Ctext x='160' y='145' font-family='Impact,Arial' font-size='36' fill='%23fff' text-anchor='middle' font-weight='bold'%3EPORTFOLIO%3C/text%3E%3C/svg%3E' },
-  { id: 'work', name: '作品项目', route: 'work', type: 'main', thumb: 'data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='200'%3E%3Crect width='320' height='200' fill='%23111'/%3E%3Crect x='20' y='30' width='85' height='60' fill='%23333'/%3E%3Crect x='115' y='30' width='85' height='60' fill='%23444'/%3E%3Crect x='210' y='30' width='85' height='60' fill='%23333'/%3E%3Crect x='20' y='100' width='85' height='60' fill='%23444'/%3E%3Crect x='115' y='100' width='85' height='60' fill='%23333'/%3E%3Crect x='210' y='100' width='85' height='60' fill='%23444'/%3E%3Ctext x='160' y='185' font-family='sans-serif' font-size='11' fill='%23888' text-anchor='middle'%3E%E4%BD%9C%E5%93%81%E9%A1%B9%E7%9B%AE%3C/text%3E%3C/svg%3E' },
-  { id: 'about', name: '关于我', route: 'about', type: 'main', thumb: 'data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='200'%3E%3Crect width='320' height='200' fill='%23000'/%3E%3Crect x='25' y='35' width='120' height='130' fill='%23222'/%3E%3Ctext x='170' y='70' font-family='Impact,Arial' font-size='28' fill='%23fff' font-weight='bold'%3EZHISHAO%3C/text%3E%3Crect x='170' y='85' width='120' height='3' fill='%23fff'/%3E%3Crect x='170' y='100' width='100' height='2' fill='%23555'/%3E%3Crect x='170' y='110' width='110' height='2' fill='%23555'/%3E%3Crect x='170' y='120' width='90' height='2' fill='%23555'/%3E%3C/svg%3E' },
-  { id: 'clients', name: '客户名单', route: 'clients', type: 'main', thumb: 'data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='200'%3E%3Crect width='320' height='200' fill='%23fff'/%3E%3Crect x='25' y='35' width='60' height='40' fill='%23eee' stroke='%23ddd'/%3E%3Crect x='95' y='35' width='60' height='40' fill='%23eee' stroke='%23ddd'/%3E%3Crect x='165' y='35' width='60' height='40' fill='%23eee' stroke='%23ddd'/%3E%3Crect x='235' y='35' width='60' height='40' fill='%23eee' stroke='%23ddd'/%3E%3Crect x='25' y='85' width='60' height='40' fill='%23eee' stroke='%23ddd'/%3E%3Crect x='95' y='85' width='60' height='40' fill='%23eee' stroke='%23ddd'/%3E%3Crect x='165' y='85' width='60' height='40' fill='%23eee' stroke='%23ddd'/%3E%3Crect x='235' y='85' width='60' height='40' fill='%23eee' stroke='%23ddd'/%3E%3Crect x='25' y='135' width='60' height='40' fill='%23eee' stroke='%23ddd'/%3E%3Crect x='95' y='135' width='60' height='40' fill='%23eee' stroke='%23ddd'/%3E%3C/svg%3E' },
+  { id: 'home', name: '首页', route: 'home', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMCIvPjx0ZXh0IHg9IjE2MCIgeT0iMTAwIiBmb250LWZhbWlseT0iSW1wYWN0LEFyaWFsIiBmb250LXNpemU9IjM0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXdlaWdodD0iYm9sZCI+REVTSUdOPC90ZXh0Pjx0ZXh0IHg9IjE2MCIgeT0iMTQwIiBmb250LWZhbWlseT0iSW1wYWN0LEFyaWFsIiBmb250LXNpemU9IjM0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXdlaWdodD0iYm9sZCI+UE9SVEZPTElPPC90ZXh0Pjwvc3ZnPg==' },
+  { id: 'work', name: '作品项目', route: 'work', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzExMSIvPjxyZWN0IHg9IjIwIiB5PSIzMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjMzMzIi8+PHJlY3QgeD0iMTE1IiB5PSIzMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjNDQ0Ii8+PHJlY3QgeD0iMjEwIiB5PSIzMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjMzMzIi8+PHJlY3QgeD0iMjAiIHk9IjEwMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjNDQ0Ii8+PHJlY3QgeD0iMTE1IiB5PSIxMDAiIHdpZHRoPSI4NSIgaGVpZ2h0PSI2MCIgZmlsbD0iIzMzMyIvPjxyZWN0IHg9IjIxMCIgeT0iMTAwIiB3aWR0aD0iODUiIGhlaWdodD0iNjAiIGZpbGw9IiM0NDQiLz48dGV4dCB4PSIxNjAiIHk9IjE4NSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiM4ODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiPldvcmtzPC90ZXh0Pjwvc3ZnPg==' },
+  { id: 'about', name: '关于我', route: 'about', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMCIvPjxyZWN0IHg9IjI1IiB5PSIzNSIgd2lkdGg9IjEyMCIgaGVpZ2h0PSIxMzAiIGZpbGw9IiMyMjIiLz48dGV4dCB4PSIxNzAiIHk9IjcwIiBmb250LWZhbWlseT0iSW1wYWN0LEFyaWFsIiBmb250LXNpemU9IjI2IiBmaWxsPSIjZmZmIiBmb250LXdlaWdodD0iYm9sZCI+WkhJU0hBTzwvdGV4dD48cmVjdCB4PSIxNzAiIHk9Ijg1IiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjMiIGZpbGw9IiNmZmYiLz48cmVjdCB4PSIxNzAiIHk9IjEwMCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIyIiBmaWxsPSIjNTU1Ii8+PHJlY3QgeD0iMTcwIiB5PSIxMTAiIHdpZHRoPSIxMTAiIGhlaWdodD0iMiIgZmlsbD0iIzU1NSIvPjxyZWN0IHg9IjE3MCIgeT0iMTIwIiB3aWR0aD0iOTAiIGhlaWdodD0iMiIgZmlsbD0iIzU1NSIvPjwvc3ZnPg==' },
+  { id: 'clients', name: '客户名单', route: 'clients', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZmZiIvPjxyZWN0IHg9IjI1IiB5PSIzNSIgd2lkdGg9IjYwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjZWVlIiBzdHJva2U9IiNkZGQiLz48cmVjdCB4PSI5NSIgeT0iMzUiIHdpZHRoPSI2MCIgaGVpZ2h0PSI0MCIgZmlsbD0iI2VlZSIgc3Ryb2tlPSIjZGRkIi8+PHJlY3QgeD0iMTY1IiB5PSIzNSIgd2lkdGg9IjYwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjZWVlIiBzdHJva2U9IiNkZGQiLz48cmVjdCB4PSIyMzUiIHk9IjM1IiB3aWR0aD0iNjAiIGhlaWdodD0iNDAiIGZpbGw9IiNlZWUiIHN0cm9rZT0iI2RkZCIvPjxyZWN0IHg9IjI1IiB5PSI4NSIgd2lkdGg9IjYwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjZWVlIiBzdHJva2U9IiNkZGQiLz48cmVjdCB4PSI5NSIgeT0iODUiIHdpZHRoPSI2MCIgaGVpZ2h0PSI0MCIgZmlsbD0iI2VlZSIgc3Ryb2tlPSIjZGRkIi8+PHJlY3QgeD0iMTY1IiB5PSI4NSIgd2lkdGg9IjYwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjZWVlIiBzdHJva2U9IiNkZGQiLz48cmVjdCB4PSIyMzUiIHk9Ijg1IiB3aWR0aD0iNjAiIGhlaWdodD0iNDAiIGZpbGw9IiNlZWUiIHN0cm9rZT0iI2RkZCIvPjxyZWN0IHg9IjI1IiB5PSIxMzUiIHdpZHRoPSI2MCIgaGVpZ2h0PSI0MCIgZmlsbD0iI2VlZSIgc3Ryb2tlPSIjZGRkIi8+PHJlY3QgeD0iOTUiIHk9IjEzNSIgd2lkdGg9IjYwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjZWVlIiBzdHJva2U9IiNkZGQiLz48L3N2Zz4=' },
 ];
 var adminCurrentFilter = 'all';
 var adminSearchQuery = '';
@@ -3600,6 +3676,212 @@ function exitEditModeSilent() {
   var toolbar = document.getElementById('editToolbar');
   if (toolbar) toolbar.classList.remove('show');
   document.querySelectorAll('[data-editable]').forEach(function(el) { el.contentEditable = 'false'; });
+}
+
+
+
+// ============================================================
+// ===== Font Management (字体上传与全站应用) =====
+// ============================================================
+const FONT_DB_NAME = 'zhishao_font_db';
+const FONT_DB_STORE = 'fonts';
+let customFonts = { en: null, zh: null };
+
+function openFontDB() {
+  return new Promise(function(resolve, reject) {
+    var req = indexedDB.open(FONT_DB_NAME, 1);
+    req.onupgradeneeded = function(e) {
+      var db = e.target.result;
+      if (!db.objectStoreNames.contains(FONT_DB_STORE)) {
+        db.createObjectStore(FONT_DB_STORE, { keyPath: 'key' });
+      }
+    };
+    req.onsuccess = function(e) { resolve(e.target.result); };
+    req.onerror = function(e) { reject(e.target.error); };
+  });
+}
+
+function saveFontToDB(key, file) {
+  return openFontDB().then(function(db) {
+    return new Promise(function(resolve, reject) {
+      var tx = db.transaction(FONT_DB_STORE, 'readwrite');
+      tx.objectStore(FONT_DB_STORE).put({ key: key, file: file, name: file.name });
+      tx.oncomplete = function() { db.close(); resolve(); };
+      tx.onerror = function(e) { db.close(); reject(e.target.error); };
+    });
+  });
+}
+
+function getFontFromDB(key) {
+  return openFontDB().then(function(db) {
+    return new Promise(function(resolve, reject) {
+      var tx = db.transaction(FONT_DB_STORE, 'readonly');
+      var req = tx.objectStore(FONT_DB_STORE).get(key);
+      req.onsuccess = function() {
+        db.close();
+        resolve(req.result || null);
+      };
+      req.onerror = function(e) { db.close(); reject(e.target.error); };
+    });
+  });
+}
+
+function deleteFontFromDB(key) {
+  return openFontDB().then(function(db) {
+    return new Promise(function(resolve) {
+      var tx = db.transaction(FONT_DB_STORE, 'readwrite');
+      tx.objectStore(FONT_DB_STORE).delete(key);
+      tx.oncomplete = function() { db.close(); resolve(); };
+    });
+  });
+}
+
+function getFontFormat(filename) {
+  var ext = filename.split('.').pop().toLowerCase();
+  var map = { ttf: 'truetype', otf: 'opentype', woff: 'woff', woff2: 'woff2' };
+  return map[ext] || 'truetype';
+}
+
+function applyCustomFont(type, file, fontName) {
+  var url = URL.createObjectURL(file);
+  var format = getFontFormat(fontName || file.name);
+  var fontFamily = type === 'en' ? 'CustomDisplayFont' : 'CustomBodyFont';
+  var fontFace = "@font-face { font-family: '" + fontFamily + "'; src: url('" + url + "') format('" + format + "'); font-display: swap; }";
+  
+  // Remove old style element if exists
+  var oldStyle = document.getElementById('custom-font-' + type);
+  if (oldStyle) oldStyle.remove();
+  
+  // Inject new @font-face
+  var style = document.createElement('style');
+  style.id = 'custom-font-' + type;
+  style.textContent = fontFace;
+  document.head.appendChild(style);
+  
+  // Update CSS variables - this applies to ALL pages because they all use :root variables
+  var root = document.documentElement;
+  if (type === 'en') {
+    root.style.setProperty('--font-display', "'" + fontFamily + "', 'PingFang SC', sans-serif");
+    customFonts.en = { url: url, name: fontName || file.name };
+    document.getElementById('currentEnFontName').textContent = '当前: ' + (fontName || file.name);
+    document.getElementById('currentEnFontPreview').style.fontFamily = "'" + fontFamily + "'";
+  } else {
+    root.style.setProperty('--font-body', "'" + fontFamily + "', sans-serif");
+    customFonts.zh = { url: url, name: fontName || file.name };
+    document.getElementById('currentZhFontName').textContent = '当前: ' + (fontName || file.name);
+    document.getElementById('currentZhFontPreview').style.fontFamily = "'" + fontFamily + "'";
+  }
+  
+  // Force re-render of all text by toggling a class on body
+  document.body.style.display = 'none';
+  document.body.offsetHeight;
+  document.body.style.display = '';
+}
+
+function handleFontUpload(event, type) {
+  var file = event.target.files[0];
+  if (!file) return;
+  
+  var validExts = ['.ttf', '.otf', '.woff', '.woff2'];
+  var ext = '.' + file.name.split('.').pop().toLowerCase();
+  if (validExts.indexOf(ext) === -1) {
+    alert('请上传 .ttf / .otf / .woff / .woff2 格式的字体文件');
+    return;
+  }
+  
+  if (file.size > 30 * 1024 * 1024) {
+    alert('字体文件过大，请上传 30MB 以内的文件');
+    return;
+  }
+  
+  saveFontToDB(type, file).then(function() {
+    applyCustomFont(type, file, file.name);
+    showSaveToast((type === 'en' ? '英文' : '中文') + '字体已上传并应用到全站');
+  }).catch(function(err) {
+    alert('字体保存失败：' + err.message);
+  });
+  
+  event.target.value = '';
+}
+
+function resetFont(type) {
+  if (!confirm('确定恢复' + (type === 'en' ? '英文' : '中文') + '默认字体吗？')) return;
+  
+  deleteFontFromDB(type).then(function() {
+    var style = document.getElementById('custom-font-' + type);
+    if (style) style.remove();
+    
+    var root = document.documentElement;
+    if (type === 'en') {
+      root.style.setProperty('--font-display', "'Impact', 'PingFang SC', sans-serif");
+      customFonts.en = null;
+      document.getElementById('currentEnFontName').textContent = '默认: Impact';
+      document.getElementById('currentEnFontPreview').style.fontFamily = "var(--font-display)";
+    } else {
+      root.style.setProperty('--font-body', "'PingFang SC', sans-serif");
+      customFonts.zh = null;
+      document.getElementById('currentZhFontName').textContent = '默认: 苹方 PingFang SC';
+      document.getElementById('currentZhFontPreview').style.fontFamily = "var(--font-body)";
+    }
+    
+    document.body.style.display = 'none';
+    document.body.offsetHeight;
+    document.body.style.display = '';
+    showSaveToast((type === 'en' ? '英文' : '中文') + '字体已恢复默认');
+  });
+}
+
+function openFontManager() {
+  document.getElementById('fontManagerModal').classList.add('show');
+  // Setup drag and drop
+  setupFontDragDrop('en');
+  setupFontDragDrop('zh');
+}
+
+function closeFontManager() {
+  document.getElementById('fontManagerModal').classList.remove('show');
+}
+
+function setupFontDragDrop(type) {
+  var zone = document.getElementById(type + 'FontDropzone');
+  if (!zone || zone.dataset.dragSetup) return;
+  zone.dataset.dragSetup = 'true';
+  
+  zone.ondragover = function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    zone.classList.add('drag-over');
+  };
+  zone.ondragleave = function(e) {
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+  };
+  zone.ondrop = function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    zone.classList.remove('drag-over');
+    var files = e.dataTransfer.files;
+    if (files.length > 0) {
+      var fakeEvent = { target: { files: files, value: '' } };
+      handleFontUpload(fakeEvent, type);
+    }
+  };
+}
+
+// Load custom fonts on page start
+function loadCustomFonts() {
+  Promise.all([getFontFromDB('en'), getFontFromDB('zh')]).then(function(results) {
+    if (results[0]) {
+      customFonts.en = { name: results[0].name };
+      applyCustomFont('en', results[0].file, results[0].name);
+    }
+    if (results[1]) {
+      customFonts.zh = { name: results[1].name };
+      applyCustomFont('zh', results[1].file, results[1].name);
+    }
+  }).catch(function(e) {
+    console.error('Load custom fonts failed:', e);
+  });
 }
 
 </script>
