@@ -1805,6 +1805,9 @@ body.edit-mode .add-category-btn { display: block; }
 .admin-nav-item { display:flex; align-items:center; gap:8px; padding:8px 12px; font-size:13px; cursor:pointer; border-radius:6px; color:#555; transition:all 0.15s; }
 .admin-nav-item:hover { background:#eee; color:#1a1a1a; }
 .admin-nav-item.active { background:#1a1a1a; color:#fff; font-weight:500; }
+.admin-tools { padding:8px 10px; border-top:1px solid #eee; }
+.admin-tool-btn { display:flex; align-items:center; gap:8px; padding:8px 12px; font-size:13px; cursor:pointer; border-radius:6px; color:#555; transition:all 0.15s; margin-bottom:2px; }
+.admin-tool-btn:hover { background:#eee; color:#1a1a1a; }
 .admin-search { padding:10px; border-top:1px solid #eee; }
 .admin-search input { width:100%; border:1px solid #e0e0e0; outline:none; font-size:12px; padding:7px 10px; background:#fff; color:#333; border-radius:6px; font-family:inherit; }
 .admin-search input:focus { border-color:#1a1a1a; }
@@ -2140,6 +2143,10 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
       <div class="admin-nav-item" onclick="filterAdminPages('main', this)">&#128193; 主要页面</div>
       <div class="admin-nav-item" onclick="filterAdminPages('work', this)">&#128193; 作品页面</div>
     </div>
+    <div class="admin-tools">
+      <div class="admin-tool-btn" onclick="openMediaLibrary()">&#128193; 管理库</div>
+      <div class="admin-tool-btn" onclick="openFontManager()">&#128260; 字体管理</div>
+    </div>
     <div class="admin-search">
       <input type="text" placeholder="搜索页面..." oninput="searchAdminPages(this.value)">
     </div>
@@ -2165,8 +2172,6 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
   <div class="edit-toolbar-right">
     <button class="edit-btn edit-btn-reset" onclick="resetAllContent()">恢复默认</button>
     <button class="edit-btn edit-btn-exit" onclick="exitEditMode()">退出编辑</button>
-    <button class="edit-btn" onclick="openMediaLibrary()">管理库</button>
-    <button class="edit-btn" onclick="openFontManager()">字体管理</button>
     <button class="edit-btn edit-btn-save" onclick="saveAllContent()">保存</button>
   </div>
 </div>
