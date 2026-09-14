@@ -1655,6 +1655,52 @@ body.edit-mode .add-work-btn { display: block; }
 .media-library-dropzone:hover, .media-library-dropzone.drag-over {
   border-color: #1a1a1a;
   color: #1a1a1a;
+}
+/* ===== Image pick menu (local upload / from library) ===== */
+.img-pick-menu {
+  position: fixed;
+  z-index: 10001;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  padding: 6px;
+  min-width: 190px;
+  font-family: system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+}
+.img-pick-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #888;
+  padding: 8px 14px 6px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.img-pick-menu button {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+  color: #1a1a1a;
+  border-radius: 6px;
+  font-family: inherit;
+}
+.img-pick-menu button:hover { background: #f5f5f5; }
+.img-pick-menu .img-pick-cancel { color: #888; }
+.lib-pick-banner {
+  display: none;
+  background: #1a1a1a;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 12px;
+  font-family: system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+}
   background: #f5f5f5;
 }
 .media-library-grid {
@@ -2170,6 +2216,7 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
     </div>
   </div>
   <div class="media-library-body">
+    <div class="lib-pick-banner" id="libPickBanner">选择模式：点击下方图片应用到当前位置</div>
     <div class="media-library-dropzone" id="mediaDropzone" onclick="document.getElementById('mediaLibraryInput').click()">
       拖拽图片到此处，或点击选择文件批量上传<br>
       <span style="font-size:13px;color:#555">支持 JPG / PNG / GIF / SVG / PDF / WEBP</span>
@@ -2917,6 +2964,10 @@ window.addEventListener('hashchange', () => {
   const hash = location.hash.replace('#/', '') || 'home';
   showView(hash);
 });
+document.addEventListener('click', function (e) {
+  var m = document.getElementById('imgPickMenu');
+  if (m && !m.contains(e.target)) closeImagePickMenu();
+});
 
 // ===== Menu Toggle =====
 function toggleMenu() {
@@ -3321,6 +3372,47 @@ function handleImageFile(file, key) {
 }
 
 function uploadImageByKey(key) {
+  showImagePickMenu(key);
+}
+
+// ===== Image pick menu: local upload OR from library =====
+function showImagePickMenu(key) {
+  closeImagePickMenu();
+  var menu = document.createElement('div');
+  menu.id = 'imgPickMenu';
+  menu.className = 'img-pick-menu';
+  menu.innerHTML =
+    '<div class="img-pick-title">\u66ff\u6362\u56fe\u7247</div>' +
+    '<button onclick="pickLocalUpload(\'' + key + '\')">\ud83d\udcc1 \u672c\u5730\u4e0a\u4f20</button>' +
+    '<button onclick="pickFromLibrary(\'' + key + '\')">\ud83d\uddc2 \u4ece\u7ba1\u7406\u5e93\u9009\u62e9</button>' +
+    '<button class="img-pick-cancel" onclick="closeImagePickMenu()">\u53d6\u6d88</button>';
+  document.body.appendChild(menu);
+  // Position near the target image
+  var imgEl = document.querySelector('img[data-image-key="' + key + '"]');
+  if (imgEl) {
+    var rect = imgEl.getBoundingClientRect();
+    var mw = menu.offsetWidth || 190;
+    var mh = menu.offsetHeight || 130;
+    var x = rect.left + rect.width / 2 - mw / 2;
+    var y = rect.top + rect.height / 2 - mh / 2;
+    x = Math.max(8, Math.min(x, window.innerWidth - mw - 8));
+    y = Math.max(8, Math.min(y, window.innerHeight - mh - 8));
+    menu.style.left = x + 'px';
+    menu.style.top = y + 'px';
+  } else {
+    menu.style.left = '50%';
+    menu.style.top = '40%';
+    menu.style.transform = 'translate(-50%,-50%)';
+  }
+}
+
+function closeImagePickMenu() {
+  var m = document.getElementById('imgPickMenu');
+  if (m) m.remove();
+}
+
+function pickLocalUpload(key) {
+  closeImagePickMenu();
   const input = document.createElement('input');
   input.type = 'file';
   input.accept = 'image/jpeg,image/png,image/gif,image/svg+xml,image/webp,application/pdf,.jpg,.jpeg,.png,.gif,.svg,.webp,.pdf';
@@ -3329,6 +3421,46 @@ function uploadImageByKey(key) {
     handleImageFile(file, key);
   };
   input.click();
+}
+
+// ===== Pick from media library (selection mode) =====
+var libPickTargetKey = null;
+function pickFromLibrary(key) {
+  closeImagePickMenu();
+  libPickTargetKey = key;
+  openMediaLibrary();
+  var banner = document.getElementById('libPickBanner');
+  if (banner) banner.style.display = 'block';
+  var dropzone = document.getElementById('mediaDropzone');
+  if (dropzone) dropzone.style.display = 'none';
+  renderMediaLibrary();
+}
+
+function applyLibraryImage(srcKey, dstKey) {
+  var srcURL = imgCache[srcKey];
+  if (!srcURL) { showSaveToast('\u56fe\u7247\u4e0d\u5b58\u5728'); return; }
+  if (srcURL.indexOf('data:application/pdf') === 0) {
+    putImage(dstKey, srcURL).then(function () {
+      var imgEl = document.querySelector('img[data-image-key="' + dstKey + '"]');
+      if (imgEl) {
+        var parent = imgEl.parentElement;
+        parent.innerHTML = '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#222;color:#888;font-size:12px;font-family:monospace;">PDF \u6587\u4ef6</div>';
+      }
+      unsavedChanges = true;
+      updateEditStatus();
+      showSaveToast('\u5df2\u4ece\u7ba1\u7406\u5e93\u5e94\u7528 PDF');
+    });
+  } else {
+    copyImage(srcKey, dstKey).then(function () {
+      var imgEl = document.querySelector('img[data-image-key="' + dstKey + '"]');
+      var src = imgCache[dstKey];
+      if (imgEl && src) imgEl.src = src;
+      unsavedChanges = true;
+      updateEditStatus();
+      showSaveToast('\u5df2\u4ece\u7ba1\u7406\u5e93\u5e94\u7528\u56fe\u7247');
+    });
+  }
+  closeMediaLibrary();
 }
 
 function showSaveToast(msg) {
@@ -3476,6 +3608,11 @@ function openMediaLibrary() {
 
 function closeMediaLibrary() {
   document.getElementById('mediaLibraryModal').classList.remove('show');
+  libPickTargetKey = null;
+  var banner = document.getElementById('libPickBanner');
+  if (banner) banner.style.display = 'none';
+  var dropzone = document.getElementById('mediaDropzone');
+  if (dropzone) dropzone.style.display = '';
 }
 
 function handleMediaLibraryUpload(event) {
@@ -3530,6 +3667,16 @@ function renderMediaLibrary() {
     item.ondragstart = (e) => {
       e.dataTransfer.setData('text/lib-key', item.dataset.libKey);
       e.dataTransfer.effectAllowed = 'copy';
+    };
+    // 选择模式：点击图片应用到页面
+    item.onclick = (e) => {
+      if (!libPickTargetKey) return;
+      e.stopPropagation();
+      e.preventDefault();
+      var srcKey = item.dataset.libKey;
+      var targetKey = libPickTargetKey;
+      libPickTargetKey = null;
+      applyLibraryImage(srcKey, targetKey);
     };
   });
 }
