@@ -2956,6 +2956,11 @@ function showView(path) {
   } else {
     const target = document.getElementById('view-' + path);
     if (target) target.classList.add('active');
+    // Moodboard: force fresh iframe load to bypass cache
+    if (path === 'moodboard') {
+      const frame = document.getElementById('view-moodboard').querySelector('iframe');
+      if (frame) frame.src = 'moodboard-preview.html?v=' + Date.now();
+    }
   }
   window.scrollTo(0, 0);
   if (path === 'home') setTimeout(fitHeroTitle, 60);
