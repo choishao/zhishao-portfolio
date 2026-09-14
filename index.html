@@ -1850,7 +1850,12 @@ body.edit-mode .add-category-btn { display: block; }
 .admin-thumb img { width:100%; height:100%; object-fit:cover; }
 .admin-thumb-preview { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:11px; color:#bbb; }
 .admin-card-footer { display:flex; align-items:center; justify-content:space-between; padding:10px 4px 0; }
-.admin-card-name { font-size:13px; color:#333; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:500; }
+.admin-card-name { font-size:13px; color:#333; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:500; outline:none; cursor:text; border-radius:3px; padding:1px 3px; margin:-1px -3px; }
+.admin-card-name:hover { background:#f0f0f0; }
+.admin-card-name:focus { background:#eee; box-shadow:0 0 0 1px #ccc; white-space:normal; word-break:break-all; }
+#thumbGenStatus { margin:0 0 12px 0; font-size:12px; color:#888; display:flex; align-items:center; gap:6px; }
+#thumbGenStatus .spin { width:12px; height:12px; border:2px solid #ddd; border-top-color:#333; border-radius:50%; animation:thumbSpin 0.8s linear infinite; }
+@keyframes thumbSpin { to { transform:rotate(360deg); } }
 .admin-card-eye { color:#bbb; font-size:14px; cursor:pointer; padding:2px 4px; border-radius:4px; }
 .admin-card-eye:hover { color:#1a1a1a; background:#f5f5f5; }
 .card-actions { position:absolute; top:6px; right:6px; opacity:0; transition:opacity 0.15s; z-index:5; }
@@ -2181,6 +2186,7 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
     </div>
   </div>
   <div class="admin-main">
+    <div id="thumbGenStatus" style="display:none"><span class="spin"></span> 正在生成页面缩略图…</div>
     <div class="admin-grid" id="adminGrid"></div>
   </div>
 </section>
@@ -3556,6 +3562,7 @@ function saveAllContent() {
   unsavedChanges = false;
   updateEditStatus();
   showSaveToast('全部已保存');
+  clearThumbDB();
 }
 
 function resetAllContent() {
@@ -3577,6 +3584,7 @@ function resetAllContent() {
   unsavedChanges = false;
   updateEditStatus();
   showSaveToast('已恢复默认');
+  clearThumbDB();
 }
 
 // Auto-save on Ctrl+S
@@ -3595,6 +3603,7 @@ document.addEventListener('DOMContentLoaded', () => {
   showView(hash);
   loadImagesFromIDB();
   loadCustomFonts();
+  loadThumbsFromIDB();
   fitHeroTitle();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitHeroTitle);
   window.addEventListener('resize', fitHeroTitle);
@@ -3793,6 +3802,7 @@ var adminContextTarget = null;
 
 function getAdminPages() {
   var pages = adminPages.slice();
+  pages.forEach(function(p){ if (p.id === 'moodboard') p.name = (siteContent && siteContent.moodboardName) || 'Moodboard'; });
   if (siteContent && siteContent.workItems) {
     siteContent.workItems.forEach(function(item, idx) {
       pages.push({ id: 'detail-' + idx, name: item.title || ('作品 ' + (idx + 1)), route: 'work/detail/' + idx, type: 'work', thumb: item.cover || '' });
@@ -3814,18 +3824,22 @@ function renderAdminDashboard() {
   }
   var html = '';
   pages.forEach(function(page) {
-    var thumbContent = page.thumb
-      ? '<img src="' + page.thumb + '" alt="' + page.name + '">'
-      : '<div class="admin-thumb-preview">' + page.name + '</div>';
+    var thumb = thumbCache['thumb_' + page.route];
+    var thumbContent = thumb
+      ? '<img src="' + thumb + '" alt="' + page.name + '">'
+      : (page.thumb
+          ? '<img src="' + page.thumb + '" alt="' + page.name + '">'
+          : '<div class="admin-thumb-preview">' + page.name + '</div>');
     html += '<div class="admin-page-card" data-page-id="' + page.id + '">'
       + '<div class="card-actions"><button class="card-menu-btn" onclick="event.stopPropagation();showAdminContextMenu(event,\'' + page.id + '\')">&#8942;</button></div>'
       + '<div class="admin-thumb" onclick="adminEditPage(\'' + page.route + '\')">' + thumbContent + '</div>'
       + '<div class="admin-card-footer">'
-      + '<span class="admin-card-name">' + page.name + '</span>'
+      + '<span class="admin-card-name" contenteditable="true" spellcheck="false" onblur="adminRenamePage(\'' + page.id + '\', this.textContent)" onkeydown="if(event.key===\'Enter\'){event.preventDefault();this.blur();}">' + page.name + '</span>'
       + '<span class="admin-card-eye" onclick="event.stopPropagation();adminPreviewPage(\'' + page.route + '\')" title="预览">&#128065;</span>'
       + '</div></div>';
   });
   grid.innerHTML = html;
+  ensurePageThumbs(false);
 }
 
 function filterAdminPages(type, el) {
@@ -3837,6 +3851,178 @@ function filterAdminPages(type, el) {
 
 function searchAdminPages(q) {
   adminSearchQuery = q;
+  renderAdminDashboard();
+}
+
+// ===== Admin Page Thumbnails (full-page render) =====
+var thumbCache = {};
+var thumbLoaded = false;
+var thumbGenerating = false;
+var THUMB_DB_NAME = 'zhishao_thumb_db';
+var THUMB_DB_STORE = 'thumbs';
+
+function openThumbDB() {
+  return new Promise(function(resolve, reject) {
+    var req = indexedDB.open(THUMB_DB_NAME, 1);
+    req.onupgradeneeded = function() {
+      if (!req.result.objectStoreNames.contains(THUMB_DB_STORE)) {
+        req.result.createObjectStore(THUMB_DB_STORE);
+      }
+    };
+    req.onsuccess = function() { resolve(req.result); };
+    req.onerror = function() { reject(req.error); };
+  });
+}
+function saveThumbToDB(route, dataUrl) {
+  openThumbDB().then(function(db) {
+    return new Promise(function(resolve) {
+      var tx = db.transaction(THUMB_DB_STORE, 'readwrite');
+      tx.objectStore(THUMB_DB_STORE).put(dataUrl, route);
+      tx.oncomplete = function() { db.close(); resolve(); };
+    });
+  }).catch(function(){});
+}
+function clearThumbDB() {
+  thumbCache = {};
+  openThumbDB().then(function(db) {
+    return new Promise(function(resolve) {
+      var tx = db.transaction(THUMB_DB_STORE, 'readwrite');
+      tx.objectStore(THUMB_DB_STORE).clear();
+      tx.oncomplete = function() { db.close(); resolve(); };
+    });
+  }).catch(function(){});
+}
+function loadThumbsFromIDB() {
+  if (thumbLoaded) return;
+  thumbLoaded = true;
+  openThumbDB().then(function(db) {
+    return new Promise(function(resolve) {
+      var tx = db.transaction(THUMB_DB_STORE, 'readonly');
+      var req = tx.objectStore(THUMB_DB_STORE).getAllKeys();
+      req.onsuccess = function() {
+        var keys = req.result || [];
+        var done = 0;
+        keys.forEach(function(k) {
+          var g = db.transaction(THUMB_DB_STORE, 'readonly').objectStore(THUMB_DB_STORE).get(k);
+          g.onsuccess = function() { thumbCache[k] = g.result; done++; if (done >= keys.length) resolve(); };
+        });
+        if (!keys.length) resolve();
+      };
+    });
+  }).catch(function(){});
+}
+function loadHtml2canvas(cb) {
+  if (typeof html2canvas === 'function') { cb(); return; }
+  var s = document.createElement('script');
+  s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+  s.onload = cb;
+  s.onerror = function() { setTimeout(cb, 0); };
+  document.head.appendChild(s);
+}
+function showViewForThumb(route) {
+  document.querySelectorAll('.view').forEach(function(v) { v.classList.remove('active'); });
+  if (route.indexOf('work/detail/') === 0) {
+    var idx = parseInt(route.split('/')[2]);
+    if (!isNaN(idx)) { currentDetailIndex = idx; renderWorkDetail(idx); }
+    var dv = document.getElementById('view-work-detail');
+    if (dv) dv.classList.add('active');
+  } else {
+    var t = document.getElementById('view-' + route);
+    if (t) t.classList.add('active');
+  }
+  window.scrollTo(0, 0);
+}
+function ensurePageThumbs(force) {
+  if (thumbGenerating) return;
+  loadHtml2canvas(function() {
+    if (typeof html2canvas !== 'function') return;
+    var routes = getAdminPages().map(function(p) { return p.route; }).filter(function(r) { return r !== 'moodboard'; });
+    var pending = [];
+    routes.forEach(function(r) {
+      if (force || !thumbCache['thumb_' + r]) pending.push(r);
+    });
+    if (!pending.length) return;
+    thumbGenerating = true;
+    var adminView = document.getElementById('view-admin');
+    var status = document.getElementById('thumbGenStatus');
+    if (status) status.style.display = 'flex';
+    adminView.classList.remove('active');
+    var i = 0;
+    function next() {
+      if (i >= pending.length) {
+        adminView.classList.add('active');
+        thumbGenerating = false;
+        if (status) status.style.display = 'none';
+        renderAdminDashboard();
+        return;
+      }
+      var route = pending[i];
+      showViewForThumb(route);
+      setTimeout(function() {
+        var viewEl = document.getElementById(route.indexOf('work/detail/') === 0 ? 'view-work-detail' : 'view-' + route);
+        if (!viewEl) { i++; next(); return; }
+        try {
+          html2canvas(viewEl, {
+            backgroundColor: '#ffffff',
+            useCORS: true,
+            scale: 0.35,
+            logging: false,
+            windowWidth: Math.min(document.documentElement.offsetWidth, 1400),
+            windowHeight: Math.min(viewEl.scrollHeight, 6000)
+          }).then(function(canvas) {
+            var dataUrl = canvas.toDataURL('image/jpeg', 0.72);
+            thumbCache['thumb_' + route] = dataUrl;
+            saveThumbToDB(route, dataUrl);
+            i++; next();
+          }).catch(function() { i++; next(); });
+        } catch(e) { i++; next(); }
+      }, 350);
+    }
+    next();
+  });
+}
+function adminRenamePage(pageId, newName) {
+  newName = (newName || '').replace(/\n/g, ' ').trim();
+  if (!newName) return;
+  var existing = getContent();
+  if (pageId === 'home') {
+    existing.logoText = newName;
+    siteContent.logoText = newName;
+    document.querySelectorAll('[data-editable="logoText"]').forEach(function(el){ el.textContent = newName; });
+  } else if (pageId === 'work') {
+    existing.navWork = newName;
+    siteContent.navWork = newName;
+    document.querySelectorAll('[data-editable="navWork"]').forEach(function(el){ el.textContent = newName; });
+  } else if (pageId === 'about') {
+    existing.navAbout = newName;
+    siteContent.navAbout = newName;
+    document.querySelectorAll('[data-editable="navAbout"]').forEach(function(el){ el.textContent = newName; });
+  } else if (pageId === 'clients') {
+    existing.navClients = newName;
+    existing.clientsTitle = newName;
+    siteContent.navClients = newName;
+    siteContent.clientsTitle = newName;
+    document.querySelectorAll('[data-editable="navClients"]').forEach(function(el){ el.textContent = newName; });
+    var ct = document.querySelector('[data-editable="clientsTitle"]');
+    if (ct) ct.textContent = newName;
+  } else if (pageId === 'moodboard') {
+    existing.moodboardName = newName;
+    siteContent.moodboardName = newName;
+    var frame = document.getElementById('view-moodboard').querySelector('iframe');
+    if (frame && frame.contentWindow) {
+      try { frame.contentWindow.postMessage({ type: 'zhishao-rename', name: newName }, '*'); } catch(e){}
+    }
+  } else if (pageId.indexOf('detail-') === 0) {
+    var idx = parseInt(pageId.replace('detail-', ''));
+    if (!isNaN(idx) && existing.workItems && existing.workItems[idx]) {
+      existing.workItems[idx].title = newName;
+      siteContent.workItems[idx].title = newName;
+      renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
+    }
+  }
+  localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
+  unsavedChanges = false;
+  showSaveToast('页面名称已更新');
   renderAdminDashboard();
 }
 

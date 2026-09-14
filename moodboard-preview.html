@@ -518,6 +518,12 @@ window.addEventListener('message', function (e) {
   if (e.data && e.data.type === 'zhishao-edit-mode') {
     setEditMode(!!e.data.editMode);
   }
+  if (e.data && e.data.type === 'zhishao-rename') {
+    data.title = e.data.name || data.title;
+    saveData();
+    var titleEl = document.querySelector('[data-field="title"]');
+    if (titleEl) titleEl.textContent = data.title;
+  }
 });
 
 // Text field handlers
