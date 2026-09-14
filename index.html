@@ -2148,7 +2148,7 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
   <!-- ===== Moodboard View ===== -->
   <section class="view" id="view-moodboard">
     <button class="moodboard-back" onclick="navigate('home')">&larr; 返回首页</button>
-    <iframe class="moodboard-frame" src="moodboard-preview.html" title="Moodboard"></iframe>
+    <iframe class="moodboard-frame" src="moodboard-preview.html" title="Moodboard" onload="syncMoodboardEditMode(typeof editMode !== 'undefined' && editMode)"></iframe>
   </section>
 
 
@@ -3216,6 +3216,16 @@ function setupEditables() {
   });
 }
 
+// 同步 Moodboard iframe 编辑状态
+function syncMoodboardEditMode(on) {
+  var frame = document.querySelector('#view-moodboard iframe');
+  if (frame && frame.contentWindow) {
+    try {
+      frame.contentWindow.postMessage({ type: 'zhishao-edit-mode', editMode: !!on }, '*');
+    } catch (e) {}
+  }
+}
+
 function enterEditMode() {
   editMode = true;
   unsavedChanges = false;
@@ -3238,6 +3248,7 @@ function enterEditMode() {
     addBtn.style.display = 'block';
   }
   updateEditStatus();
+  syncMoodboardEditMode(true);
 }
 
 function exitEditMode() {
@@ -3262,6 +3273,7 @@ function exitEditMode() {
   if (addBtn) addBtn.style.display = 'none';
   // 移除拖拽
   teardownDragAndDrop();
+  syncMoodboardEditMode(false);
   location.hash = '#/home';
 }
 
@@ -3901,6 +3913,7 @@ function exitEditModeSilent() {
   var toolbar = document.getElementById('editToolbar');
   if (toolbar) toolbar.classList.remove('show');
   document.querySelectorAll('[data-editable]').forEach(function(el) { el.contentEditable = 'false'; });
+  syncMoodboardEditMode(false);
 }
 
 

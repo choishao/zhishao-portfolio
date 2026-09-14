@@ -508,6 +508,18 @@ function toggleEditMode() {
   }
 }
 
+// Set edit mode explicitly (used by parent page sync)
+function setEditMode(on) {
+  if (!!editMode === !!on) return;
+  toggleEditMode();
+}
+// Listen for edit mode sync from parent (zhishao portfolio)
+window.addEventListener('message', function (e) {
+  if (e.data && e.data.type === 'zhishao-edit-mode') {
+    setEditMode(!!e.data.editMode);
+  }
+});
+
 // Text field handlers
 document.querySelectorAll('[data-field]').forEach(el => {
   el.addEventListener('blur', () => {
