@@ -3776,13 +3776,6 @@ var adminContextTarget = null;
 
 function getAdminPages() {
   var pages = adminPages.slice();
-  if (siteContent && siteContent.categories) {
-    Object.keys(siteContent.categories).forEach(function(cat) {
-      var catItems = siteContent.workItems.filter(function(i) { return i.cat === cat; });
-      var catThumb = (catItems.length > 0 && catItems[0].cover) ? catItems[0].cover : '';
-      pages.push({ id: 'work-' + cat, name: siteContent.categories[cat], route: 'work/' + cat, type: 'work', thumb: catThumb });
-    });
-  }
   if (siteContent && siteContent.workItems) {
     siteContent.workItems.forEach(function(item, idx) {
       pages.push({ id: 'detail-' + idx, name: item.title || ('作品 ' + (idx + 1)), route: 'work/detail/' + idx, type: 'work', thumb: item.cover || '' });
