@@ -355,7 +355,7 @@ button {
 
 .hero-title {
   font-family: var(--font-display);
-  font-size: clamp(90px, 18.5vw, 340px);
+  font-size: 300px; /* fitHeroTitle() dynamically fits to fill width */
   color: var(--white);
   line-height: 0.88;
   letter-spacing: -2px;
@@ -2849,6 +2849,39 @@ async function downloadResume() {
 function navigate(path) {
   location.hash = '/' + path;
 }
+
+// ===== Fit hero title to fill screen width (dynamic font sizing) =====
+function fitHeroTitle() {
+  var title = document.querySelector('.hero-title');
+  var home = document.getElementById('view-home');
+  if (!title || !home) return;
+  var active = home.classList.contains('active');
+  var availW = (active ? home.clientWidth : window.innerWidth) - 100;
+  if (availW < 100) return;
+
+  title.style.fontSize = '300px';
+  title.style.whiteSpace = 'nowrap';
+  var textW = title.scrollWidth;
+  if (textW <= 0) return;
+  var sizeByW = (availW / textW) * 300;
+
+  // Height constraint: keep nav row + footer fully visible
+  var navH = 130, footH = 90;
+  if (active) {
+    var navRow = home.querySelector('.hero-nav-row');
+    var footer = home.querySelector('.hero-footer');
+    if (navRow && navRow.offsetHeight) navH = navRow.offsetHeight;
+    if (footer && footer.offsetHeight) footH = footer.offsetHeight;
+  }
+  var availH = window.innerHeight - 80 - navH - footH - 50;
+  if (availH < 60) availH = 120;
+  var sizeByH = (availH / (300 * 0.88)) * 300;
+
+  var size = Math.min(sizeByW, sizeByH);
+  size = Math.max(size, 40);
+  title.style.fontSize = size + 'px';
+}
+
 function showView(path) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   if (path === 'edit') {
@@ -2878,6 +2911,7 @@ function showView(path) {
     if (target) target.classList.add('active');
   }
   window.scrollTo(0, 0);
+  if (path === 'home') setTimeout(fitHeroTitle, 60);
 }
 window.addEventListener('hashchange', () => {
   const hash = location.hash.replace('#/', '') || 'home';
@@ -3412,6 +3446,9 @@ document.addEventListener('DOMContentLoaded', () => {
   showView(hash);
   loadImagesFromIDB();
   loadCustomFonts();
+  fitHeroTitle();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitHeroTitle);
+  window.addEventListener('resize', fitHeroTitle);
   // Auto-enter edit mode if opened via ?mode=edit (from admin dashboard new tab)
   if (window.location.search.indexOf('mode=edit') !== -1) {
     setTimeout(function() { enterEditMode(); }, 150);
@@ -3824,6 +3861,7 @@ function applyCustomFont(type, file, fontName) {
   document.body.style.display = 'none';
   document.body.offsetHeight;
   document.body.style.display = '';
+  setTimeout(fitHeroTitle, 150);
 }
 
 function handleFontUpload(event, type) {
@@ -3875,6 +3913,7 @@ function resetFont(type) {
     document.body.style.display = 'none';
     document.body.offsetHeight;
     document.body.style.display = '';
+    setTimeout(fitHeroTitle, 150);
     showSaveToast((type === 'en' ? '英文' : '中文') + '字体已恢复默认');
   });
 }
