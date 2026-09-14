@@ -1521,23 +1521,6 @@ body.edit-mode .client-slot:hover {
   transform: translateX(-50%) translateY(0);
 }
 
-/* Edit mode entry hint */
-#editEntryHint {
-  position: fixed;
-  bottom: 16px;
-  right: 16px;
-  font-size: 11px;
-  color: #999;
-  z-index: 50;
-  font-family: system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  opacity: 0.7;
-  background: rgba(255,255,255,0.8);
-  padding: 4px 10px;
-  border-radius: 4px;
-  backdrop-filter: blur(4px);
-}
-
-
 /* ===== Work card delete (edit mode) ===== */
 .work-card { position: relative; }
 body.edit-mode .work-card .work-delete-btn { display: flex; }
@@ -2238,7 +2221,6 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
   </div>
 </div>
 
-<div id="editEntryHint">访问 #/edit 进入后台管理</div>
 
   
 
@@ -3154,7 +3136,6 @@ function enterEditMode() {
   unsavedChanges = false;
   document.body.classList.add('edit-mode');
   document.getElementById('editToolbar').classList.add('show');
-  document.getElementById('editEntryHint').style.display = 'none';
   // 简历按钮
   const resumeBtn = document.getElementById('resumeBtn');
   if (resumeBtn) resumeBtn.textContent = '上传PDF简历';
@@ -3181,7 +3162,6 @@ function exitEditMode() {
   editMode = false;
   document.body.classList.remove('edit-mode');
   document.getElementById('editToolbar').classList.remove('show');
-  document.getElementById('editEntryHint').style.display = 'block';
   document.querySelectorAll('[data-editable]').forEach(el => {
     el.contentEditable = 'false';
     el.onclick = null;
