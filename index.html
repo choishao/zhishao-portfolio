@@ -344,6 +344,22 @@ button {
 #view-home {
   background: var(--black);
   position: relative;
+}
+#view-home #heroEvilEye {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  display: block;
+}
+#view-home .hero-title,
+#view-home .hero-nav-row,
+#view-home .hero-footer {
+  position: relative;
+  z-index: 1;
+}
   min-height: calc(100vh - 80px);
   flex-direction: column;
   justify-content: center;
@@ -1973,6 +1989,7 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
 
   <!-- ===== View: Home ===== -->
   <section class="view active" id="view-home">
+    <canvas id="heroEvilEye" aria-hidden="true"></canvas>
     <div class="hero-title" data-editable="heroTitle">DESIGN PORTFOLIO</div>
     <div class="hero-nav-row">
       <div class="hero-nav">
@@ -3605,6 +3622,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadCustomFonts();
   loadThumbsFromIDB();
   fitHeroTitle();
+  initHeroEvilEye();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitHeroTitle);
   window.addEventListener('resize', fitHeroTitle);
   // Auto-enter edit mode if opened via ?mode=edit (from admin dashboard new tab)
@@ -4314,6 +4332,280 @@ function loadCustomFonts() {
     console.error('Load custom fonts failed:', e);
   });
 }
+
+
+// ============================================================
+// ===== Hero Dynamic Background: EvilEye (native WebGL) =====
+// ============================================================
+function initHeroEvilEye() {
+  var canvas = document.getElementById('heroEvilEye');
+  if (!canvas) return;
+  var gl = null;
+  try {
+    gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: false }) ||
+         canvas.getContext('experimental-webgl', { alpha: true, premultipliedAlpha: false });
+  } catch (e) { gl = null; }
+  if (!gl) { canvas.style.display = 'none'; return; }
+
+  var VERT = [
+    'attribute vec2 uv;',
+    'attribute vec2 position;',
+    'varying vec2 vUv;',
+    'void main() {',
+    '  vUv = uv;',
+    '  gl_Position = vec4(position, 0, 1);',
+    '}'
+  ].join('\n');
+
+  var FRAG = [
+    'precision highp float;',
+    'uniform float uTime;',
+    'uniform vec3 uResolution;',
+    'uniform sampler2D uNoiseTexture;',
+    'uniform float uPupilSize;',
+    'uniform float uIrisWidth;',
+    'uniform float uGlowIntensity;',
+    'uniform float uIntensity;',
+    'uniform float uScale;',
+    'uniform float uNoiseScale;',
+    'uniform vec2 uMouse;',
+    'uniform float uPupilFollow;',
+    'uniform float uFlameSpeed;',
+    'uniform vec3 uEyeColor;',
+    'uniform vec3 uBgColor;',
+    'uniform bool uLightMode;',
+    'void main() {',
+    '  vec2 uv = (gl_FragCoord.xy * 2.0 - uResolution.xy) / uResolution.y;',
+    '  uv /= uScale;',
+    '  float ft = uTime * uFlameSpeed;',
+    '  float polarRadius = length(uv) * 2.0;',
+    '  float polarAngle = (2.0 * atan(uv.x, uv.y)) / 6.28 * 0.3;',
+    '  vec2 polarUv = vec2(polarRadius, polarAngle);',
+    '  vec4 noiseA = texture2D(uNoiseTexture, polarUv * vec2(0.2, 7.0) * uNoiseScale + vec2(-ft * 0.1, 0.0));',
+    '  vec4 noiseB = texture2D(uNoiseTexture, polarUv * vec2(0.3, 4.0) * uNoiseScale + vec2(-ft * 0.2, 0.0));',
+    '  vec4 noiseC = texture2D(uNoiseTexture, polarUv * vec2(0.1, 5.0) * uNoiseScale + vec2(-ft * 0.1, 0.0));',
+    '  float distanceMask = 1.0 - length(uv);',
+    '  float innerRing = clamp(-1.0 * ((distanceMask - 0.7) / uIrisWidth), 0.0, 1.0);',
+    '  innerRing = (innerRing * distanceMask - 0.2) / 0.28;',
+    '  innerRing += noiseA.r - 0.5;',
+    '  innerRing *= 1.3;',
+    '  innerRing = clamp(innerRing, 0.0, 1.0);',
+    '  float outerRing = clamp(-1.0 * ((distanceMask - 0.5) / 0.2), 0.0, 1.0);',
+    '  outerRing = (outerRing * distanceMask - 0.1) / 0.38;',
+    '  outerRing += noiseC.r - 0.5;',
+    '  outerRing *= 1.3;',
+    '  outerRing = clamp(outerRing, 0.0, 1.0);',
+    '  innerRing += outerRing;',
+    '  float innerEye = distanceMask - 0.1 * 2.0;',
+    '  innerEye *= noiseB.r * 2.0;',
+    '  vec2 pupilOffset = uMouse * uPupilFollow * 0.12;',
+    '  vec2 pupilUv = uv - pupilOffset;',
+    '  float pupil = 1.0 - length(pupilUv * vec2(9.0, 2.3));',
+    '  pupil *= uPupilSize;',
+    '  pupil = clamp(pupil, 0.0, 1.0);',
+    '  pupil /= 0.35;',
+    '  float outerEyeGlow = 1.0 - length(uv * vec2(0.5, 1.5));',
+    '  outerEyeGlow = clamp(outerEyeGlow + 0.5, 0.0, 1.0);',
+    '  outerEyeGlow += noiseC.r - 0.5;',
+    '  float outerBgGlow = outerEyeGlow;',
+    '  outerEyeGlow = pow(outerEyeGlow, 2.0);',
+    '  outerEyeGlow += distanceMask;',
+    '  outerEyeGlow *= uGlowIntensity;',
+    '  outerEyeGlow = clamp(outerEyeGlow, 0.0, 1.0);',
+    '  outerEyeGlow *= pow(1.0 - distanceMask, 2.0) * 2.5;',
+    '  outerBgGlow += distanceMask;',
+    '  outerBgGlow = pow(outerBgGlow, 0.5);',
+    '  outerBgGlow *= 0.15;',
+    '  vec3 eyeEnergy = uEyeColor * uIntensity * clamp(max(innerRing + innerEye, outerEyeGlow + outerBgGlow) - pupil, 0.0, 3.0);',
+    '  vec3 color;',
+    '  if (uLightMode) {',
+    '    vec3 mapped = vec3(1.0) - exp(-max(eyeEnergy, vec3(0.0)) * 1.3);',
+    '    float energy = clamp(max(mapped.r, max(mapped.g, mapped.b)), 0.0, 1.0);',
+    '    vec3 hue = mapped / max(energy, 0.0001);',
+    '    hue = pow(clamp(hue, 0.0, 1.0), vec3(1.2));',
+    '    color = mix(uBgColor, hue, smoothstep(0.02, 0.82, energy) * 0.96);',
+    '  } else {',
+    '    color = eyeEnergy + uBgColor;',
+    '  }',
+    '  gl_FragColor = vec4(color, 1.0);',
+    '}'
+  ].join('\n');
+
+  function compile(type, src) {
+    var sh = gl.createShader(type);
+    gl.shaderSource(sh, src);
+    gl.compileShader(sh);
+    if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+      if (window.console) console.warn('EvilEye shader error:', gl.getShaderInfoLog(sh));
+      gl.deleteShader(sh);
+      return null;
+    }
+    return sh;
+  }
+
+  var vs = compile(gl.VERTEX_SHADER, VERT);
+  var fs = compile(gl.FRAGMENT_SHADER, FRAG);
+  if (!vs || !fs) { canvas.style.display = 'none'; return; }
+  var prog = gl.createProgram();
+  gl.attachShader(prog, vs);
+  gl.attachShader(prog, fs);
+  gl.linkProgram(prog);
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) { canvas.style.display = 'none'; return; }
+  gl.useProgram(prog);
+
+  // Fullscreen triangle geometry (same as ogl Triangle)
+  var positions = new Float32Array([-1, -1, 3, -1, -1, 3]);
+  var uvs = new Float32Array([0, 0, 2, 0, 0, 2]);
+  var posBuf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
+  gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+  var uvBuf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, uvBuf);
+  gl.bufferData(gl.ARRAY_BUFFER, uvs, gl.STATIC_DRAW);
+  var aPos = gl.getAttribLocation(prog, 'position');
+  var aUv = gl.getAttribLocation(prog, 'uv');
+  gl.enableVertexAttribArray(aPos);
+  gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
+  gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+  if (aUv >= 0) {
+    gl.enableVertexAttribArray(aUv);
+    gl.bindBuffer(gl.ARRAY_BUFFER, uvBuf);
+    gl.vertexAttribPointer(aUv, 2, gl.FLOAT, false, 0, 0);
+  }
+
+  // Noise texture (procedural, same as EvilEye)
+  var texSize = 256;
+  function hash(x, y, s) {
+    var n = x * 374761393 + y * 668265263 + s * 1274126177;
+    n = Math.imul(n ^ (n >>> 13), 1274126177);
+    return ((n ^ (n >>> 16)) >>> 0) / 4294967296;
+  }
+  function noise(px, py, freq, seed) {
+    var fx = (px / texSize) * freq, fy = (py / texSize) * freq;
+    var ix = Math.floor(fx), iy = Math.floor(fy);
+    var tx = fx - ix, ty = fy - iy;
+    var w = freq | 0;
+    function hh(x, y) { return hash(((x % w) + w) % w, ((y % w) + w) % w, seed); }
+    var v00 = hh(ix, iy), v10 = hh(ix + 1, iy), v01 = hh(ix, iy + 1), v11 = hh(ix + 1, iy + 1);
+    return v00 * (1 - tx) * (1 - ty) + v10 * tx * (1 - ty) + v01 * (1 - tx) * ty + v11 * tx * ty;
+  }
+  var data = new Uint8Array(texSize * texSize * 4);
+  for (var y = 0; y < texSize; y++) {
+    for (var x = 0; x < texSize; x++) {
+      var v = 0, amp = 0.4, totalAmp = 0;
+      for (var o = 0; o < 8; o++) {
+        var f = 32 * (1 << o);
+        v += amp * noise(x, y, f, o * 31);
+        totalAmp += amp;
+        amp *= 0.65;
+      }
+      v /= totalAmp;
+      v = (v - 0.5) * 2.2 + 0.5;
+      v = Math.max(0, Math.min(1, v));
+      var val = Math.round(v * 255);
+      var i = (y * texSize + x) * 4;
+      data[i] = val; data[i + 1] = val; data[i + 2] = val; data[i + 3] = 255;
+    }
+  }
+  var tex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, texSize, texSize, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+
+  function hexToVec3(hex) {
+    var h = hex.replace('#', '');
+    return [parseInt(h.slice(0, 2), 16) / 255, parseInt(h.slice(2, 4), 16) / 255, parseInt(h.slice(4, 6), 16) / 255];
+  }
+  function uni(name) { return gl.getUniformLocation(prog, name); }
+  var uTime = uni('uTime'), uRes = uni('uResolution'), uTex = uni('uNoiseTexture');
+  var uPupil = uni('uPupilSize'), uIris = uni('uIrisWidth'), uGlow = uni('uGlowIntensity');
+  var uIntensity = uni('uIntensity'), uScale = uni('uScale'), uNoiseScale = uni('uNoiseScale');
+  var uMouse = uni('uMouse'), uFollow = uni('uPupilFollow'), uFlame = uni('uFlameSpeed');
+  var uEye = uni('uEyeColor'), uBg = uni('uBgColor'), uLight = uni('uLightMode');
+
+  var params = {
+    eyeColor: '#FF6F37', intensity: 1.5, pupilSize: 0.6, irisWidth: 0.25,
+    glowIntensity: 0.35, scale: 0.8, noiseScale: 1.0, pupilFollow: 1.0,
+    flameSpeed: 1.0, backgroundColor: '#000000', lightMode: false
+  };
+
+  function setUniforms(t, w, h, mx, my) {
+    gl.uniform1f(uTime, t);
+    gl.uniform3f(uRes, w, h, w / h);
+    gl.uniform1i(uTex, 0);
+    gl.uniform1f(uPupil, params.pupilSize);
+    gl.uniform1f(uIris, params.irisWidth);
+    gl.uniform1f(uGlow, params.glowIntensity);
+    gl.uniform1f(uIntensity, params.intensity);
+    gl.uniform1f(uScale, params.scale);
+    gl.uniform1f(uNoiseScale, params.noiseScale);
+    gl.uniform2f(uMouse, mx, my);
+    gl.uniform1f(uFollow, params.pupilFollow);
+    gl.uniform1f(uFlame, params.flameSpeed);
+    var ec = hexToVec3(params.eyeColor), bc = hexToVec3(params.backgroundColor);
+    gl.uniform3f(uEye, ec[0], ec[1], ec[2]);
+    gl.uniform3f(uBg, bc[0], bc[1], bc[2]);
+    gl.uniform1i(uLight, params.lightMode ? 1 : 0);
+  }
+
+  var mouse = { x: 0, y: 0, tx: 0, ty: 0 };
+  function onMouseMove(e) {
+    var rect = canvas.getBoundingClientRect();
+    mouse.tx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.ty = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
+  }
+  function onMouseLeave() { mouse.tx = 0; mouse.ty = 0; }
+  window.addEventListener('mousemove', onMouseMove);
+  window.addEventListener('mouseleave', onMouseLeave);
+
+  var rafId = null;
+  function resize() {
+    var w = canvas.clientWidth || canvas.parentElement.clientWidth || window.innerWidth;
+    var h = canvas.clientHeight || canvas.parentElement.clientHeight || window.innerHeight;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w;
+      canvas.height = h;
+      gl.viewport(0, 0, w, h);
+    }
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  var ro = null;
+  if (window.ResizeObserver) {
+    ro = new ResizeObserver(resize);
+    ro.observe(canvas.parentElement);
+  }
+
+  var startTime = performance.now();
+  var running = true;
+  function tick() {
+    if (!running) return;
+    rafId = requestAnimationFrame(tick);
+    mouse.x += (mouse.tx - mouse.x) * 0.05;
+    mouse.y += (mouse.ty - mouse.y) * 0.05;
+    var t = (performance.now() - startTime) / 1000;
+    setUniforms(t, canvas.width, canvas.height, mouse.x, mouse.y);
+    gl.clearColor(0, 0, 0, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+  }
+  tick();
+
+  // Pause rendering when the home view is not visible (performance)
+  var viewHome = document.getElementById('view-home');
+  if (viewHome && window.IntersectionObserver) {
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting && !running) { running = true; tick(); }
+        else if (!en.isIntersecting && running) { running = false; if (rafId) { cancelAnimationFrame(rafId); rafId = null; } }
+      });
+    }).observe(viewHome);
+  }
+}
+
 
 </script>
 
