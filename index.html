@@ -217,22 +217,42 @@ button {
   left: 0;
   right: 0;
   height: 80px;
-  background: var(--off-white);
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 50px;
   z-index: 100;
-  border-bottom: 1px solid rgba(0,0,0,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
 .top-nav .logo {
   font-family: var(--font-display);
   font-size: 36px;
-  color: var(--black);
+  color: var(--white);
   letter-spacing: -1px;
   cursor: pointer;
   line-height: 1;
+}
+
+/* MAISON 式顶部横排导航 */
+.top-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}
+.top-nav-links a {
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.78);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.top-nav-links a:hover {
+  color: var(--white);
 }
 
 .top-nav .nav-right {
@@ -252,7 +272,7 @@ button {
   display: block;
   width: 32px;
   height: 3px;
-  background: var(--black);
+  background: var(--white);
   transition: all 0.3s ease;
 }
 
@@ -355,18 +375,20 @@ button {
   display: block;
 }
 #view-home .hero-title,
-#view-home .hero-nav-row,
+#view-home .hero-subtitle,
 #view-home .hero-footer {
   position: relative;
   z-index: 1;
 }
+.hero-title {
+  margin-top: auto;
+}
+#view-home.active {
+  display: flex;
   min-height: calc(100vh - 80px);
   flex-direction: column;
-  justify-content: center;
   padding: 0 50px;
   overflow: hidden;
-}
-#view-home.active { display: flex;
 }
 
 .hero-title {
@@ -379,6 +401,16 @@ button {
   white-space: nowrap;
   overflow: hidden;
   width: 100%;
+}
+
+.hero-subtitle {
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  margin-top: 24px;
+  padding-left: 6px;
 }
 
 .hero-nav-row {
@@ -432,8 +464,9 @@ button {
 }
 
 .hero-footer {
-  margin-top: auto;
-  padding-top: 40px;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.1);
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -1382,6 +1415,9 @@ body.edit-mode .client-slot .remove-slot-btn {
     padding: 0 20px;
     height: 64px;
   }
+  .top-nav-links {
+    display: none;
+  }
   .top-nav .logo {
     font-size: 26px;
   }
@@ -1982,6 +2018,11 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
 <nav class="top-nav">
   <div class="logo" onclick="navigate('home')" data-editable="logoText">ZHISHAOCUI</div>
   <div class="nav-right">
+    <div class="top-nav-links">
+      <a href="#/work" onclick="navigate('work')" data-editable="navWork">作品项目</a>
+      <a href="#/about" onclick="navigate('about')" data-editable="navAbout">关于我</a>
+      <a href="#/clients" onclick="navigate('clients')" data-editable="navClients">客户名单</a>
+    </div>
     <button class="menu-btn" id="menuBtn" onclick="toggleMenu()">
       <span></span>
       <span></span>
@@ -2008,15 +2049,7 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
   <section class="view active" id="view-home">
     <canvas id="heroEvilEye" aria-hidden="true"></canvas>
     <div class="hero-title" data-editable="heroTitle">DESIGN PORTFOLIO</div>
-    <div class="hero-nav-row">
-      <div class="hero-nav">
-        <a href="#/work" onclick="navigate('work')" data-editable="navWork">作品项目</a>
-        <a href="#/about" onclick="navigate('about')" data-editable="navAbout">关于我</a>
-      </div>
-      <div class="hero-nav-right">
-        <a href="#/clients" onclick="navigate('clients')" data-editable="navClients">客户名单</a>
-      </div>
-    </div>
+    <div class="hero-subtitle" data-editable="heroSubtitle">VISUAL DESIGNER / CREATIVE PORTFOLIO</div>
     <div class="hero-footer">
       <div class="hero-social">
         <a href="#" aria-label="Instagram" data-social="instagram" onclick="return handleSocialClick(event, 'instagram')">
@@ -2323,6 +2356,7 @@ const DEFAULT_CONTENT = {
   navWork: '作品项目',
   navAbout: '关于我',
   navClients: '客户名单',
+  heroSubtitle: 'VISUAL DESIGNER / CREATIVE PORTFOLIO',
   menuFooterLeft: 'ZHISHAOCUI DESIGN STUDIO',
   menuFooterRight: '\u00a9 2026 ALL RIGHTS RESERVED',
   // 首页
@@ -2951,8 +2985,8 @@ function fitHeroTitle() {
   if (textW <= 0) return;
   var sizeByW = (availW / textW) * 300;
 
-  // Height constraint: keep nav row + footer fully visible
-  var navH = 130, footH = 90;
+  // Height constraint: keep footer fully visible
+  var navH = 40, footH = 90;
   if (active) {
     var navRow = home.querySelector('.hero-nav-row');
     var footer = home.querySelector('.hero-footer');
