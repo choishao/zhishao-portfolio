@@ -1045,7 +1045,7 @@ body.edit-mode .add-gallery-btn { display: block; }
   font-size: 22px;
   color: var(--white);
   background: var(--black);
-  border: 2px solid var(--white);
+  border: 1px solid var(--white);
   border-radius: 60px;
   padding: 22px 70px;
   letter-spacing: 2px;
@@ -1073,6 +1073,10 @@ body.edit-mode .add-gallery-btn { display: block; }
 .sb-label {
   position: relative;
   z-index: 2;
+}
+/* 扫光仅前台（访客）显示，后台编辑模式隐藏 */
+body.edit-mode .sb-fx {
+  display: none !important;
 }
 
 .resume-copyright {
@@ -3310,8 +3314,9 @@ function enterEditMode() {
   unsavedChanges = false;
   document.body.classList.add('edit-mode');
   document.getElementById('editToolbar').classList.add('show');
-  // 简历按钮
+  // 简历按钮（扫光仅前台显示，编辑模式暂停）
   setResumeBtnText('上传PDF简历');
+  if (typeof sbState !== 'undefined') sbState.paused = true;
   // 渲染分类为可编辑模式
   renderCategories();
   // 文字可编辑
@@ -3341,8 +3346,9 @@ function exitEditMode() {
     el.onclick = null;
     el.ondblclick = null;
   });
-  // 恢复简历按钮文字
+  // 恢复简历按钮文字与前台扫光
   setResumeBtnText(siteContent.resumeBtnText || '下载PDF简历');
+  if (typeof sbState !== 'undefined') sbState.paused = false;
   // 恢复分类为普通模式
   renderCategories();
   // 隐藏添加按钮
@@ -3776,7 +3782,7 @@ function initResumeSpecular() {
   });
   var props = {
     radius: 60, lineColor: [1, 1, 1], baseColor: [1, 1, 1],
-    intensity: 1.5, shineSize: 14, shineFade: 14, thickness: 4,
+    intensity: 1.5, shineSize: 14, shineFade: 14, thickness: 2,
     speed: 0.7, followMouse: true, proximity: 300, autoAnimate: true
   };
   var dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -3829,6 +3835,7 @@ function initResumeSpecular() {
   window.addEventListener('pointermove', onPointerMove);
   function update(now) {
     sbState.raf = requestAnimationFrame(update);
+    if (sbState.paused) return;
     var dt = Math.min((now - (sbState.last || now)) / 1000, 0.05);
     sbState.last = now;
     sbState.idleAngle += props.speed * dt;
@@ -4338,6 +4345,7 @@ function exitAdminToSite() {
 function exitEditModeSilent() {
   editMode = false;
   document.body.classList.remove('edit-mode');
+  if (typeof sbState !== 'undefined') sbState.paused = true;
   var toolbar = document.getElementById('editToolbar');
   if (toolbar) toolbar.classList.remove('show');
   document.querySelectorAll('[data-editable]').forEach(function(el) { el.contentEditable = 'false'; });
