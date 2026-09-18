@@ -1024,6 +1024,23 @@ body.edit-mode .add-gallery-btn { display: block; }
   color: var(--black);
 }
 
+/* ===== Resume Specular Button (WebGL 扫光) ===== */
+.sb-fx {
+  position: absolute;
+  inset: -20px;
+  pointer-events: none;
+  z-index: 1;
+}
+.sb-fx canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.sb-label {
+  position: relative;
+  z-index: 2;
+}
+
 .resume-copyright {
   font-family: var(--font-display);
   font-size: 20px;
@@ -2433,8 +2450,7 @@ function applyContent() {
     }
   });
   // 简历按钮文字(非编辑模式固定为下载)
-  const resumeBtn = document.getElementById('resumeBtn');
-  if (resumeBtn && !editMode) resumeBtn.textContent = '下载PDF简历';
+  setResumeBtnText('下载PDF简历');
   // 浏览器标题
   document.title = siteContent.logoText + ' \u2014 Designer Portfolio';
   // 作品分类导航
@@ -3260,8 +3276,7 @@ function enterEditMode() {
   document.body.classList.add('edit-mode');
   document.getElementById('editToolbar').classList.add('show');
   // 简历按钮
-  const resumeBtn = document.getElementById('resumeBtn');
-  if (resumeBtn) resumeBtn.textContent = '上传PDF简历';
+  setResumeBtnText('上传PDF简历');
   // 渲染分类为可编辑模式
   renderCategories();
   // 文字可编辑
@@ -3292,8 +3307,7 @@ function exitEditMode() {
     el.ondblclick = null;
   });
   // 恢复简历按钮文字
-  const resumeBtn = document.getElementById('resumeBtn');
-  if (resumeBtn) resumeBtn.textContent = siteContent.resumeBtnText || '下载PDF简历';
+  setResumeBtnText(siteContent.resumeBtnText || '下载PDF简历');
   // 恢复分类为普通模式
   renderCategories();
   // 隐藏添加按钮
@@ -3629,7 +3643,177 @@ document.addEventListener('DOMContentLoaded', () => {
   if (window.location.search.indexOf('mode=edit') !== -1) {
     setTimeout(function() { enterEditMode(); }, 150);
   }
+  // 简历按钮 WebGL 扫光效果
+  initResumeSpecular();
 });
+
+// ===== Resume Specular Button (ReactBits SpecularButton -> 原生 WebGL) =====
+var SB_PAD = 20;
+var SB_VERT = '#version 300 es\nin vec2 position; void main(){ gl_Position = vec4(position, 0.0, 1.0); }';
+var SB_FRAG = '#version 300 es\n' +
+'precision highp float;\n' +
+'uniform vec2 uCenter; uniform vec2 uHalfSize; uniform float uRadius; uniform float uAngle; uniform float uPx;\n' +
+'uniform vec3 uLineColor; uniform vec3 uBaseColor; uniform float uIntensity; uniform float uShineSize; uniform float uShineFade; uniform float uThickness; uniform float uBaseWidth;\n' +
+'out vec4 fragColor;\n' +
+'float sdRoundedRect(vec2 p, vec2 b, float r){ vec2 q = abs(p)-b+r; return length(max(q,0.0))+min(max(q.x,q.y),0.0)-r; }\n' +
+'float shapeSDF(vec2 p){ return sdRoundedRect(p, uHalfSize, uRadius); }\n' +
+'float gaussianLine(float d, float sigma){ float x = d/(sigma+1e-6); float k = mix(1.0,1.6,smoothstep(0.0,1.5,x)); return exp(-k*x*x); }\n' +
+'void main(){ \n' +
+'  vec2 p = gl_FragCoord.xy - uCenter; \n' +
+'  float d = shapeSDF(p); \n' +
+'  vec2 L = vec2(cos(uAngle), sin(uAngle)); \n' +
+'  float base = (1.0-smoothstep(0.0,uBaseWidth,abs(d)))*0.45; \n' +
+'  vec2 nEll = normalize(p/(uHalfSize*uHalfSize)+1e-6); \n' +
+'  float phi = acos(clamp(abs(dot(nEll,L)),0.0,1.0)); \n' +
+'  float rim = 1.0-smoothstep(uShineSize-uShineFade, uShineSize+uShineFade+1e-4, phi); \n' +
+'  float line = gaussianLine(d, uThickness); \n' +
+'  float edgeClamp = 1.0-smoothstep(0.5*uPx, 3.0*uPx, abs(d)); \n' +
+'  float hi = line*rim*edgeClamp*uIntensity; \n' +
+'  vec3 col = uBaseColor*base + uLineColor*hi; \n' +
+'  float a = clamp(base+hi, 0.0, 1.0); \n' +
+'  fragColor = vec4(col, a); \n' +
+'}';
+var sbState = { raf: 0, last: 0, angle: 2.4, idleAngle: 2.4, bright: 0, pointerAngle: null, proximityT: 0 };
+
+function setResumeBtnText(text) {
+  var btn = document.getElementById('resumeBtn');
+  if (!btn) return;
+  var l = btn.querySelector('.sb-label');
+  if (l) l.textContent = text; else btn.textContent = text;
+}
+
+function sbCompileShader(gl, type, src) {
+  var s = gl.createShader(type);
+  gl.shaderSource(s, src);
+  gl.compileShader(s);
+  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+    if (window.console) console.warn('specular shader:', gl.getShaderInfoLog(s));
+    gl.deleteShader(s);
+    return null;
+  }
+  return s;
+}
+
+function initResumeSpecular() {
+  var btn = document.getElementById('resumeBtn');
+  if (!btn || btn._sbInited) return;
+  btn._sbInited = true;
+  // 文本移入 label span（保留原有 textContent 逻辑兼容）
+  var label = document.createElement('span');
+  label.className = 'sb-label';
+  label.textContent = btn.textContent;
+  btn.textContent = '';
+  btn.appendChild(label);
+  var fx = document.createElement('span');
+  fx.className = 'sb-fx';
+  fx.setAttribute('aria-hidden', 'true');
+  btn.insertBefore(fx, label);
+  // WebGL2 渲染层（不支持时按钮保持原样式）
+  var canvas = document.createElement('canvas');
+  var gl = null;
+  try { gl = canvas.getContext('webgl2', { alpha: true, premultipliedAlpha: true, antialias: true, preserveDrawingBuffer: true }); } catch (e) { gl = null; }
+  if (!gl) { if (window.console) console.warn('WebGL2 unavailable, resume button specular disabled'); return; }
+  fx.appendChild(canvas);
+  gl.clearColor(0, 0, 0, 0);
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+  var vs = sbCompileShader(gl, gl.VERTEX_SHADER, SB_VERT);
+  var fs = sbCompileShader(gl, gl.FRAGMENT_SHADER, SB_FRAG);
+  if (!vs || !fs) return;
+  var prog = gl.createProgram();
+  gl.attachShader(prog, vs);
+  gl.attachShader(prog, fs);
+  gl.linkProgram(prog);
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+    if (window.console) console.warn('specular link:', gl.getProgramInfoLog(prog));
+    return;
+  }
+  gl.useProgram(prog);
+  var buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+  var loc = gl.getAttribLocation(prog, 'position');
+  gl.enableVertexAttribArray(loc);
+  gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  var U = {};
+  ['uCenter', 'uHalfSize', 'uRadius', 'uAngle', 'uPx', 'uLineColor', 'uBaseColor', 'uIntensity', 'uShineSize', 'uShineFade', 'uThickness', 'uBaseWidth'].forEach(function (n) {
+    U[n] = gl.getUniformLocation(prog, n);
+  });
+  var props = {
+    radius: 60, lineColor: [1, 1, 1], baseColor: [1, 1, 1],
+    intensity: 1.3, shineSize: 9, shineFade: 40, thickness: 3,
+    speed: 0.5, followMouse: true, proximity: 300, autoAnimate: true
+  };
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  var sizeRef = { w: 1, h: 1 };
+  function resize() {
+    var r = btn.getBoundingClientRect();
+    var w = r.width, h = r.height;
+    if (w < 4 || h < 4) return;
+    sizeRef.w = w; sizeRef.h = h;
+    var cw = Math.max(1, Math.round(w + SB_PAD * 2));
+    var ch = Math.max(1, Math.round(h + SB_PAD * 2));
+    canvas.width = cw * dpr;
+    canvas.height = ch * dpr;
+    canvas.style.width = cw + 'px';
+    canvas.style.height = ch + 'px';
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    gl.uniform2f(U.uCenter, (SB_PAD + w / 2) * dpr, (SB_PAD + h / 2) * dpr);
+    gl.uniform2f(U.uHalfSize, (w / 2) * dpr, (h / 2) * dpr);
+    gl.uniform1f(U.uPx, dpr);
+    gl.uniform1f(U.uBaseWidth, dpr);
+    gl.uniform1f(U.uRadius, Math.min(props.radius, Math.min(w, h) / 2) * dpr);
+    gl.uniform3fv(U.uLineColor, props.lineColor);
+    gl.uniform3fv(U.uBaseColor, props.baseColor);
+    gl.uniform1f(U.uShineSize, props.shineSize * Math.PI / 180);
+    gl.uniform1f(U.uShineFade, props.shineFade * Math.PI / 180);
+    gl.uniform1f(U.uThickness, props.thickness * dpr);
+  }
+  var ro = null;
+  if (window.ResizeObserver) {
+    ro = new ResizeObserver(resize);
+    ro.observe(btn);
+  }
+  resize();
+  function onPointerMove(e) {
+    var r = btn.getBoundingClientRect();
+    var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    var dx = Math.max(r.left - e.clientX, 0, e.clientX - r.right);
+    var dy = Math.max(r.top - e.clientY, 0, e.clientY - r.bottom);
+    var dist = Math.hypot(dx, dy);
+    if (dist === 0) {
+      var nx = (e.clientX - cx) / (r.width / 2);
+      var ny = (cy - e.clientY) / (r.height / 2);
+      sbState.pointerAngle = Math.atan2(2 / r.height, -2 / r.width) + nx * 0.3 + ny * 0.15;
+    } else {
+      sbState.pointerAngle = Math.atan2(cy - e.clientY, e.clientX - cx);
+    }
+    var t = Math.max(0, 1 - dist / Math.max(props.proximity, 1));
+    sbState.proximityT = t * t * (3 - 2 * t);
+  }
+  window.addEventListener('pointermove', onPointerMove);
+  function update(now) {
+    sbState.raf = requestAnimationFrame(update);
+    var dt = Math.min((now - (sbState.last || now)) / 1000, 0.05);
+    sbState.last = now;
+    sbState.idleAngle += props.speed * dt;
+    var steer = props.followMouse && sbState.pointerAngle != null && (!props.autoAnimate || sbState.proximityT > 0);
+    var target = steer ? sbState.pointerAngle : sbState.idleAngle;
+    var diff = ((target - sbState.angle + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
+    sbState.angle += diff * (1 - Math.exp(-dt * 7));
+    var brightTarget = props.autoAnimate ? 1 : sbState.proximityT;
+    sbState.bright += (brightTarget - sbState.bright) * (1 - Math.exp(-dt * 8));
+    gl.uniform1f(U.uAngle, sbState.angle);
+    gl.uniform1f(U.uIntensity, props.intensity * sbState.bright);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+  }
+  sbState.raf = requestAnimationFrame(update);
+  btn._sbCleanup = function () {
+    if (sbState.raf) cancelAnimationFrame(sbState.raf);
+    if (ro) ro.disconnect();
+    window.removeEventListener('pointermove', onPointerMove);
+  };
+}
 
 // ============================================================
 // ===== Media Library (管理库) =====
