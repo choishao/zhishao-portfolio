@@ -2087,7 +2087,30 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
 #view-moodboard .moodboard-back { position:fixed; top:20px; left:24px; z-index:10; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; padding:8px 16px; border-radius:6px; cursor:pointer; font-size:13px; backdrop-filter:blur(10px); }
 #view-moodboard .moodboard-back:hover { background:rgba(255,255,255,0.2); }
 
+/* ===== Paper Crumple Intro ===== */
+#paperIntro {
+  position: fixed; inset: 0; z-index: 99999;
+  background: #0a0a0a;
+  display: none;
+  align-items: center; justify-content: center;
+  transition: opacity 0.6s ease;
+}
+#paperIntro.visible { display: flex; }
+#paperIntro.fadeout { opacity: 0; pointer-events: none; }
+#paperCrumple { position: relative; width: 100%; height: 100%; overflow: hidden; }
+#paperCanvas { display: block; width: 100%; height: 100%; }
+.paper-crumple-hit {
+  position: absolute; inset: 0; background: transparent; border: none;
+  cursor: grab; touch-action: none; outline: none; z-index: 2;
+}
+.paper-crumple-hit:active { cursor: grabbing; }
+.paper-intro-hint {
+  position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+  color: #888; font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
+  pointer-events: none; z-index: 1; white-space: nowrap; font-family: inherit;
+}
 </style>
+<script src="https://unpkg.com/three@0.149.0/build/three.min.js"></script>
 </head>
 <body>
 
@@ -3289,6 +3312,12 @@ function showView(path) {
     return;
   }
 
+  if (path === 'about' && !editMode) {
+    showPaperIntro(function () {
+      document.getElementById('view-about').classList.add('active');
+    });
+    return;
+  }
   if (path.startsWith('work/detail/')) {
     const idx = parseInt(path.split('/')[2]);
     currentDetailIndex = idx;
@@ -4135,6 +4164,211 @@ function handleGlobalDrop(e) {
 }
 
 
+// ===== Paper Crumple Intro (native three.js) =====
+var _paperCrumple = null;
+function showPaperIntro(afterDone) {
+  var el = document.getElementById('paperIntro');
+  el.classList.add('visible');
+  el.classList.remove('fadeout');
+  initPaperCrumple(afterDone);
+}
+function buildPaperTexture() {
+  var c = document.createElement('canvas');
+  c.width = 640; c.height = 800;
+  var ctx = c.getContext('2d');
+  ctx.fillStyle = '#f4f0e8';
+  ctx.fillRect(0, 0, 640, 800);
+  ctx.fillStyle = '#1a1a1a';
+  ctx.textAlign = 'center';
+  ctx.font = '700 72px Inter, Arial, sans-serif';
+  ctx.fillText('ZHISHAO', 320, 380);
+  ctx.font = '400 22px Inter, Arial, sans-serif';
+  ctx.fillStyle = '#666';
+  ctx.fillText('D E S I G N   P O R T F O L I O', 320, 430);
+  return c.toDataURL();
+}
+function paperRandom(seed) {
+  var v = seed | 0;
+  return function () {
+    v = (v + 0x6d2b79f5) | 0;
+    var n = Math.imul(v ^ (v >>> 15), 1 | v);
+    n = (n + Math.imul(n ^ (n >>> 7), 61 | n)) ^ n;
+    return ((n ^ (n >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function initPaperCrumple(afterDone) {
+  if (_paperCrumple) {
+    _paperCrumple.dispose();
+    _paperCrumple = null;
+  }
+  var canvas = document.getElementById('paperCanvas');
+  var hit = document.getElementById('paperHit');
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+  renderer.setClearColor(0x000000, 0);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  var PW = 320, PH = 400;
+  var aspect = PH / PW;
+  var cols = 16, rows = 20;
+  var count = (cols + 1) * (rows + 1);
+  var orig = new Float32Array(count * 3);
+  var pos = new Float32Array(count * 3);
+  var uvs = new Float32Array(count * 2);
+  var idx = [];
+  var rng = paperRandom(7);
+  for (var r = 0; r <= rows; r++) {
+    for (var c = 0; c <= cols; c++) {
+      var i = r * (cols + 1) + c;
+      var u = c / cols, v = r / rows;
+      orig[i*3] = (u - 0.5);
+      orig[i*3+1] = (v - 0.5) * aspect;
+      uvs[i*2] = u; uvs[i*2+1] = v;
+      if (c < cols && r < rows) {
+        var a = i, b = i+1, d = i+cols+1, e = d+1;
+        idx.push(a,b,e, a,e,d);
+      }
+    }
+  }
+  // Precompute crumple frames: compress inward
+  var frames = [];
+  var points = Float64Array.from(orig);
+  var prev = Float64Array.from(orig);
+  var shortSide = Math.min(1, aspect);
+  var spacing = Math.sqrt(shortSide * shortSide / count);
+  var initR = 0;
+  for (var i = 0; i < orig.length; i += 3) initR = Math.max(initR, Math.hypot(orig[i], orig[i+1]));
+  initR *= 1.02;
+  var FRAMES = 48, STEPS = 96;
+  frames.push(Float32Array.from(points));
+  for (var s = 1; s <= STEPS; s++) {
+    var t = s / STEPS;
+    var comp = t * t * (3 - 2 * t);
+    var radius = initR * (1 - comp) + shortSide * 0.18 * comp;
+    for (var i = 0; i < points.length; i += 3) {
+      var x = points[i], y = points[i+1], z = points[i+2];
+      var dist = Math.hypot(x, y, z);
+      if (dist > radius) {
+        var push = (1 - radius / dist) * 0.6;
+        points[i] -= points[i] * push;
+        points[i+1] -= points[i+1] * push;
+        points[i+2] -= points[i+2] * push;
+      }
+      points[i+2] += Math.sin(t * Math.PI * 6 + i) * 0.004 * comp;
+    }
+    if (s % 2 === 0) frames.push(Float32Array.from(points));
+  }
+  // Unfold frames
+  var folded = Float64Array.from(points);
+  var unfoldFrames = [Float32Array.from(folded)];
+  var upoints = Float64Array.from(folded);
+  for (var s = 1; s <= 40; s++) {
+    var t = s / 40;
+    var unfold = t * t * (3 - 2 * t);
+    for (var i = 0; i < upoints.length; i++) {
+      upoints[i] = folded[i] + (orig[i] - folded[i]) * unfold;
+    }
+    unfoldFrames.push(Float32Array.from(upoints));
+  }
+  var allFrames = frames.concat(unfoldFrames.slice(1));
+  var geo = new THREE.BufferGeometry();
+  var renderPos = new Float32Array(idx.length * 3);
+  var renderUv = new Float32Array(idx.length * 2);
+  for (var i = 0; i < idx.length; i++) {
+    renderUv[i*2] = uvs[idx[i]*2];
+    renderUv[i*2+1] = uvs[idx[i]*2+1];
+  }
+  geo.setAttribute('position', new THREE.BufferAttribute(renderPos, 3).setUsage(THREE.DynamicDrawUsage));
+  geo.setAttribute('uv', new THREE.BufferAttribute(renderUv, 2));
+  var texLoader = new THREE.TextureLoader();
+  texLoader.load(buildPaperTexture(), function (tex) {
+    tex.colorSpace = THREE.SRGBColorSpace;
+    var mat = new THREE.MeshStandardMaterial({ map: tex, roughness: 0.9, metalness: 0, side: THREE.DoubleSide, alphaTest: 0.05 });
+    var mesh = new THREE.Mesh(geo, mat);
+    var scene = new THREE.Scene();
+    scene.add(mesh);
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x888888, 1.2));
+    var dl = new THREE.DirectionalLight(0xffffff, 1.5);
+    dl.position.set(1, 1, 2);
+    scene.add(dl);
+    var camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
+    var sheet = new THREE.Group();
+    sheet.add(mesh);
+    scene.add(sheet);
+    function resize() {
+      var w = window.innerWidth, h = window.innerHeight;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.position.z = h / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)));
+      camera.updateProjectionMatrix();
+      var scale = Math.min(1, (w - 80) / PW, (h - 80) / PH);
+      sheet.scale.setScalar(scale);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+    function deform(f) {
+      var frame = Math.max(0, Math.min(allFrames.length - 1, f));
+      var lower = Math.floor(frame), upper = Math.min(lower + 1, allFrames.length - 1);
+      var mix = frame - lower;
+      var from = allFrames[lower], to = allFrames[upper];
+      for (var i = 0; i < idx.length; i++) {
+        var src = idx[i] * 3;
+        renderPos[i*3] = from[src] + (to[src] - from[src]) * mix;
+        renderPos[i*3+1] = from[src+1] + (to[src+1] - from[src+1]) * mix;
+        renderPos[i*3+2] = from[src+2] + (to[src+2] - from[src+2]) * mix;
+      }
+      geo.attributes.position.needsUpdate = true;
+      geo.computeVertexNormals();
+    }
+    deform(0);
+    var raf = 0;
+    var state = 'idle';
+    var frameIdx = 0;
+    var lastTime = 0;
+    function tick(time) {
+      raf = requestAnimationFrame(tick);
+      var dt = lastTime ? Math.min(0.05, (time - lastTime) / 1000) : 0.016;
+      lastTime = time;
+      if (state === 'holding') {
+        frameIdx = Math.min(allFrames.length / 2, frameIdx + dt * 22);
+        deform(frameIdx);
+      } else if (state === 'releasing') {
+        frameIdx += dt * 18;
+        deform(frameIdx);
+        if (frameIdx >= allFrames.length - 1) {
+          state = 'done';
+          deform(allFrames.length - 1);
+          var intro = document.getElementById('paperIntro');
+          intro.classList.add('fadeout');
+          setTimeout(function () {
+            intro.classList.remove('visible', 'fadeout');
+            if (afterDone) afterDone();
+          }, 600);
+        }
+      }
+      renderer.render(scene, camera);
+    }
+    raf = requestAnimationFrame(tick);
+    hit.addEventListener('pointerdown', function (e) {
+      e.preventDefault();
+      if (state === 'idle') { state = 'holding'; frameIdx = 0; }
+    });
+    hit.addEventListener('pointerup', function () {
+      if (state === 'holding') state = 'releasing';
+    });
+    hit.addEventListener('pointercancel', function () {
+      if (state === 'holding') state = 'releasing';
+    });
+    _paperCrumple = {
+      dispose: function () {
+        cancelAnimationFrame(raf);
+        window.removeEventListener('resize', resize);
+        renderer.dispose();
+        geo.dispose();
+        mat.dispose();
+      }
+    };
+  });
+}
+// ===== Admin Dashboard Functions =====
 // ===== Admin Dashboard Functions =====
 var adminPages = [
   { id: 'home', name: '首页', route: 'home', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMCIvPjx0ZXh0IHg9IjE2MCIgeT0iMTAwIiBmb250LWZhbWlseT0iSW1wYWN0LEFyaWFsIiBmb250LXNpemU9IjM0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXdlaWdodD0iYm9sZCI+REVTSUdOPC90ZXh0Pjx0ZXh0IHg9IjE2MCIgeT0iMTQwIiBmb250LWZhbWlseT0iSW1wYWN0LEFyaWFsIiBmb250LXNpemU9IjM0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXdlaWdodD0iYm9sZCI+UE9SVEZPTElPPC90ZXh0Pjwvc3ZnPg==' },
@@ -4944,5 +5178,12 @@ function initHeroEvilEye() {
 
 </script>
 
+<div id="paperIntro">
+  <div class="paper-crumple" id="paperCrumple">
+    <canvas id="paperCanvas"></canvas>
+    <button class="paper-crumple-hit" id="paperHit" aria-label="按住揉碎纸张"></button>
+    <div class="paper-intro-hint">按住纸张揉碎，松开进入</div>
+  </div>
+</div>
 </body>
 </html>
