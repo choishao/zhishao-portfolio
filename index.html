@@ -702,6 +702,67 @@ button {
   padding-top: 16px;
   text-align: left;
 }
+/* ===== Gallery 媒体墙（等宽网格） ===== */
+.gallery-page {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 70px 40px 100px;
+}
+.gallery-title {
+  font-size: 32px;
+  font-weight: 400;
+  color: var(--gray-light);
+  letter-spacing: 2px;
+  margin-bottom: 44px;
+}
+.medias {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+.media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #111;
+}
+.media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  user-select: none;
+}
+.gallery-del-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.65);
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  display: none;
+  z-index: 5;
+  align-items: center;
+  justify-content: center;
+}
+body.edit-mode .gallery-del-btn { display: flex; }
+body.edit-mode .gallery-del-btn:hover { background: rgba(0,0,0,0.9); }
+.gallery-add-btn { margin-top: 44px; }
+@media (max-width: 1024px) {
+  .medias { grid-template-columns: repeat(3, 1fr); gap: 18px; }
+}
+@media (max-width: 640px) {
+  .gallery-page { padding: 44px 16px 80px; }
+  .medias { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+}
+
 
 .work-card {
   padding: 0 15px 45px;
@@ -2159,6 +2220,7 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
       <a href="#/work" onclick="navigate('work')" data-editable="navWork">作品项目</a>
       <a href="#/about" onclick="navigate('about')" data-editable="navAbout">关于我</a>
       <a href="#/clients" onclick="navigate('clients')" data-editable="navClients">客户名单</a>
+      <a href="#/gallery" onclick="navigate('gallery')" data-editable="navGallery">媒体墙</a>
     </div>
     <button class="menu-btn" id="menuBtn" onclick="toggleMenu()">
       <span></span>
@@ -2173,6 +2235,7 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
   <a href="#/work" onclick="navigate('work'); toggleMenu();" data-editable="navWork">作品项目</a>
   <a href="#/about" onclick="navigate('about'); toggleMenu();" data-editable="navAbout">关于我</a>
   <a href="#/clients" onclick="navigate('clients'); toggleMenu();" data-editable="navClients">客户名单</a>
+  <a href="#/gallery" onclick="navigate('gallery'); toggleMenu();" data-editable="navGallery">媒体墙</a>
   <div class="menu-footer">
     <span data-editable="menuFooterLeft">ZHISHAOCUI DESIGN STUDIO</span>
     <span data-editable="menuFooterRight">&copy; 2026 ALL RIGHTS RESERVED</span>
@@ -2355,6 +2418,15 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
   </section>
 
   <!-- ===== Moodboard View ===== -->
+
+  <!-- ===== View: Gallery 媒体墙 ===== -->
+  <section class="view" id="view-gallery">
+    <div class="gallery-page">
+      <div class="gallery-title" data-editable="galleryTitle">媒体墙</div>
+      <div class="medias" id="galleryGrid"></div>
+      <button class="add-work-btn gallery-add-btn" id="galleryAddBtn" onclick="addGalleryMedia()" style="display:none;">+ 添加图片</button>
+    </div>
+  </section>
   <section class="view" id="view-moodboard">
     <button class="moodboard-back" onclick="navigate('home')">&larr; 返回首页</button>
     <iframe class="moodboard-frame" src="moodboard-preview.html" title="Moodboard" onload="syncMoodboardEditMode(typeof editMode !== 'undefined' && editMode)"></iframe>
@@ -2493,6 +2565,7 @@ const DEFAULT_CONTENT = {
   navWork: '作品项目',
   navAbout: '关于我',
   navClients: '客户名单',
+  navGallery: '媒体墙',
   heroSubtitle: 'VISUAL DESIGNER / CREATIVE PORTFOLIO',
   menuFooterLeft: 'ZHISHAOCUI DESIGN STUDIO',
   menuFooterRight: '\u00a9 2026 ALL RIGHTS RESERVED',
@@ -2583,6 +2656,9 @@ const DEFAULT_CONTENT = {
   // 客户名单
   clientsYear: '2015 - 2026',
   clientsTitle: '客户名单',
+  // 媒体墙
+  galleryTitle: '媒体墙',
+  galleryImages: ['https://aka.doubaocdn.com/s/AZDhFfhkIC', 'https://aka.doubaocdn.com/s/hzAVPCEVXx', 'https://aka.doubaocdn.com/s/v3SWOVAMTn', 'https://aka.doubaocdn.com/s/OrJ7NDVYMC', 'https://aka.doubaocdn.com/s/h1JEWpmnMr', 'https://aka.doubaocdn.com/s/EiYyDl5nQK'],
   clientUploadHint: '点击上传',
   clientsFooterCenter: 'Designed by<br>ZHISHAOCUI',
   clientsFooterRight: '\u00a9 2026, ZHISHAOCUI,<br>All Rights Reserved.'
@@ -2628,6 +2704,7 @@ function applyContent() {
   renderCategories();
   // 渲染作品和经历
   renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
+  renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
   renderHistoryList(document.getElementById('workExperienceList'), siteContent.workExperience);
   renderHistoryList(document.getElementById('projectList'), siteContent.projectExperience);
   // 应用用户上传的图片
@@ -2695,6 +2772,49 @@ function deleteCategory(key) {
 }
 
 // ===== Render Work Grid =====
+
+// ===== Gallery 媒体墙 =====
+function renderGalleryGrid(container, items) {
+  if (!container) return;
+  items = items || [];
+  const imgs = getImages();
+  container.innerHTML = items.map(function (src, i) {
+    const key = 'gallery_' + i;
+    const imgSrc = imgs[key] || src;
+    return '<div class="media">'
+      + (editMode ? '<button class="gallery-del-btn" onclick="event.stopPropagation();removeGalleryMedia(' + i + ')">\u00d7</button>' : '')
+      + '<img src="' + imgSrc + '" alt="" loading="lazy" data-image-key="' + key + '"></div>';
+  }).join('');
+  const addBtn = document.getElementById('galleryAddBtn');
+  if (addBtn) addBtn.style.display = editMode ? 'block' : 'none';
+  if (editMode) setupImageEditing();
+}
+function addGalleryMedia() {
+  siteContent.galleryImages = siteContent.galleryImages || [];
+  siteContent.galleryImages.push('https://aka.doubaocdn.com/s/AZDhFfhkIC');
+  const existing = getContent();
+  existing.galleryImages = siteContent.galleryImages;
+  localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
+  renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
+  showSaveToast('已添加图片');
+}
+function removeGalleryMedia(idx) {
+  if (!siteContent.galleryImages || idx < 0 || idx >= siteContent.galleryImages.length) return;
+  siteContent.galleryImages.splice(idx, 1);
+  // 后续图片 key 前移，保持与 IndexedDB 图片对齐
+  let i = idx;
+  while (imgCache['gallery_' + (i + 1)]) {
+    putImage('gallery_' + i, imgCache['gallery_' + (i + 1)]);
+    deleteImage('gallery_' + (i + 1));
+    i++;
+  }
+  deleteImage('gallery_' + i);
+  const existing = getContent();
+  existing.galleryImages = siteContent.galleryImages;
+  localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
+  renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
+  showSaveToast('已删除图片');
+}
 function renderWorkGrid(container, items) {
   if (!container) return;
   const imgs = getImages();
@@ -2767,6 +2887,7 @@ function deleteWorkItem(idx) {
   existing.workItems = siteContent.workItems;
   localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
   renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
+  renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
   if (editMode) { setupEditables(); setupImageEditing(); }
   showSaveToast('作品已删除');
 }
@@ -2789,6 +2910,7 @@ function addFeaturedWork() {
   existing.workItems = siteContent.workItems;
   localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
   renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
+  renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
   if (editMode) { setupEditables(); setupImageEditing(); }
   showSaveToast('已添加新作品');
 }
@@ -3404,6 +3526,7 @@ function applyImages() {
 // 图片加载完成后重渲染所有用到图片的模块
 function rerenderAllImages() {
   renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
+  renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
   renderHistoryList(document.getElementById('workExperienceList'), siteContent.workExperience);
   renderHistoryList(document.getElementById('projectList'), siteContent.projectExperience);
   renderClients();
@@ -3487,6 +3610,7 @@ function enterEditMode() {
   // 渲染分类与作品网格为可编辑模式
   renderCategories();
   renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
+  renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
   // 文字可编辑
   setupEditables();
   // 图片可替换
@@ -3520,6 +3644,7 @@ function exitEditMode() {
   // 恢复分类与作品网格为访客模板
   renderCategories();
   renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
+  renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
   // 隐藏添加按钮
   const addBtn = document.getElementById('addProjectBtn');
   if (addBtn) addBtn.style.display = 'none';
@@ -4207,6 +4332,7 @@ var adminPages = [
   { id: 'work', name: '作品项目', route: 'work', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzExMSIvPjxyZWN0IHg9IjIwIiB5PSIzMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjMzMzIi8+PHJlY3QgeD0iMTE1IiB5PSIzMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjNDQ0Ii8+PHJlY3QgeD0iMjEwIiB5PSIzMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjMzMzIi8+PHJlY3QgeD0iMjAiIHk9IjEwMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjNDQ0Ii8+PHJlY3QgeD0iMTE1IiB5PSIxMDAiIHdpZHRoPSI4NSIgaGVpZ2h0PSI2MCIgZmlsbD0iIzMzMyIvPjxyZWN0IHg9IjIxMCIgeT0iMTAwIiB3aWR0aD0iODUiIGhlaWdodD0iNjAiIGZpbGw9IiM0NDQiLz48dGV4dCB4PSIxNjAiIHk9IjE4NSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiM4ODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiPldvcmtzPC90ZXh0Pjwvc3ZnPg==' },
   { id: 'about', name: '关于我', route: 'about', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMCIvPjxyZWN0IHg9IjI1IiB5PSIzNSIgd2lkdGg9IjEyMCIgaGVpZ2h0PSIxMzAiIGZpbGw9IiMyMjIiLz48dGV4dCB4PSIxNzAiIHk9IjcwIiBmb250LWZhbWlseT0iSW1wYWN0LEFyaWFsIiBmb250LXNpemU9IjI2IiBmaWxsPSIjZmZmIiBmb250LXdlaWdodD0iYm9sZCI+WkhJU0hBTzwvdGV4dD48cmVjdCB4PSIxNzAiIHk9Ijg1IiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjMiIGZpbGw9IiNmZmYiLz48cmVjdCB4PSIxNzAiIHk9IjEwMCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIyIiBmaWxsPSIjNTU1Ii8+PHJlY3QgeD0iMTcwIiB5PSIxMTAiIHdpZHRoPSIxMTAiIGhlaWdodD0iMiIgZmlsbD0iIzU1NSIvPjxyZWN0IHg9IjE3MCIgeT0iMTIwIiB3aWR0aD0iOTAiIGhlaWdodD0iMiIgZmlsbD0iIzU1NSIvPjwvc3ZnPg==' },
   { id: 'clients', name: '客户名单', route: 'clients', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZmZiIvPjxyZWN0IHg9IjI1IiB5PSIzNSIgd2lkdGg9IjYwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjZWVlIiBzdHJva2U9IiNkZGQiLz48cmVjdCB4PSI5NSIgeT0iMzUiIHdpZHRoPSI2MCIgaGVpZ2h0PSI0MCIgZmlsbD0iI2VlZSIgc3Ryb2tlPSIjZGRkIi8+PHJlY3QgeD0iMTY1IiB5PSIzNSIgd2lkdGg9IjYwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjZWVlIiBzdHJva2U9IiNkZGQiLz48cmVjdCB4PSIyMzUiIHk9IjM1IiB3aWR0aD0iNjAiIGhlaWdodD0iNDAiIGZpbGw9IiNlZWUiIHN0cm9rZT0iI2RkZCIvPjxyZWN0IHg9IjI1IiB5PSI4NSIgd2lkdGg9IjYwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjZWVlIiBzdHJva2U9IiNkZGQiLz48cmVjdCB4PSI5NSIgeT0iODUiIHdpZHRoPSI2MCIgaGVpZ2h0PSI0MCIgZmlsbD0iI2VlZSIgc3Ryb2tlPSIjZGRkIi8+PHJlY3QgeD0iMTY1IiB5PSI4NSIgd2lkdGg9IjYwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjZWVlIiBzdHJva2U9IiNkZGQiLz48cmVjdCB4PSIyMzUiIHk9Ijg1IiB3aWR0aD0iNjAiIGhlaWdodD0iNDAiIGZpbGw9IiNlZWUiIHN0cm9rZT0iI2RkZCIvPjxyZWN0IHg9IjI1IiB5PSIxMzUiIHdpZHRoPSI2MCIgaGVpZ2h0PSI0MCIgZmlsbD0iI2VlZSIgc3Ryb2tlPSIjZGRkIi8+PHJlY3QgeD0iOTUiIHk9IjEzNSIgd2lkdGg9IjYwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjZWVlIiBzdHJva2U9IiNkZGQiLz48L3N2Zz4=' },
+  { id: 'gallery', name: '媒体墙', route: 'gallery', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBhMGEwYSIvPjxyZWN0IHg9IjIwIiB5PSIzMCIgd2lkdGg9IjEzMCIgaGVpZ2h0PSI5MCIgZmlsbD0iIzIyMiIvPjxyZWN0IHg9IjE3MCIgeT0iMzAiIHdpZHRoPSIxMzAiIGhlaWdodD0iOTAiIGZpbGw9IiMzMzMiLz48cmVjdCB4PSIyMCIgeT0iMTM1IiB3aWR0aD0iMTMwIiBoZWlnaHQ9IjQ1IiBmaWxsPSIjMzMzIi8+PHJlY3QgeD0iMTcwIiB5PSIxMzUiIHdpZHRoPSIxMzAiIGhlaWdodD0iNDUiIGZpbGw9IiMyMjIiLz48dGV4dCB4PSIxNjAiIHk9IjE5NSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiM4ODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdhbGxlcnk8L3RleHQ+PC9zdmc+' },
   { id: 'moodboard', name: 'Moodboard', route: 'moodboard', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBhMGEwYSIvPjxyZWN0IHg9IjIwIiB5PSIzMCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjMjIyIiByeD0iMiIvPjxyZWN0IHg9IjExMCIgeT0iMzAiIHdpZHRoPSI2MCIgaGVpZ2h0PSI4MCIgZmlsbD0iIzMzMyIgcng9IjIiLz48cmVjdCB4PSIxODAiIHk9IjMwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjMWExYTFhIiByeD0iMiIvPjxyZWN0IHg9IjIwIiB5PSIxMDAiIHdpZHRoPSIxMDAiIGhlaWdodD0iNzAiIGZpbGw9IiMzMzMiIHJ4PSIyIi8+PHJlY3QgeD0iMTMwIiB5PSIxMjAiIHdpZHRoPSI3MCIgaGVpZ2h0PSI1MCIgZmlsbD0iIzIyMiIgcng9IjIiLz48cmVjdCB4PSIyMTAiIHk9IjkwIiB3aWR0aD0iOTAiIGhlaWdodD0iODAiIGZpbGw9IiMxYTFhMWEiIHJ4PSIyIi8+PHRleHQgeD0iMTYwIiB5PSIxOTAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEwIiBmaWxsPSIjNjY2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5Nb29kYm9hcmQ8L3RleHQ+PC9zdmc+' },
 ];
 var adminCurrentFilter = 'all';
@@ -4418,6 +4544,14 @@ function adminRenamePage(pageId, newName) {
     document.querySelectorAll('[data-editable="navClients"]').forEach(function(el){ el.textContent = newName; });
     var ct = document.querySelector('[data-editable="clientsTitle"]');
     if (ct) ct.textContent = newName;
+  } else if (pageId === 'gallery') {
+    existing.navGallery = newName;
+    existing.galleryTitle = newName;
+    siteContent.navGallery = newName;
+    siteContent.galleryTitle = newName;
+    document.querySelectorAll('[data-editable="navGallery"]').forEach(function(el){ el.textContent = newName; });
+    var gt = document.querySelector('[data-editable="galleryTitle"]');
+    if (gt) gt.textContent = newName;
   } else if (pageId === 'moodboard') {
     existing.moodboardName = newName;
     siteContent.moodboardName = newName;
@@ -4431,6 +4565,7 @@ function adminRenamePage(pageId, newName) {
       existing.workItems[idx].title = newName;
       siteContent.workItems[idx].title = newName;
       renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
+  renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
     }
   }
   localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
@@ -4515,6 +4650,7 @@ function exitEditModeSilent() {
   editMode = false;
   document.body.classList.remove('edit-mode');
   renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
+  renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
   if (typeof sbState !== 'undefined') sbState.paused = true;
   var toolbar = document.getElementById('editToolbar');
   if (toolbar) toolbar.classList.remove('show');
