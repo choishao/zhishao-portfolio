@@ -2879,6 +2879,7 @@ function renderWorkGrid(container, items) {
     const src = imgs[key] || item.img;
     const titleKey = 'feat_title_' + idx;
     const authorKey = 'feat_author_' + idx;
+    const yearKey = 'feat_year_' + idx;
     const num = (idx + 1) + '.';
     const cardClick = editMode ? 'onclick="return handleWorkCardClick(event, ' + idx + ')" ondblclick="openWorkDetail(' + idx + ')"' : 'onclick="openWorkDetail(' + idx + ')"';
     return '<div class="work-card kono-card" ' + cardClick + '>' +
@@ -2891,7 +2892,7 @@ function renderWorkGrid(container, items) {
           '<span class="kono-sep">\u2014</span>' +
           '<span class="kono-author" data-editable="' + authorKey + '">' + item.author + '</span>' +
         '</div>' +
-        '<span class="kono-year">' + (item.year || '') + '</span>' +
+        '<span class="kono-year" data-editable="' + yearKey + '">' + (item.year || '') + '</span>' +
       '</div>' +
     '</div>';
   }).join('');
@@ -3956,8 +3957,10 @@ function saveAllContent() {
     const idx = parseInt(titleEl.dataset.editable.replace('feat_title_', ''));
     if (isNaN(idx) || !existing.workItems[idx]) return;
     const authorEl = card.querySelector('[data-editable^="feat_author_"]');
+    const yearEl = card.querySelector('[data-editable^="feat_year_"]');
     if (titleEl) existing.workItems[idx].title = titleEl.textContent;
     if (authorEl) existing.workItems[idx].author = authorEl.textContent;
+    if (yearEl) existing.workItems[idx].year = yearEl.textContent.trim();
   });
   // Save history item dynamic fields
   ['workExperience', 'projectExperience'].forEach((arrKey, colIdx) => {
