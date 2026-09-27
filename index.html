@@ -3339,8 +3339,7 @@ function showView(path) {
     renderAdminDashboard();
     return;
   }
-  // 离开后台后静默补齐页面缩略图（后台不可见时生成，避免进入后台逐页闪屏）
-  setTimeout(function() { ensurePageThumbs(false); }, 400);
+
   if (path.startsWith('work/detail/')) {
     const idx = parseInt(path.split('/')[2]);
     currentDetailIndex = idx;
