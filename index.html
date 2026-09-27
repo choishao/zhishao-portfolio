@@ -1057,6 +1057,48 @@ body.edit-mode .detail-gallery-item.drag-over { outline: 2px solid #1a1a1a; outl
 }
 body.edit-mode .add-gallery-btn { display: block; }
 .add-gallery-btn:hover { border-color: rgba(0,0,0,0.4); color: #1a1a1a; background: rgba(0,0,0,0.03); }
+
+/* ===== Native FileUpload (ReactBits 拖拽上传区) ===== */
+.file-upload-zone {
+  position: relative;
+  margin-top: 30px;
+  width: 100%;
+  padding: 60px 20px;
+  border: 2px dashed #d4d4d8;
+  border-radius: 14px;
+  background: #ffffff;
+  text-align: center;
+  cursor: pointer;
+  overflow: hidden;
+  display: none;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+body.edit-mode .file-upload-zone { display: block; }
+.file-upload-zone:hover { border-color: #a1a1aa; }
+.file-upload-zone.dragover { border-color: #0ea5e9; background: #f0f9ff; }
+.file-upload-zone::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: linear-gradient(#e8e8ec 1px, transparent 1px), linear-gradient(90deg, #e8e8ec 1px, transparent 1px);
+  background-size: 20px 20px;
+  -webkit-mask-image: radial-gradient(ellipse 75% 95% at 50% 50%, #000 15%, transparent 75%);
+  mask-image: radial-gradient(ellipse 75% 95% at 50% 50%, #000 15%, transparent 75%);
+  pointer-events: none;
+}
+.file-upload-zone .fu-title { position: relative; font-size: 16px; font-weight: 700; color: #404040; margin: 0; }
+.file-upload-zone .fu-sub { position: relative; font-size: 14px; color: #a1a1aa; margin: 8px 0 0; }
+.file-upload-zone .fu-icon {
+  position: relative;
+  margin: 24px auto 0;
+  width: 128px; height: 128px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 10px 50px rgba(0,0,0,0.1);
+  display: grid; place-items: center;
+  transition: transform 0.35s cubic-bezier(0.32,0.72,0,1);
+}
+.file-upload-zone:hover .fu-icon { transform: translate(20px, -20px); }
+.file-upload-zone .fu-icon svg { color: #525252; }
 .detail-next-project {
   margin-top: 80px;
   padding-top: 40px;
@@ -2375,7 +2417,13 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
       <div class="detail-cat-label" id="detailCatLabel">GRAPHIC DESIGN</div>
     </div>
     <div class="detail-gallery" id="detailGallery"></div>
-    <button class="add-gallery-btn" onclick="addDetailImage()">+ 添加图片</button>
+    <div class="file-upload-zone" data-target="detail" onclick="addDetailImage()">
+      <p class="fu-title">上传图片</p>
+      <p class="fu-sub">拖拽图片到此处，或点击选择（支持多张）</p>
+      <div class="fu-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      </div>
+    </div>
   </section>
 
 
@@ -2466,7 +2514,13 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
     <div class="gallery-page">
       <div class="gallery-title" data-editable="galleryTitle">媒体墙</div>
       <div class="medias" id="galleryGrid"></div>
-      <button class="add-work-btn gallery-add-btn" id="galleryAddBtn" onclick="addGalleryMedia()" style="display:none;">+ 添加图片</button>
+      <div class="file-upload-zone" id="galleryAddBtn" data-target="gallery" onclick="addGalleryMedia()" style="display:none;">
+        <p class="fu-title">上传图片</p>
+        <p class="fu-sub">拖拽图片到此处，或点击选择</p>
+        <div class="fu-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+      </div>
     </div>
   </section>
   <section class="view" id="view-moodboard">
@@ -2824,15 +2878,44 @@ function renderGalleryGrid(container, items) {
   if (addBtn) addBtn.style.display = editMode ? 'block' : 'none';
   if (editMode) setupImageEditing();
 }
-function addGalleryMedia() {
+function addGalleryMedia(externalFiles) {
   siteContent.galleryImages = siteContent.galleryImages || [];
-  siteContent.galleryImages.push('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E');
+  var placeholder = 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E';
+  var files = (externalFiles && externalFiles.length) ? Array.prototype.slice.call(externalFiles) : null;
+  if (files) {
+    for (var i = 0; i < files.length; i++) {
+      var idx = siteContent.galleryImages.length;
+      siteContent.galleryImages.push(placeholder);
+      putImage('gallery_' + idx, files[i]);
+    }
+  } else {
+    siteContent.galleryImages.push(placeholder);
+  }
   const existing = getContent();
   existing.galleryImages = siteContent.galleryImages;
   localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
   renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
-  showSaveToast('已添加图片');
+  showSaveToast(files ? ('已上传 ' + files.length + ' 张图片') : '已添加图片');
 }
+// 拖拽到上传区
+document.addEventListener('dragover', function (e) {
+  var z = e.target.closest && e.target.closest('.file-upload-zone');
+  if (z) { e.preventDefault(); z.classList.add('dragover'); }
+});
+document.addEventListener('dragleave', function (e) {
+  var z = e.target.closest && e.target.closest('.file-upload-zone');
+  if (z) z.classList.remove('dragover');
+});
+document.addEventListener('drop', function (e) {
+  var z = e.target.closest && e.target.closest('.file-upload-zone');
+  if (!z) return;
+  e.preventDefault();
+  z.classList.remove('dragover');
+  var fs = e.dataTransfer && e.dataTransfer.files;
+  if (!fs || !fs.length) return;
+  if (z.dataset.target === 'detail') addDetailImage(fs);
+  else if (z.dataset.target === 'gallery') addGalleryMedia(fs);
+});
 function removeGalleryMedia(idx) {
   if (!siteContent.galleryImages || idx < 0 || idx >= siteContent.galleryImages.length) return;
   siteContent.galleryImages.splice(idx, 1);
@@ -3007,26 +3090,29 @@ function renderWorkDetail(idx) {
   }).join('');
   if (editMode) { setupImageEditing(); }
 }
-function addDetailImage() {
+async function _doDetailUpload(files) {
+  var idx = currentDetailIndex;
+  var item = siteContent.workItems[idx];
+  if (!item) return;
+  var prefix = 'detail_img_' + idx + '_';
+  var startNum = Object.keys(imgCache).filter(function (k) { return k.indexOf(prefix) === 0; }).length;
+  for (var i = 0; i < files.length; i++) {
+    var key = prefix + (startNum + i);
+    await putImage(key, files[i]);
+  }
+  renderWorkDetail(idx);
+  showSaveToast('已批量上传 ' + files.length + ' 张图片');
+}
+function addDetailImage(externalFiles) {
+  if (externalFiles && externalFiles.length) {
+    _doDetailUpload(Array.prototype.slice.call(externalFiles));
+    return;
+  }
   var input = document.createElement('input');
   input.type = 'file';
   input.multiple = true;
   input.accept = 'image/jpeg,image/png,image/gif,image/svg+xml,image/webp,.jpg,.jpeg,.png,.gif,.svg,.webp';
-  input.onchange = async function (e) {
-    var files = Array.prototype.slice.call(e.target.files || []);
-    if (!files.length) return;
-    var idx = currentDetailIndex;
-    var item = siteContent.workItems[idx];
-    if (!item) return;
-    var prefix = 'detail_img_' + idx + '_';
-    var startNum = Object.keys(imgCache).filter(function (k) { return k.indexOf(prefix) === 0; }).length;
-    for (var i = 0; i < files.length; i++) {
-      var key = prefix + (startNum + i);
-      await putImage(key, files[i]);
-    }
-    renderWorkDetail(idx);
-    showSaveToast('已批量上传 ' + files.length + ' 张图片');
-  };
+  input.onchange = function (e) { _doDetailUpload(e.target.files || []); };
   input.click();
 }
 // ===== DeleteButton =====
