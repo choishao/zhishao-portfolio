@@ -504,8 +504,9 @@ button {
 
 /* ===== View: Work (Category Overview) ===== */
 #view-work {
-  background: var(--black);
+  background: #F5F5F5;
   padding: 0 50px 60px;
+  color: #111;
 }
 
 .work-header {
@@ -568,17 +569,86 @@ button {
 .work-featured-title {
   font-family: var(--font-display);
   font-size: 14px;
-  color: var(--gray);
+  color: #111;
   letter-spacing: 2px;
   text-transform: uppercase;
   margin-bottom: 20px;
 }
 
 .work-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+/* ===== konolee 风格作品卡片 ===== */
+.kono-card {
+  position: relative;
+  padding: 0 !important;
+  background: #E3E3E3;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.kono-card .work-delete-btn {
+  right: 10px;
+  top: 10px;
+}
+.kono-thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #d8d8d8;
+}
+.kono-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.kono-meta {
+  height: 36px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 30px 24px;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 12px;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0.14px;
+  color: #111;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.kono-meta-left {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+}
+.kono-num {
+  color: #111;
+}
+.kono-title {
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.kono-sep {
+  color: #666;
+}
+.kono-author {
+  color: #444;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.kono-year {
+  color: #333;
+  flex-shrink: 0;
 }
 
 /* ===== rare-ui folder-component (white theme) 原生版 ===== */
@@ -1620,9 +1690,9 @@ body.edit-mode .client-slot .remove-slot-btn {
     padding: 0 20px 40px;
   }
   .work-grid {
-    flex-direction: column;
-    align-items: center;
-    gap: 36px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
   .fw-item {
     width: 280px;
@@ -2823,45 +2893,23 @@ function renderWorkGrid(container, items) {
     const src = imgs[key] || item.img;
     const titleKey = 'feat_title_' + idx;
     const authorKey = 'feat_author_' + idx;
-    const fid = 'fw' + idx;
-    const cardClick = editMode ? 'onclick="return handleWorkCardClick(event, ' + idx + ')" ondblclick="openWorkDetail(' + idx + ')"' : 'onclick="folderOpenThen(' + idx + ', this)"';
-    const cardSvg =
-      '<svg width="164" height="214" viewBox="0 0 164 214" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-        '<rect width="163.078" height="213.262" rx="20" fill="#262626"/>' +
-        '<rect x="0.5" y="0.5" width="162.078" height="212.262" rx="19.5" stroke="#404040"/>' +
-        '<rect x="14.1193" y="31.2091" width="134.84" height="11.8892" rx="5.94459" fill="#737373"/>' +
-        '<rect width="64.5183" height="5.88276" rx="2.94138" transform="matrix(1 -0.000409158 0.00201956 0.999998 14.8253 60.9939)" fill="#737373"/>' +
-        '<rect width="64.5183" height="5.88276" rx="2.94138" transform="matrix(1 -0.000461045 0.00179228 0.999998 84.4303 60.9617)" fill="#737373"/>' +
-        '<rect width="64.5183" height="5.88276" rx="2.94138" transform="matrix(1 -0.000409158 0.00201956 0.999998 14.8253 75.1122)" fill="#737373"/>' +
-        '<rect width="64.5183" height="5.88276" rx="2.94138" transform="matrix(1 -0.000461045 0.00179228 0.999998 84.4303 75.0801)" fill="#737373"/>' +
-        '<rect width="64.5183" height="5.88276" rx="2.94138" transform="matrix(1 -0.000409158 0.00201956 0.999998 14.8253 89.2306)" fill="#737373"/>' +
-        '<rect width="64.5183" height="5.88276" rx="2.94138" transform="matrix(1 -0.000461045 0.00179228 0.999998 84.4303 89.1985)" fill="#737373"/>' +
-      '</svg>';
-    const flapSvg =
-      '<svg width="321" height="241" viewBox="0 0 321 241" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-        '<path d="M0 25C0 11.1929 11.1929 0 25 0H136.084C143.044 0 149.689 2.90139 154.42 8.00608L178.08 33.5343C182.811 38.639 189.456 41.5404 196.416 41.5404H296C309.807 41.5404 321 52.7333 321 66.5404V216C321 229.807 309.807 241 296 241H25C11.1929 241 0 229.807 0 216V25Z" fill="#f5f5f5" fill-opacity="0.85"/>' +
-        '<path d="M25 0.5H136.084C142.905 0.5 149.417 3.3431 154.054 8.3457L177.713 33.874C182.539 39.0808 189.317 42.04 196.416 42.04H296C309.531 42.04 320.5 53.0092 320.5 66.54V216C320.5 229.531 309.531 240.5 296 240.5H25C11.469 240.5 0.5 229.531 0.5 216V25C0.5 11.469 11.469 0.5 25 0.5Z" stroke="#d4d4d4"/>' +
-      '</svg>';
-    return '<div class="work-card fw-item" ' + cardClick + '>' +
-      (editMode ? '<button class="work-delete-btn" onclick="event.stopPropagation();deleteWorkItem(' + idx + ')">×</button>' : '') +
-      '<div class="fw-stage"><div class="fw-folder">' +
-        '<div class="fw-back"></div>' +
-        '<div class="fw-cards">' +
-          '<div class="fw-card fw-c1">' + cardSvg + '</div>' +
-          '<div class="fw-card fw-c2 editable-image-wrap" data-image-wrap="' + key + '"><img src="' + src + '" alt="' + item.title + '" loading="lazy" data-image-key="' + key + '"></div>' +
-          '<div class="fw-card fw-c3">' + cardSvg + '</div>' +
+    const num = (idx + 1) + '.';
+    const cardClick = editMode ? 'onclick="return handleWorkCardClick(event, ' + idx + ')" ondblclick="openWorkDetail(' + idx + ')"' : 'onclick="openWorkDetail(' + idx + ')"';
+    return '<div class="work-card kono-card" ' + cardClick + '>' +
+      (editMode ? '<button class="work-delete-btn" onclick="event.stopPropagation();deleteWorkItem(' + idx + ')">\u00d7</button>' : '') +
+      '<div class="kono-thumb editable-image-wrap" data-image-wrap="' + key + '"><img src="' + src + '" alt="' + item.title + '" loading="lazy" data-image-key="' + key + '"></div>' +
+      '<div class="kono-meta">' +
+        '<div class="kono-meta-left">' +
+          '<span class="kono-num">' + num + '</span>' +
+          '<span class="kono-title" data-editable="' + titleKey + '">' + item.title + '</span>' +
+          '<span class="kono-sep">\u2014</span>' +
+          '<span class="kono-author" data-editable="' + authorKey + '">' + item.author + '</span>' +
         '</div>' +
-        '<div class="fw-flap">' +
-          '<div class="fw-flap-blur"></div>' +
-          flapSvg +
-        '</div>' +
-      '</div></div>' +
-      '<div class="fw-info">' +
-        '<div class="work-card-title" data-editable="' + titleKey + '">' + item.title + '</div>' +
-        '<div class="work-card-author" data-editable="' + authorKey + '">' + item.author + '</div>' +
+        '<span class="kono-year">' + (item.year || '') + '</span>' +
       '</div>' +
     '</div>';
   }).join('');
+  if (editMode) { setupEditables(); setupImageEditing(); }
 }
 
 function folderOpenThen(idx, el) {
