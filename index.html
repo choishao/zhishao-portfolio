@@ -2003,7 +2003,7 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
   pointer-events: none; z-index: 1; white-space: nowrap; font-family: inherit;
 }
 </style>
-<script src="https://unpkg.com/three@0.149.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
 </head>
 <body>
 
@@ -3964,9 +3964,17 @@ function handleGlobalDrop(e) {
 var _paperCrumple = null;
 function showPaperIntro(afterDone) {
   var el = document.getElementById('paperIntro');
+  // three.js 加载失败或超时则直接进入
+  if (typeof THREE === 'undefined') { afterDone && afterDone(); return; }
   el.classList.add('visible');
   el.classList.remove('fadeout');
-  initPaperCrumple(afterDone);
+  var fallbackTimer = setTimeout(function () {
+    el.classList.remove('visible', 'fadeout');
+    if (afterDone) afterDone();
+  }, 6000);
+  var wrapped = function () { clearTimeout(fallbackTimer); afterDone && afterDone(); };
+  try { initPaperCrumple(wrapped); }
+  catch (e) { el.classList.remove('visible', 'fadeout'); afterDone && afterDone(); }
 }
 function buildPaperTexture() {
   var c = document.createElement('canvas');
