@@ -488,11 +488,12 @@ button {
   line-height: 1.7;
 }
 
-/* ===== View: Work (Category Overview) ===== */
+/* ===== View: Work (locomotive style) ===== */
 #view-work {
-  background: #F5F5F5;
-  padding: 0 50px 60px;
-  color: #111;
+  background: #0a0a0a;
+  padding: 140px 0 80px;
+  color: #fff;
+  min-height: 100vh;
 }
 
 .work-header {
@@ -554,17 +555,75 @@ button {
 
 .work-featured-title {
   font-family: var(--font-display);
-  font-size: 14px;
-  color: #111;
-  letter-spacing: 2px;
+  font-size: 13px;
+  color: #666;
+  letter-spacing: 3px;
   text-transform: uppercase;
-  margin-bottom: 20px;
+  margin: 0 50px 40px;
 }
 
-.work-grid {
+.work-grid { display: block; }
+
+/* locomotive 作品列表行 */
+.loc-row {
+  position: relative;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  grid-template-columns: 60px 1fr 100px 40px;
+  align-items: center;
+  gap: 24px;
+  padding: 34px 50px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.loc-row:last-child { border-bottom: 1px solid rgba(255,255,255,0.1); }
+.loc-row:hover { background: rgba(255,255,255,0.03); }
+.loc-num { font-size: 13px; color: #555; font-variant-numeric: tabular-nums; }
+.loc-title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.6vw, 56px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  color: #fff;
+  transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), color 0.3s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.loc-row:hover .loc-title { transform: translateX(16px); color: #888; }
+.loc-year { font-size: 14px; color: #666; text-align: right; font-variant-numeric: tabular-nums; }
+.loc-arrow {
+  text-align: right; font-size: 22px; color: #fff;
+  opacity: 0; transform: translateX(-12px);
+  transition: all 0.35s cubic-bezier(0.22,1,0.36,1);
+}
+.loc-row:hover .loc-arrow { opacity: 1; transform: translateX(0); }
+.loc-thumb-float {
+  position: fixed; width: 340px; aspect-ratio: 4/3;
+  pointer-events: none; z-index: 100;
+  border-radius: 6px; overflow: hidden;
+  opacity: 0; transform: scale(0.92) translateY(8px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.6);
+  background: #222;
+}
+.loc-thumb-float.visible { opacity: 1; transform: scale(1) translateY(0); }
+.loc-thumb-float img { width: 100%; height: 100%; object-fit: cover; display: block; }
+body.edit-mode .loc-row { cursor: default; }
+body.edit-mode .loc-row:hover { background: transparent; }
+body.edit-mode .loc-row:hover .loc-title { transform: none; color: #fff; }
+body.edit-mode .loc-row:hover .loc-arrow { opacity: 0; }
+body.edit-mode .work-delete-btn {
+  position: absolute; right: 50px; top: 50%; transform: translateY(-50%); z-index: 5;
+}
+@media (max-width: 768px) {
+  #view-work { padding: 100px 0 60px; }
+  .work-featured-title { margin: 0 24px 28px; }
+  .loc-row { grid-template-columns: 30px 1fr 60px; gap: 12px; padding: 22px 24px; }
+  .loc-arrow { display: none; }
+  .loc-title { font-size: 26px; }
+  .loc-thumb-float { display: none; }
 }
 
 /* ===== konolee 风格作品卡片 ===== */
@@ -2538,25 +2597,48 @@ function renderWorkGrid(container, items) {
     const key = 'work_' + idx;
     const src = imgs[key] || item.img;
     const titleKey = 'feat_title_' + idx;
-    const authorKey = 'feat_author_' + idx;
     const yearKey = 'feat_year_' + idx;
-    const num = (idx + 1) + '.';
-    const cardClick = editMode ? 'onclick="return handleWorkCardClick(event, ' + idx + ')" ondblclick="openWorkDetail(' + idx + ')"' : 'onclick="openWorkDetail(' + idx + ')"';
-    return '<div class="work-card kono-card" ' + cardClick + '>' +
+    const num = String(idx + 1).padStart(2, '0');
+    const cardClick = editMode
+      ? 'onclick="return handleWorkCardClick(event, ' + idx + ')" ondblclick="openWorkDetail(' + idx + ')"'
+      : 'onclick="openWorkDetail(' + idx + ')"';
+    return '<div class="loc-row" data-idx="' + idx + '" data-thumb="' + src + '" ' + cardClick + '>' +
       (editMode ? delBtnHtml('workcard_' + idx, function () { deleteWorkItem(idx); }) : '') +
-      '<div class="kono-thumb editable-image-wrap" data-image-wrap="' + key + '"><img src="' + src + '" alt="' + item.title + '" loading="lazy" data-image-key="' + key + '"></div>' +
-      '<div class="kono-meta">' +
-        '<div class="kono-meta-left">' +
-          '<span class="kono-num">' + num + '</span>' +
-          '<span class="kono-title" data-editable="' + titleKey + '">' + item.title + '</span>' +
-          '<span class="kono-sep">\u2014</span>' +
-          '<span class="kono-author" data-editable="' + authorKey + '">' + item.author + '</span>' +
-        '</div>' +
-        '<span class="kono-year" data-editable="' + yearKey + '">' + (item.year || '') + '</span>' +
-      '</div>' +
+      '<span class="loc-num">' + num + '</span>' +
+      '<span class="loc-title" data-editable="' + titleKey + '">' + item.title + '</span>' +
+      '<span class="loc-year" data-editable="' + yearKey + '">' + (item.year || '') + '</span>' +
+      '<span class="loc-arrow">\u2192</span>' +
+      '<span class="loc-hidden-thumb" style="display:none" data-image-wrap="' + key + '"><img src="' + src + '" data-image-key="' + key + '"></span>' +
     '</div>';
   }).join('');
   if (editMode) { setupEditables(); setupImageEditing(); }
+  // hover 浮层缩略图
+  if (!editMode) {
+    if (!document.getElementById('locThumbFloat')) {
+      const fl = document.createElement('div');
+      fl.id = 'locThumbFloat';
+      fl.className = 'loc-thumb-float';
+      fl.innerHTML = '<img src="" alt="">';
+      document.body.appendChild(fl);
+    }
+    const floatEl = document.getElementById('locThumbFloat');
+    const floatImg = floatEl.querySelector('img');
+    container.querySelectorAll('.loc-row').forEach(row => {
+      row.addEventListener('mouseenter', () => {
+        floatImg.src = row.dataset.thumb;
+        floatEl.classList.add('visible');
+      });
+      row.addEventListener('mousemove', (e) => {
+        const x = e.clientX + 30;
+        const y = e.clientY - 100;
+        floatEl.style.left = Math.min(x, window.innerWidth - 370) + 'px';
+        floatEl.style.top = Math.max(y, 20) + 'px';
+      });
+      row.addEventListener('mouseleave', () => {
+        floatEl.classList.remove('visible');
+      });
+    });
+  }
 }
 
 function folderOpenThen(idx, el) {
@@ -4163,7 +4245,8 @@ function initPaperCrumple(afterDone) {
 var adminPages = [
   { id: 'home', name: '首页', route: 'home', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMCIvPjx0ZXh0IHg9IjE2MCIgeT0iMTAwIiBmb250LWZhbWlseT0iSW1wYWN0LEFyaWFsIiBmb250LXNpemU9IjM0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXdlaWdodD0iYm9sZCI+REVTSUdOPC90ZXh0Pjx0ZXh0IHg9IjE2MCIgeT0iMTQwIiBmb250LWZhbWlseT0iSW1wYWN0LEFyaWFsIiBmb250LXNpemU9IjM0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXdlaWdodD0iYm9sZCI+UE9SVEZPTElPPC90ZXh0Pjwvc3ZnPg==' },
   { id: 'work', name: '作品项目', route: 'work', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzExMSIvPjxyZWN0IHg9IjIwIiB5PSIzMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjMzMzIi8+PHJlY3QgeD0iMTE1IiB5PSIzMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjNDQ0Ii8+PHJlY3QgeD0iMjEwIiB5PSIzMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjMzMzIi8+PHJlY3QgeD0iMjAiIHk9IjEwMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjNDQ0Ii8+PHJlY3QgeD0iMTE1IiB5PSIxMDAiIHdpZHRoPSI4NSIgaGVpZ2h0PSI2MCIgZmlsbD0iIzMzMyIvPjxyZWN0IHg9IjIxMCIgeT0iMTAwIiB3aWR0aD0iODUiIGhlaWdodD0iNjAiIGZpbGw9IiM0NDQiLz48dGV4dCB4PSIxNjAiIHk9IjE4NSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiM4ODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiPldvcmtzPC90ZXh0Pjwvc3ZnPg==' },
-  { id: 'about', name: '关于我', route: 'about', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMCIvPjxyZWN0IHg9IjI1IiB5PSIzNSIgd2lkdGg9IjEyMCIgaGVpZ2h0PSIxMzAiIGZpbGw9IiMyMjIiLz48dGV4dCB4PSIxNzAiIHk9IjcwIiBmb250LWZhbWlseT0iSW1wYWN0LEFyaWFsIiBmb250LXNpemU9IjI2IiBmaWxsPSIjZmZmIiBmb250LXdlaWdodD0iYm9sZCI+WkhJU0hBTzwvdGV4dD48cmVjdCB4PSIxNzAiIHk9Ijg1IiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjMiIGZpbGw9IiNmZmYiLz48cmVjdCB4PSIxNzAiIHk9IjEwMCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIyIiBmaWxsPSIjNTU1Ii8+PHJlY3QgeD0iMTcwIiB5PSIxMTAiIHdpZHRoPSIxMTAiIGhlaWdodD0iMiIgZmlsbD0iIzU1NSIvPjxyZWN0IHg9IjE3MCIgeT0iMTIwIiB3aWR0aD0iOTAiIGhlaWdodD0iMiIgZmlsbD0iIzU1NSIvPjwvc3ZnPg==' },
+  { id: 'about', name: '关于我', route: 'about', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMCIvPjxyZWN0IHg9IjI1IiB5PSIzNSIgd2lkdGg9IjEyMCIgaGVpZ2h0PSIxMzAiIGZpbGw9IiMyMjIiLz48dGV4dCB4PSIxNzAiIHk9IjcwIiBmb250LWZhbWlseT0iSW1wYWN0LEFyaWFsIiBmb250LXNpemU9IjI2IiBmaWxsPSIjZmZmIiBmb250LXdlaWdodD0iYm9sZCI+WkhJU0hBTzwvdGV4dD48cmVjdCB4PSIxNzAiIHk9Ijg1IiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjMiIGZpbGw9IiNmZmYiLz48cmVjdCB4PSIxNzAiIHk9IjEwMCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIyIiBmaWxsPSIjNTU1Ii8+PHJlY3QgeD0iMTcwIiB5PSIxMTAiIHdpZHRoPSIxMTAiIGhlaWdodD0iMiIgZmlsbD0iIzU1NSIvPjxyZWN0IHg9IjE3MCIgeT0iMTIwIiB3aWR0aD0iOTAiIGhlaWdodD0iMiIgZmlsbD0iIzU1NSIvPjwvc3ZnPg==' },
+
   { id: 'moodboard', name: 'Moodboard', route: 'moodboard', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBhMGEwYSIvPjxyZWN0IHg9IjIwIiB5PSIzMCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjMjIyIiByeD0iMiIvPjxyZWN0IHg9IjExMCIgeT0iMzAiIHdpZHRoPSI2MCIgaGVpZ2h0PSI4MCIgZmlsbD0iIzMzMyIgcng9IjIiLz48cmVjdCB4PSIxODAiIHk9IjMwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjMWExYTFhIiByeD0iMiIvPjxyZWN0IHg9IjIwIiB5PSIxMDAiIHdpZHRoPSIxMDAiIGhlaWdodD0iNzAiIGZpbGw9IiMzMzMiIHJ4PSIyIi8+PHJlY3QgeD0iMTMwIiB5PSIxMjAiIHdpZHRoPSI3MCIgaGVpZ2h0PSI1MCIgZmlsbD0iIzIyMiIgcng9IjIiLz48cmVjdCB4PSIyMTAiIHk9IjkwIiB3aWR0aD0iOTAiIGhlaWdodD0iODAiIGZpbGw9IiMxYTFhMWEiIHJ4PSIyIi8+PHRleHQgeD0iMTYwIiB5PSIxOTAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEwIiBmaWxsPSIjNjY2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5Nb29kYm9hcmQ8L3RleHQ+PC9zdmc+' },
 ];
 var adminCurrentFilter = 'all';
