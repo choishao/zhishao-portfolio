@@ -2275,7 +2275,7 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
     <div class="top-nav-links">
       <a href="#/work" onclick="navigate('work')" data-editable="navWork">作品项目</a>
       <a href="#/about" onclick="navigate('about')" data-editable="navAbout">关于我</a>
-      <a href="#/clients" onclick="navigate('clients')" data-editable="navClients">客户名单</a>
+
       <a href="#/gallery" onclick="navigate('gallery')" data-editable="navGallery">媒体墙</a>
     </div>
     <button class="menu-btn" id="menuBtn" onclick="toggleMenu()">
@@ -2290,7 +2290,7 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
 <div id="menu-overlay">
   <a href="#/work" onclick="navigate('work'); toggleMenu();" data-editable="navWork">作品项目</a>
   <a href="#/about" onclick="navigate('about'); toggleMenu();" data-editable="navAbout">关于我</a>
-  <a href="#/clients" onclick="navigate('clients'); toggleMenu();" data-editable="navClients">客户名单</a>
+
   <a href="#/gallery" onclick="navigate('gallery'); toggleMenu();" data-editable="navGallery">媒体墙</a>
   <div class="menu-footer">
     <span data-editable="menuFooterLeft">ZHISHAOCUI DESIGN STUDIO</span>
@@ -2437,38 +2437,6 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
           <strong data-editable="cargoContact4Title">Test Studio Pacific</strong>
           <span data-editable="cargoContact4">Level 6<br>85 Clarence Street<br>Sydney NSW 2000<br>Australia<br>T: +61 2 8218 4470<br>F: +61 69 7421 382<br><a href="mailto:pacific@teststudio.au">pacific@teststudio.au</a></span>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== View: Clients ===== -->
-  <section class="view" id="view-clients">
-    <div class="clients-header">
-      <div class="clients-year" data-editable="clientsYear">2015 - 2026</div>
-      <div class="clients-title" data-editable="clientsTitle">客户名单</div>
-    </div>
-    <div class="client-controls">
-      <button class="client-add-btn" onclick="addClientSlot()">+ 增加客户</button>
-      <button class="client-remove-btn" onclick="toggleRemoveMode()">删除模式</button>
-    </div>
-    <div class="clients-grid" id="clientsGrid"></div>
-    <div class="clients-footer">
-      <div class="clients-footer-social">
-        <a href="#" aria-label="Instagram" data-social="instagram" onclick="return handleSocialClick(event, 'instagram')">
-          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-        </a>
-        <a href="#" aria-label="Twitter" data-social="twitter" onclick="return handleSocialClick(event, 'twitter')">
-          <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-        </a>
-        <a href="#" aria-label="LinkedIn" data-social="linkedin" onclick="return handleSocialClick(event, 'linkedin')">
-          <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-        </a>
-      </div>
-      <div class="clients-footer-center">
-        <span data-editable="clientsFooterCenter">Designed by<br>ZHISHAOCUI</span>
-      </div>
-      <div class="clients-footer-right">
-        <span data-editable="clientsFooterRight">&copy; 2026, ZHISHAOCUI,<br>All Rights Reserved.</span>
       </div>
     </div>
   </section>
@@ -2620,7 +2588,6 @@ const DEFAULT_CONTENT = {
   logoText: 'ZHISHAOCUI',
   navWork: '作品项目',
   navAbout: '关于我',
-  navClients: '客户名单',
   navGallery: '媒体墙',
   heroSubtitle: 'VISUAL DESIGNER / CREATIVE PORTFOLIO',
   menuFooterLeft: 'ZHISHAOCUI DESIGN STUDIO',
@@ -2709,15 +2676,9 @@ const DEFAULT_CONTENT = {
   cargoContact3: '7/F Meridian House<br>22 Wyndham Street<br>Sheung Wan<br>Hong Kong<br>T: +852 3186 9040<br>F: +852 3186 0044<br>asia@teststudio.eu',
   cargoContact4Title: 'Test Studio Pacific',
   cargoContact4: 'Level 6<br>85 Clarence Street<br>Sydney NSW 2000<br>Australia<br>T: +61 2 8218 4470<br>F: +61 69 7421 382<br>pacific@teststudio.au',
-  // 客户名单
-  clientsYear: '2015 - 2026',
-  clientsTitle: '客户名单',
   // 媒体墙
   galleryTitle: '媒体墙',
   galleryImages: ['data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E'],
-  clientUploadHint: '点击上传',
-  clientsFooterCenter: 'Designed by<br>ZHISHAOCUI',
-  clientsFooterRight: '\u00a9 2026, ZHISHAOCUI,<br>All Rights Reserved.'
 };
 
 function getContent() {
@@ -3133,13 +3094,9 @@ function renderHistoryList(container, items) {
   }).join('');
 }
 
-// ===== Clients Grid =====
-const STORAGE_KEY = 'zhishao_client_logos';
-const CLIENT_COUNT_KEY = 'zhishao_client_count';
-let clientRemoveMode = false;
-function getClientCount() {
-  return parseInt(localStorage.getItem(CLIENT_COUNT_KEY) || '24');
-}
+// ===== Clients Grid (removed) =====
+const _REMOVED_CLIENT_LOGOS_KEY = 'zhishao_client_logos';
+const _REMOVED_CLIENT_COUNT_KEY = 'zhishao_client_count';
 function renderClients() {
   const grid = document.getElementById('clientsGrid');
   if (!grid) return;
@@ -3537,16 +3494,6 @@ function migrateLegacyImages() {
       localStorage.removeItem(IMAGE_KEY);
     }
   } catch (e) {}
-  try {
-    var logos = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-    if (Object.keys(logos).length) {
-      Object.keys(logos).forEach(function (i) {
-        var k = 'client_' + i;
-        if (!imgCache[k] && logos[i]) { imgCache[k] = logos[i]; putImage(k, logos[i]); }
-      });
-      localStorage.removeItem(STORAGE_KEY);
-    }
-  } catch (e) {}
 }
 
 function getImages() { return imgCache; }
@@ -3565,7 +3512,6 @@ function rerenderAllImages() {
   renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
   renderHistoryList(document.getElementById('workExperienceList'), siteContent.workExperience);
   renderHistoryList(document.getElementById('projectList'), siteContent.projectExperience);
-  renderClients();
   applyImages();
   var hash = location.hash.replace('#/', '') || 'home';
   if (hash.indexOf('work/detail/') === 0) {
@@ -3983,11 +3929,9 @@ function saveAllContent() {
 function resetAllContent() {
   if (!confirm('确定要恢复所有文字和图片为默认值吗？此操作不可撤销。')) return;
   localStorage.removeItem(CONTENT_KEY);
-  localStorage.removeItem(CLIENT_COUNT_KEY);
   clearAllImages();
   siteContent = getContent();
   applyContent();
-  renderClients();
   applyImages();
   renderCategories();
   if (editMode) {
@@ -4012,7 +3956,6 @@ document.addEventListener('keydown', (e) => {
 
 document.addEventListener('DOMContentLoaded', () => {
   applyContent();
-  renderClients();
   applyImages();
   const hash = location.hash.replace('#/', '') || 'home';
   showView(hash);
@@ -4379,8 +4322,7 @@ document.addEventListener('DOMContentLoaded', () => {
 var adminPages = [
   { id: 'home', name: '首页', route: 'home', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMCIvPjx0ZXh0IHg9IjE2MCIgeT0iMTAwIiBmb250LWZhbWlseT0iSW1wYWN0LEFyaWFsIiBmb250LXNpemU9IjM0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXdlaWdodD0iYm9sZCI+REVTSUdOPC90ZXh0Pjx0ZXh0IHg9IjE2MCIgeT0iMTQwIiBmb250LWZhbWlseT0iSW1wYWN0LEFyaWFsIiBmb250LXNpemU9IjM0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXdlaWdodD0iYm9sZCI+UE9SVEZPTElPPC90ZXh0Pjwvc3ZnPg==' },
   { id: 'work', name: '作品项目', route: 'work', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzExMSIvPjxyZWN0IHg9IjIwIiB5PSIzMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjMzMzIi8+PHJlY3QgeD0iMTE1IiB5PSIzMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjNDQ0Ii8+PHJlY3QgeD0iMjEwIiB5PSIzMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjMzMzIi8+PHJlY3QgeD0iMjAiIHk9IjEwMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjNDQ0Ii8+PHJlY3QgeD0iMTE1IiB5PSIxMDAiIHdpZHRoPSI4NSIgaGVpZ2h0PSI2MCIgZmlsbD0iIzMzMyIvPjxyZWN0IHg9IjIxMCIgeT0iMTAwIiB3aWR0aD0iODUiIGhlaWdodD0iNjAiIGZpbGw9IiM0NDQiLz48dGV4dCB4PSIxNjAiIHk9IjE4NSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiM4ODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiPldvcmtzPC90ZXh0Pjwvc3ZnPg==' },
-  { id: 'about', name: '关于我', route: 'about', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMCIvPjxyZWN0IHg9IjI1IiB5PSIzNSIgd2lkdGg9IjEyMCIgaGVpZ2h0PSIxMzAiIGZpbGw9IiMyMjIiLz48dGV4dCB4PSIxNzAiIHk9IjcwIiBmb250LWZhbWlseT0iSW1wYWN0LEFyaWFsIiBmb250LXNpemU9IjI2IiBmaWxsPSIjZmZmIiBmb250LXdlaWdodD0iYm9sZCI+WkhJU0hBTzwvdGV4dD48cmVjdCB4PSIxNzAiIHk9Ijg1IiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjMiIGZpbGw9IiNmZmYiLz48cmVjdCB4PSIxNzAiIHk9IjEwMCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIyIiBmaWxsPSIjNTU1Ii8+PHJlY3QgeD0iMTcwIiB5PSIxMTAiIHdpZHRoPSIxMTAiIGhlaWdodD0iMiIgZmlsbD0iIzU1NSIvPjxyZWN0IHg9IjE3MCIgeT0iMTIwIiB3aWR0aD0iOTAiIGhlaWdodD0iMiIgZmlsbD0iIzU1NSIvPjwvc3ZnPg==' },
-  { id: 'clients', name: '客户名单', route: 'clients', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZmZiIvPjxyZWN0IHg9IjI1IiB5PSIzNSIgd2lkdGg9IjYwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjZWVlIiBzdHJva2U9IiNkZGQiLz48cmVjdCB4PSI5NSIgeT0iMzUiIHdpZHRoPSI2MCIgaGVpZ2h0PSI0MCIgZmlsbD0iI2VlZSIgc3Ryb2tlPSIjZGRkIi8+PHJlY3QgeD0iMTY1IiB5PSIzNSIgd2lkdGg9IjYwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjZWVlIiBzdHJva2U9IiNkZGQiLz48cmVjdCB4PSIyMzUiIHk9IjM1IiB3aWR0aD0iNjAiIGhlaWdodD0iNDAiIGZpbGw9IiNlZWUiIHN0cm9rZT0iI2RkZCIvPjxyZWN0IHg9IjI1IiB5PSI4NSIgd2lkdGg9IjYwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjZWVlIiBzdHJva2U9IiNkZGQiLz48cmVjdCB4PSI5NSIgeT0iODUiIHdpZHRoPSI2MCIgaGVpZ2h0PSI0MCIgZmlsbD0iI2VlZSIgc3Ryb2tlPSIjZGRkIi8+PHJlY3QgeD0iMTY1IiB5PSI4NSIgd2lkdGg9IjYwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjZWVlIiBzdHJva2U9IiNkZGQiLz48cmVjdCB4PSIyMzUiIHk9Ijg1IiB3aWR0aD0iNjAiIGhlaWdodD0iNDAiIGZpbGw9IiNlZWUiIHN0cm9rZT0iI2RkZCIvPjxyZWN0IHg9IjI1IiB5PSIxMzUiIHdpZHRoPSI2MCIgaGVpZ2h0PSI0MCIgZmlsbD0iI2VlZSIgc3Ryb2tlPSIjZGRkIi8+PHJlY3QgeD0iOTUiIHk9IjEzNSIgd2lkdGg9IjYwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjZWVlIiBzdHJva2U9IiNkZGQiLz48L3N2Zz4=' },
+  { id: 'about', name: '关于我', route: 'about', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMCIvPjxyZWN0IHg9IjI1IiB5PSIzNSIgd2lkdGg9IjEyMCIgaGVpZ2h0PSIxMzAiIGZpbGw9IiMyMjIiLz48dGV4dCB4PSIxNzAiIHk9IjcwIiBmb250LWZhbWlseT0iSW1wYWN0LEFyaWFsIiBmb250LXNpemU9IjI2IiBmaWxsPSIjZmZmIiBmb250LXdlaWdodD0iYm9sZCI+WkhJU0hBTzwvdGV4dD48cmVjdCB4PSIxNzAiIHk9Ijg1IiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjMiIGZpbGw9IiNmZmYiLz48cmVjdCB4PSIxNzAiIHk9IjEwMCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIyIiBmaWxsPSIjNTU1Ii8+PHJlY3QgeD0iMTcwIiB5PSIxMTAiIHdpZHRoPSIxMTAiIGhlaWdodD0iMiIgZmlsbD0iIzU1NSIvPjxyZWN0IHg9IjE3MCIgeT0iMTIwIiB3aWR0aD0iOTAiIGhlaWdodD0iMiIgZmlsbD0iIzU1NSIvPjwvc3ZnPg==' },
   { id: 'gallery', name: '媒体墙', route: 'gallery', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBhMGEwYSIvPjxyZWN0IHg9IjIwIiB5PSIzMCIgd2lkdGg9IjEzMCIgaGVpZ2h0PSI5MCIgZmlsbD0iIzIyMiIvPjxyZWN0IHg9IjE3MCIgeT0iMzAiIHdpZHRoPSIxMzAiIGhlaWdodD0iOTAiIGZpbGw9IiMzMzMiLz48cmVjdCB4PSIyMCIgeT0iMTM1IiB3aWR0aD0iMTMwIiBoZWlnaHQ9IjQ1IiBmaWxsPSIjMzMzIi8+PHJlY3QgeD0iMTcwIiB5PSIxMzUiIHdpZHRoPSIxMzAiIGhlaWdodD0iNDUiIGZpbGw9IiMyMjIiLz48dGV4dCB4PSIxNjAiIHk9IjE5NSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiM4ODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdhbGxlcnk8L3RleHQ+PC9zdmc+' },
   { id: 'moodboard', name: 'Moodboard', route: 'moodboard', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBhMGEwYSIvPjxyZWN0IHg9IjIwIiB5PSIzMCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjMjIyIiByeD0iMiIvPjxyZWN0IHg9IjExMCIgeT0iMzAiIHdpZHRoPSI2MCIgaGVpZ2h0PSI4MCIgZmlsbD0iIzMzMyIgcng9IjIiLz48cmVjdCB4PSIxODAiIHk9IjMwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjMWExYTFhIiByeD0iMiIvPjxyZWN0IHg9IjIwIiB5PSIxMDAiIHdpZHRoPSIxMDAiIGhlaWdodD0iNzAiIGZpbGw9IiMzMzMiIHJ4PSIyIi8+PHJlY3QgeD0iMTMwIiB5PSIxMjAiIHdpZHRoPSI3MCIgaGVpZ2h0PSI1MCIgZmlsbD0iIzIyMiIgcng9IjIiLz48cmVjdCB4PSIyMTAiIHk9IjkwIiB3aWR0aD0iOTAiIGhlaWdodD0iODAiIGZpbGw9IiMxYTFhMWEiIHJ4PSIyIi8+PHRleHQgeD0iMTYwIiB5PSIxOTAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEwIiBmaWxsPSIjNjY2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5Nb29kYm9hcmQ8L3RleHQ+PC9zdmc+' },
 ];
@@ -4587,14 +4529,6 @@ function adminRenamePage(pageId, newName) {
     existing.navAbout = newName;
     siteContent.navAbout = newName;
     document.querySelectorAll('[data-editable="navAbout"]').forEach(function(el){ el.textContent = newName; });
-  } else if (pageId === 'clients') {
-    existing.navClients = newName;
-    existing.clientsTitle = newName;
-    siteContent.navClients = newName;
-    siteContent.clientsTitle = newName;
-    document.querySelectorAll('[data-editable="navClients"]').forEach(function(el){ el.textContent = newName; });
-    var ct = document.querySelector('[data-editable="clientsTitle"]');
-    if (ct) ct.textContent = newName;
   } else if (pageId === 'gallery') {
     existing.navGallery = newName;
     existing.galleryTitle = newName;
