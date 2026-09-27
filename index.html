@@ -1941,210 +1941,6 @@ body.edit-mode .work-card .work-delete-btn { display: flex; }
 }
 body.edit-mode .add-work-btn { display: block; }
 .add-work-btn:hover { border-color: rgba(255,255,255,0.5); color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.05); }
-/* ===== Media Library Modal ===== */
-#mediaLibraryModal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.4);
-  z-index: 20000;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(4px);
-}
-#mediaLibraryModal.show { display: flex; }
-#mediaLibraryModal > * {
-  width: 90vw;
-  max-width: 1000px;
-  max-height: 85vh;
-}
-.media-library-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px 24px;
-  border-bottom: 1px solid #eee;
-  background: #fff;
-  border-radius: 12px 12px 0 0;
-}
-.media-library-title {
-  font-family: system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  font-size: 17px;
-  font-weight: 600;
-  color: #1a1a1a;
-  letter-spacing: 0;
-}
-.media-library-actions {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-.media-library-btn {
-  padding: 8px 18px;
-  border: 1px solid #d9d9d9;
-  background: #fff;
-  color: #333;
-  font-size: 13px;
-  cursor: pointer;
-  border-radius: 6px;
-  font-family: system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  transition: all 0.15s;
-  font-weight: 400;
-}
-.media-library-btn:hover { border-color: #1a1a1a; color: #1a1a1a; }
-.media-library-btn-primary {
-  background: #1a1a1a;
-  color: #fff;
-  border-color: #1a1a1a;
-  font-weight: 500;
-}
-.media-library-btn-primary:hover { background: #333; color: #fff; border-color: #333; }
-.media-library-close {
-  width: 32px;
-  height: 32px;
-  border: 1px solid #e0e0e0;
-  background: #fff;
-  color: #999;
-  font-size: 18px;
-  cursor: pointer;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.15s;
-  line-height: 1;
-}
-.media-library-close:hover { border-color: #c44; color: #c44; background: #fef5f5; }
-.media-library-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 24px;
-  background: #fafafa;
-  border-radius: 0 0 12px 12px;
-}
-.media-library-dropzone {
-  border: 1px solid #d9d9d9;
-  border-radius: 8px;
-  padding: 36px;
-  text-align: center;
-  color: #999;
-  font-size: 14px;
-  margin-bottom: 24px;
-  transition: all 0.15s;
-  cursor: pointer;
-  background: #fff;
-}
-.media-library-dropzone:hover, .media-library-dropzone.drag-over {
-  border-color: #1a1a1a;
-  color: #1a1a1a;
-}
-/* ===== Image pick menu (local upload / from library) ===== */
-.img-pick-menu {
-  position: fixed;
-  z-index: 10001;
-  background: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 10px;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-  padding: 6px;
-  min-width: 190px;
-  font-family: system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
-}
-.img-pick-title {
-  font-size: 12px;
-  font-weight: 600;
-  color: #888;
-  padding: 8px 14px 6px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-.img-pick-menu button {
-  display: block;
-  width: 100%;
-  padding: 10px 14px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  text-align: left;
-  font-size: 14px;
-  color: #1a1a1a;
-  border-radius: 6px;
-  font-family: inherit;
-}
-.img-pick-menu button:hover { background: #f5f5f5; }
-.img-pick-menu .img-pick-cancel { color: #888; }
-.lib-pick-banner {
-  display: none;
-  background: #1a1a1a;
-  color: #fff;
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-size: 13px;
-  margin-bottom: 12px;
-  font-family: system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
-}
-  background: #f5f5f5;
-}
-.media-library-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 12px;
-}
-.media-library-item {
-  position: relative;
-  aspect-ratio: 1;
-  background: #fff;
-  border: 1px solid #e8e8e8;
-  border-radius: 8px;
-  overflow: hidden;
-  cursor: grab;
-  transition: all 0.15s;
-}
-.media-library-item:hover { border-color: #1a1a1a; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-.media-library-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.media-library-item .file-icon {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  color: #bbb;
-  font-family: system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-}
-.media-library-item .delete-lib-img {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 24px;
-  height: 24px;
-  background: rgba(26,26,26,0.9);
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 14px;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
-}
-.media-library-item:hover .delete-lib-img { display: flex; }
-.media-library-empty {
-  text-align: center;
-  color: #555;
-  padding: 60px;
-  font-size: 15px;
-}
-
-/* Drag overlay removed */
-
 /* ===== Category edit mode ===== */
 body.edit-mode .work-categories a {
   position: relative;
@@ -2550,7 +2346,6 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
       <div class="admin-nav-item" onclick="filterAdminPages('work', this)">&#128193; 作品页面</div>
     </div>
     <div class="admin-tools">
-      <div class="admin-tool-btn" onclick="openMediaLibrary()">&#128193; 管理库</div>
       <div class="admin-tool-btn" onclick="openFontManager()">&#128260; 字体管理</div>
     </div>
     <div class="admin-search">
@@ -2583,27 +2378,6 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
   </div>
 </div>
 <div id="editSaveToast">已保存</div>
-<!-- ===== Media Library Modal ===== -->
-<div id="mediaLibraryModal">
-  <div class="media-library-header">
-    <div class="media-library-title">MEDIA LIBRARY / 管理库</div>
-    <div class="media-library-actions">
-      <button class="media-library-btn media-library-btn-primary" onclick="document.getElementById('mediaLibraryInput').click()">批量上传</button>
-      <input type="file" id="mediaLibraryInput" multiple accept="image/jpeg,image/png,image/gif,image/svg+xml,image/webp,application/pdf,.jpg,.jpeg,.png,.gif,.svg,.webp,.pdf" style="display:none" onchange="handleMediaLibraryUpload(event)">
-      <button class="media-library-close" onclick="closeMediaLibrary()">×</button>
-    </div>
-  </div>
-  <div class="media-library-body">
-    <div class="lib-pick-banner" id="libPickBanner">选择模式：点击下方图片应用到当前位置</div>
-    <div class="media-library-dropzone" id="mediaDropzone" onclick="document.getElementById('mediaLibraryInput').click()">
-      拖拽图片到此处，或点击选择文件批量上传<br>
-      <span style="font-size:13px;color:#555">支持 JPG / PNG / GIF / SVG / PDF / WEBP</span>
-    </div>
-    <div class="media-library-grid" id="mediaLibraryGrid"></div>
-  </div>
-</div>
-
-
 <!-- ===== Font Manager Modal ===== -->
 <div id="fontManagerModal">
   <div class="font-manager">
@@ -3990,7 +3764,6 @@ function showImagePickMenu(key) {
   menu.innerHTML =
     '<div class="img-pick-title">\u66ff\u6362\u56fe\u7247</div>' +
     '<button onclick="pickLocalUpload(\'' + key + '\')">\ud83d\udcc1 \u672c\u5730\u4e0a\u4f20</button>' +
-    '<button onclick="pickFromLibrary(\'' + key + '\')">\ud83d\uddc2 \u4ece\u7ba1\u7406\u5e93\u9009\u62e9</button>' +
     '<button class="img-pick-cancel" onclick="closeImagePickMenu()">\u53d6\u6d88</button>';
   document.body.appendChild(menu);
   // Position near the target image
@@ -4027,46 +3800,6 @@ function pickLocalUpload(key) {
     handleImageFile(file, key);
   };
   input.click();
-}
-
-// ===== Pick from media library (selection mode) =====
-var libPickTargetKey = null;
-function pickFromLibrary(key) {
-  closeImagePickMenu();
-  libPickTargetKey = key;
-  openMediaLibrary();
-  var banner = document.getElementById('libPickBanner');
-  if (banner) banner.style.display = 'block';
-  var dropzone = document.getElementById('mediaDropzone');
-  if (dropzone) dropzone.style.display = 'none';
-  renderMediaLibrary();
-}
-
-function applyLibraryImage(srcKey, dstKey) {
-  var srcURL = imgCache[srcKey];
-  if (!srcURL) { showSaveToast('\u56fe\u7247\u4e0d\u5b58\u5728'); return; }
-  if (srcURL.indexOf('data:application/pdf') === 0) {
-    putImage(dstKey, srcURL).then(function () {
-      var imgEl = document.querySelector('img[data-image-key="' + dstKey + '"]');
-      if (imgEl) {
-        var parent = imgEl.parentElement;
-        parent.innerHTML = '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#222;color:#888;font-size:12px;font-family:monospace;">PDF \u6587\u4ef6</div>';
-      }
-      unsavedChanges = true;
-      updateEditStatus();
-      showSaveToast('\u5df2\u4ece\u7ba1\u7406\u5e93\u5e94\u7528 PDF');
-    });
-  } else {
-    copyImage(srcKey, dstKey).then(function () {
-      var imgEl = document.querySelector('img[data-image-key="' + dstKey + '"]');
-      var src = imgCache[dstKey];
-      if (imgEl && src) imgEl.src = src;
-      unsavedChanges = true;
-      updateEditStatus();
-      showSaveToast('\u5df2\u4ece\u7ba1\u7406\u5e93\u5e94\u7528\u56fe\u7247');
-    });
-  }
-  closeMediaLibrary();
 }
 
 function showSaveToast(msg) {
@@ -4368,107 +4101,7 @@ function initResumeSpecular() {
 }
 
 // ============================================================
-// ===== Media Library (管理库) =====
-// ============================================================
-function openMediaLibrary() {
-  document.getElementById('mediaLibraryModal').classList.add('show');
-  renderMediaLibrary();
-  // 管理库拖拽区
-  const dropzone = document.getElementById('mediaDropzone');
-  if (dropzone) {
-    dropzone.ondragover = (e) => { e.preventDefault(); dropzone.classList.add('drag-over'); };
-    dropzone.ondragleave = () => { dropzone.classList.remove('drag-over'); };
-    dropzone.ondrop = (e) => {
-      e.preventDefault();
-      dropzone.classList.remove('drag-over');
-      handleMediaLibraryFiles(e.dataTransfer.files);
-    };
-  }
-}
-
-function closeMediaLibrary() {
-  document.getElementById('mediaLibraryModal').classList.remove('show');
-  libPickTargetKey = null;
-  var banner = document.getElementById('libPickBanner');
-  if (banner) banner.style.display = 'none';
-  var dropzone = document.getElementById('mediaDropzone');
-  if (dropzone) dropzone.style.display = '';
-}
-
-function handleMediaLibraryUpload(event) {
-  handleMediaLibraryFiles(event.target.files);
-  event.target.value = '';
-}
-
-function handleMediaLibraryFiles(files) {
-  if (!files || files.length === 0) return;
-  var count = 0;
-  Array.from(files).forEach(function (file, idx) {
-    var key = 'lib_' + Date.now() + '_' + idx;
-    if (file.type === 'application/pdf') {
-      var reader = new FileReader();
-      reader.onload = function (ev) {
-        putImage(key, ev.target.result);
-        count++;
-        if (count >= files.length) { renderMediaLibrary(); showSaveToast('已上传 ' + count + ' 个文件'); }
-      };
-      reader.readAsDataURL(file);
-    } else {
-      // 原画质存储，不压缩
-      putImage(key, file);
-      count++;
-      if (count >= files.length) { renderMediaLibrary(); showSaveToast('已上传 ' + count + ' 张图片'); }
-    }
-  });
-}
-
-function renderMediaLibrary() {
-  const imgs = getImages();
-  const grid = document.getElementById('mediaLibraryGrid');
-  if (!grid) return;
-  const keys = Object.keys(imgs);
-  if (keys.length === 0) {
-    grid.innerHTML = '<div class="media-library-empty">管理库为空，上传图片后将显示在这里</div>';
-    return;
-  }
-  grid.innerHTML = keys.map(key => {
-    const src = imgs[key];
-    const isPdf = src.startsWith('data:application/pdf');
-    return '<div class="media-library-item" data-lib-key="' + key + '" title="' + key + '">' +
-      '<button class="delete-lib-img" onclick="event.stopPropagation();deleteFromLibrary(\'' + key + '\')">×</button>' +
-      (isPdf
-        ? '<div class="file-icon">PDF</div>'
-        : '<img src="' + src + '" alt="' + key + '" loading="lazy">') +
-    '</div>';
-  }).join('');
-  // 点击管理库图片可拖拽到页面替换
-  grid.querySelectorAll('.media-library-item').forEach(item => {
-    item.draggable = true;
-    item.ondragstart = (e) => {
-      e.dataTransfer.setData('text/lib-key', item.dataset.libKey);
-      e.dataTransfer.effectAllowed = 'copy';
-    };
-    // 选择模式：点击图片应用到页面
-    item.onclick = (e) => {
-      if (!libPickTargetKey) return;
-      e.stopPropagation();
-      e.preventDefault();
-      var srcKey = item.dataset.libKey;
-      var targetKey = libPickTargetKey;
-      libPickTargetKey = null;
-      applyLibraryImage(srcKey, targetKey);
-    };
-  });
-}
-
-function deleteFromLibrary(key) {
-  deleteImage(key);
-  renderMediaLibrary();
-  showSaveToast('已删除');
-}
-
-// ============================================================
-// ===== Global Drag & Drop (全局拖拽上传) =====
+// ===== Global Drag & Drop (全局拖拽) =====
 // ============================================================
 let dragCounter = 0;
 
@@ -4488,58 +4121,18 @@ function teardownDragAndDrop() {
 function handleGlobalDragOver(e) {
   if (!editMode) return;
   e.preventDefault();
-  // overlay removed per user request
 }
 
 function handleGlobalDragLeave(e) {
   if (!editMode) return;
-  // overlay removed per user request
 }
 
 function handleGlobalDrop(e) {
   if (!editMode) return;
   e.preventDefault();
-  // overlay removed per user request
-  // 检查是否拖到了图片区域(由图片区域自己的ondrop处理)
   const target = e.target;
-  if (target.closest('.editable-image-wrap') || target.closest('.media-library-item')) return;
-  // 检查是否是从管理库拖拽过来的
-  const libKey = e.dataTransfer.getData('text/lib-key');
-  if (libKey) {
-    // 从管理库拖到非图片区域，不做处理
-    return;
-  }
-  // 全局拖放：如果有文件，上传到管理库
-  const files = e.dataTransfer.files;
-  if (files.length > 0) {
-    handleMediaLibraryFiles(files);
-    openMediaLibrary();
-  }
+  if (target.closest('.editable-image-wrap') || target.closest('.file-upload-zone')) return;
 }
-
-// 管理库图片拖到页面图片区域时的处理
-document.addEventListener('DOMContentLoaded', () => {
-  // 监听所有editable-image-wrap的drop，支持从管理库拖拽
-  document.addEventListener('drop', (e) => {
-    if (!editMode) return;
-    const libKey = e.dataTransfer.getData('text/lib-key');
-    if (!libKey) return;
-    const wrap = e.target.closest('.editable-image-wrap');
-    if (!wrap) return;
-    e.preventDefault();
-    e.stopPropagation();
-    const img = wrap.querySelector('img[data-image-key]');
-    if (!img) return;
-    const targetKey = img.dataset.imageKey;
-    if (imgCache[libKey]) {
-      img.src = imgCache[libKey];
-      copyImage(libKey, targetKey);
-      unsavedChanges = true;
-      updateEditStatus();
-      showSaveToast('已从管理库应用图片');
-    }
-  }, true);
-});
 
 
 // ===== Admin Dashboard Functions =====
