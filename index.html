@@ -1026,6 +1026,22 @@ body.edit-mode .gallery-del-btn:hover { background: rgba(0,0,0,0.9); }
 body.edit-mode .detail-gallery-item .remove-img-btn { display: block; }
 body.edit-mode .detail-gallery-item[draggable="true"] { cursor: grab; }
 body.edit-mode .detail-gallery-item.drag-over { outline: 2px solid #1a1a1a; outline-offset: 2px; }
+
+/* ===== Native DeleteButton ===== */
+.dlt { position: relative; display: inline-flex; align-items: center; height: 28px; border-radius: 9px; background: #F4F4F9; color: #868593; box-shadow: 0 0.5px 1px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.08), inset 0 0.5px 0 rgba(255,255,255,0.9); width: 28px; transition: width 0.32s cubic-bezier(0.32,0.72,0,1); z-index: 30; }
+.dlt.open { width: 86px; }
+.dlt.confirmed { background: #FFF1EC; }
+.dlt__btn { position: relative; z-index: 2; width: 28px; height: 28px; display: grid; place-items: center; border: none; background: transparent; color: inherit; cursor: pointer; padding: 0; flex: 0 0 auto; }
+.dlt__btn svg { overflow: visible; }
+.dlt__lid { transform-origin: 4px 6px; transition: transform 0.38s cubic-bezier(0.34,1.1,0.64,1); }
+.dlt.open .dlt__lid { transform: rotate(-35deg); }
+.dlt__actions { position: absolute; top: 0; right: 0; height: 28px; display: flex; align-items: center; gap: 3px; padding: 0 5px 0 22px; background: #E7E7EF; border-radius: 9px; opacity: 0; transform: translateX(6px); pointer-events: none; transition: opacity 0.26s cubic-bezier(0.32,0.72,0,1), transform 0.26s cubic-bezier(0.32,0.72,0,1); }
+.dlt.open .dlt__actions { opacity: 1; transform: translateX(0); pointer-events: auto; }
+.dlt__yes, .dlt__no { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; border: none; cursor: pointer; background: #fff; font-size: 12px; line-height: 1; box-shadow: 0 0.5px 1px rgba(0,0,0,0.06); padding: 0; }
+.dlt__yes { color: #FF5F2E; font-weight: 700; }
+.dlt__yes:hover { background: #FF5F2E; color: #fff; }
+.dlt__no { color: #868593; }
+.dlt__no:hover { background: #1a1a1a; color: #fff; }
 .add-gallery-btn {
   display: none;
   margin-top: 30px;
@@ -2739,7 +2755,7 @@ function renderCategories() {
   let html = Object.entries(siteContent.categories).map(([key, name]) => {
     if (editMode) {
       return '<a href="#/work/' + key + '" data-cat-key="' + key + '" data-editable="cat_' + key + '" onclick="return handleCategoryClick(event, \'' + key + '\')">' + name + '</a>' +
-        '<button class="cat-delete-btn" onclick="event.stopPropagation();deleteCategory(\'' + key + '\')">×</button>';
+        delBtnHtml('cat_' + key, function () { deleteCategory(key); });
     }
     return '<a href="#/work/' + key + '" onclick="navigate(\'work/' + key + '\')">' + name + '</a>';
   }).join('');
@@ -2801,7 +2817,7 @@ function renderGalleryGrid(container, items) {
     const key = 'gallery_' + i;
     const imgSrc = imgs[key] || src;
     return '<div class="media">'
-      + (editMode ? '<button class="gallery-del-btn" onclick="event.stopPropagation();removeGalleryMedia(' + i + ')">\u00d7</button>' : '')
+      + (editMode ? delBtnHtml('gal_' + i, function () { removeGalleryMedia(i); }) : '')
       + '<img src="' + imgSrc + '" alt="" loading="lazy" data-image-key="' + key + '"></div>';
   }).join('');
   const addBtn = document.getElementById('galleryAddBtn');
@@ -2846,7 +2862,7 @@ function renderWorkGrid(container, items) {
     const num = (idx + 1) + '.';
     const cardClick = editMode ? 'onclick="return handleWorkCardClick(event, ' + idx + ')" ondblclick="openWorkDetail(' + idx + ')"' : 'onclick="openWorkDetail(' + idx + ')"';
     return '<div class="work-card kono-card" ' + cardClick + '>' +
-      (editMode ? '<button class="work-delete-btn" onclick="event.stopPropagation();deleteWorkItem(' + idx + ')">\u00d7</button>' : '') +
+      (editMode ? delBtnHtml('workcard_' + idx, function () { deleteWorkItem(idx); }) : '') +
       '<div class="kono-thumb editable-image-wrap" data-image-wrap="' + key + '"><img src="' + src + '" alt="' + item.title + '" loading="lazy" data-image-key="' + key + '"></div>' +
       '<div class="kono-meta">' +
         '<div class="kono-meta-left">' +
@@ -2985,7 +3001,7 @@ function renderWorkDetail(idx) {
       ? ' draggable="true" data-vi="' + vi + '" ondragstart="detailDragStart(event,' + vi + ')" ondragover="detailDragOver(event)" ondragleave="detailDragLeave(event)" ondrop="detailDrop(event,' + vi + ')"'
       : '';
     return '<div class="detail-gallery-item"' + dragAttrs + '>' +
-      (editMode ? '<button class="remove-img-btn" onclick="removeDetailImage(' + vi + ')">×</button>' : '') +
+      (editMode ? delBtnHtml('det_' + vi, function () { removeDetailImage(vi); }) : '') +
       imgTag +
     '</div>';
   }).join('');
@@ -3013,6 +3029,44 @@ function addDetailImage() {
   };
   input.click();
 }
+// ===== DeleteButton =====
+var _delCallbacks = {};
+function delBtnHtml(id, onConfirm) {
+  _delCallbacks[id] = onConfirm;
+  return '<div class="dlt" data-del="' + id + '">'
+    + '<button class="dlt__btn" type="button" aria-label="删除">'
+    + '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
+    + '<path d="M19 8v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8"/>'
+    + '<g class="dlt__lid"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></g>'
+    + '</svg></button>'
+    + '<span class="dlt__actions">'
+    + '<button class="dlt__yes" type="button" aria-label="确认删除">\u2713</button>'
+    + '<button class="dlt__no" type="button" aria-label="取消">\u00d7</button>'
+    + '</span></div>';
+}
+document.addEventListener('click', function (e) {
+  var root = e.target.closest('.dlt');
+  if (!root) {
+    document.querySelectorAll('.dlt.open').forEach(function (o) { o.classList.remove('open'); });
+    return;
+  }
+  var id = root.dataset.del;
+  if (e.target.closest('.dlt__yes')) {
+    e.stopPropagation();
+    root.classList.add('confirmed');
+    root.classList.remove('open');
+    var cb = _delCallbacks[id];
+    setTimeout(function () { if (cb) cb(); }, 280);
+  } else if (e.target.closest('.dlt__no')) {
+    e.stopPropagation();
+    root.classList.remove('open');
+  } else if (e.target.closest('.dlt__btn')) {
+    e.stopPropagation();
+    var wasOpen = root.classList.contains('open');
+    document.querySelectorAll('.dlt.open').forEach(function (o) { if (o !== root) o.classList.remove('open'); });
+    root.classList.toggle('open', !wasOpen);
+  }
+});
 // 加载失败的图自动从数据中移除（未识别链接）
 function handleDetailImgError(imgEl, vi) {
   var idx = currentDetailIndex;
