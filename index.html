@@ -2485,7 +2485,7 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
   </section>
   <section class="view" id="view-moodboard">
     <button class="moodboard-back" onclick="navigate('home')">&larr; 返回首页</button>
-    <iframe class="moodboard-frame" src="moodboard-preview.html" title="Moodboard" onload="syncMoodboardEditMode(typeof editMode !== 'undefined' && editMode)"></iframe>
+    <iframe class="moodboard-frame" src="moodboard-preview.html" title="Moodboard"></iframe>
   </section>
 
 
@@ -3338,6 +3338,8 @@ function showView(path) {
     renderAdminDashboard();
     return;
   }
+  // 离开后台后静默补齐页面缩略图（后台不可见时生成，避免进入后台逐页闪屏）
+  setTimeout(function() { ensurePageThumbs(false); }, 400);
   if (path.startsWith('work/detail/')) {
     const idx = parseInt(path.split('/')[2]);
     currentDetailIndex = idx;
@@ -3624,6 +3626,17 @@ function setupEditables() {
 }
 
 // 同步 Moodboard iframe 编辑状态
+(function initMoodboardFrameSync() {
+  window.addEventListener('load', function() {
+    var mf = document.querySelector('.moodboard-frame');
+    if (!mf) return;
+    function sync() { syncMoodboardEditMode(typeof editMode !== 'undefined' && editMode); }
+    mf.addEventListener('load', sync);
+    try {
+      if (mf.contentDocument && mf.contentDocument.readyState === 'complete') sync();
+    } catch (e) {}
+  });
+})();
 function syncMoodboardEditMode(on) {
   var frame = document.querySelector('#view-moodboard iframe');
   if (frame && frame.contentWindow) {
@@ -4412,7 +4425,6 @@ function renderAdminDashboard() {
       + '</div></div>';
   });
   grid.innerHTML = html;
-  ensurePageThumbs(false);
 }
 
 function filterAdminPages(type, el) {
@@ -4482,6 +4494,8 @@ function loadThumbsFromIDB() {
         if (!keys.length) resolve();
       };
     });
+  }).then(function() {
+    if (location.hash.indexOf('#/edit') === 0) renderAdminDashboard();
   }).catch(function(){});
 }
 function loadHtml2canvas(cb) {
@@ -4507,6 +4521,7 @@ function showViewForThumb(route) {
 }
 function ensurePageThumbs(force) {
   if (thumbGenerating) return;
+  if (!force && location.hash.indexOf('#/edit') === 0) return;
   loadHtml2canvas(function() {
     if (typeof html2canvas !== 'function') return;
     var routes = getAdminPages().map(function(p) { return p.route; }).filter(function(r) { return r !== 'moodboard'; });
