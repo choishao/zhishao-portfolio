@@ -965,7 +965,7 @@ body.edit-mode .gallery-del-btn:hover { background: rgba(0,0,0,0.9); }
 }
 /* ===== Work Detail Page (ablackcover style) ===== */
 #view-work-detail {
-  background: var(--black);
+  background: #ffffff;
   padding: 0 50px 80px;
 }
 .detail-back-bar {
@@ -973,14 +973,14 @@ body.edit-mode .gallery-del-btn:hover { background: rgba(0,0,0,0.9); }
   justify-content: space-between;
   align-items: center;
   padding: 30px 0 20px;
-  border-bottom: 1px solid var(--gray-dark);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
   margin-bottom: 40px;
 }
 .detail-back {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--white);
+  color: #1a1a1a;
   cursor: pointer;
   font-size: 14px;
   transition: opacity 0.3s;
@@ -989,7 +989,7 @@ body.edit-mode .gallery-del-btn:hover { background: rgba(0,0,0,0.9); }
 .detail-cat-label {
   font-size: 13px;
   letter-spacing: 2px;
-  color: var(--gray);
+  color: #999;
   text-transform: uppercase;
 }
 .detail-gallery {
@@ -1024,25 +1024,27 @@ body.edit-mode .gallery-del-btn:hover { background: rgba(0,0,0,0.9); }
   line-height: 1;
 }
 body.edit-mode .detail-gallery-item .remove-img-btn { display: block; }
+body.edit-mode .detail-gallery-item[draggable="true"] { cursor: grab; }
+body.edit-mode .detail-gallery-item.drag-over { outline: 2px solid #1a1a1a; outline-offset: 2px; }
 .add-gallery-btn {
   display: none;
   margin-top: 30px;
   width: 100%;
   padding: 50px;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(0,0,0,0.15);
   background: transparent;
-  color: var(--gray);
+  color: #999;
   font-size: 14px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: inherit;
 }
 body.edit-mode .add-gallery-btn { display: block; }
-.add-gallery-btn:hover { border-color: rgba(255,255,255,0.5); color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.05); }
+.add-gallery-btn:hover { border-color: rgba(0,0,0,0.4); color: #1a1a1a; background: rgba(0,0,0,0.03); }
 .detail-next-project {
   margin-top: 80px;
   padding-top: 40px;
-  border-top: 1px solid var(--gray-dark);
+  border-top: 1px solid rgba(0,0,0,0.1);
   text-align: center;
 }
 .detail-next-label {
@@ -1055,7 +1057,7 @@ body.edit-mode .add-gallery-btn { display: block; }
 .detail-next-title {
   font-family: var(--font-display);
   font-size: clamp(36px, 5vw, 72px);
-  color: var(--white);
+  color: #1a1a1a;
   cursor: pointer;
   transition: color 0.3s ease;
   letter-spacing: -1px;
@@ -2977,8 +2979,12 @@ function renderWorkDetail(idx) {
     var keyAttr = ent.key ? ' data-image-wrap="' + ent.key + '"' : '';
     var imgKeyAttr = ent.key ? ' data-image-key="' + ent.key + '"' : '';
     var imgTag = '<div class="editable-image-wrap"' + keyAttr + ' style="display:block;">' +
-      '<img src="' + ent.src + '" alt="Image ' + (vi + 1) + '"' + imgKeyAttr + '></div>';
-    return '<div class="detail-gallery-item">' +
+      '<img src="' + ent.src + '" alt="Image ' + (vi + 1) + '"' + imgKeyAttr +
+      ' onerror="handleDetailImgError(this,' + vi + ')"></div>';
+    var dragAttrs = editMode && vi > 0
+      ? ' draggable="true" data-vi="' + vi + '" ondragstart="detailDragStart(event,' + vi + ')" ondragover="detailDragOver(event)" ondragleave="detailDragLeave(event)" ondrop="detailDrop(event,' + vi + ')"'
+      : '';
+    return '<div class="detail-gallery-item"' + dragAttrs + '>' +
       (editMode ? '<button class="remove-img-btn" onclick="removeDetailImage(' + vi + ')">×</button>' : '') +
       imgTag +
     '</div>';
@@ -2988,23 +2994,95 @@ function renderWorkDetail(idx) {
 function addDetailImage() {
   var input = document.createElement('input');
   input.type = 'file';
+  input.multiple = true;
   input.accept = 'image/jpeg,image/png,image/gif,image/svg+xml,image/webp,.jpg,.jpeg,.png,.gif,.svg,.webp';
-  input.onchange = function (e) {
-    var file = e.target.files[0];
-    if (!file) return;
+  input.onchange = async function (e) {
+    var files = Array.prototype.slice.call(e.target.files || []);
+    if (!files.length) return;
     var idx = currentDetailIndex;
     var item = siteContent.workItems[idx];
     if (!item) return;
-    var legacyCount = (item.gallery || []).length;
     var prefix = 'detail_img_' + idx + '_';
-    var newCount = Object.keys(imgCache).filter(function (k) { return k.indexOf(prefix) === 0; }).length;
-    var key = prefix + (legacyCount + newCount);
-    // 原画质 Blob 存入 IndexedDB，可无限添加
-    putImage(key, file);
+    var startNum = Object.keys(imgCache).filter(function (k) { return k.indexOf(prefix) === 0; }).length;
+    for (var i = 0; i < files.length; i++) {
+      var key = prefix + (startNum + i);
+      await putImage(key, files[i]);
+    }
     renderWorkDetail(idx);
-    showSaveToast('图片已添加（原画质）');
+    showSaveToast('已批量上传 ' + files.length + ' 张图片');
   };
   input.click();
+}
+// 加载失败的图自动从数据中移除（未识别链接）
+function handleDetailImgError(imgEl, vi) {
+  var idx = currentDetailIndex;
+  var item = siteContent.workItems[idx];
+  if (!item) return;
+  var list = buildDetailGallery(idx);
+  if (vi < 0 || vi >= list.length) return;
+  var ent = list[vi];
+  if (ent.type === 'legacy') {
+    var gIdx = vi - 1; // list[0] 是 hero
+    item.gallery = item.gallery || [];
+    if (gIdx >= 0 && gIdx < item.gallery.length) {
+      item.gallery.splice(gIdx, 1);
+      var existing = getContent();
+      existing.workItems = siteContent.workItems;
+      localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
+    }
+  } else if (ent.type === 'new' || ent.type === 'hero') {
+    deleteImage(ent.key);
+  }
+  renderWorkDetail(idx);
+}
+// ===== 拖拽排序 =====
+var _detailDragFrom = -1;
+function detailDragStart(ev, vi) {
+  _detailDragFrom = vi;
+  ev.dataTransfer.effectAllowed = 'move';
+}
+function detailDragOver(ev) {
+  ev.preventDefault();
+  ev.dataTransfer.dropEffect = 'move';
+  var item = ev.currentTarget;
+  if (parseInt(item.dataset.vi, 10) !== _detailDragFrom) item.classList.add('drag-over');
+}
+function detailDragLeave(ev) {
+  ev.currentTarget.classList.remove('drag-over');
+}
+async function detailDrop(ev, toVi) {
+  ev.preventDefault();
+  ev.currentTarget.classList.remove('drag-over');
+  var fromVi = _detailDragFrom;
+  _detailDragFrom = -1;
+  if (fromVi < 1 || toVi < 1 || fromVi === toVi) return;
+  var idx = currentDetailIndex;
+  var item = siteContent.workItems[idx];
+  if (!item) return;
+  var list = buildDetailGallery(idx);
+  var rest = list.slice(1);
+  var moved = rest.splice(fromVi - 1, 1)[0];
+  rest.splice(toVi - 1, 0, moved);
+  var legacySrcs = [];
+  var newKeys = [];
+  rest.forEach(function (ent) {
+    if (ent.type === 'legacy') legacySrcs.push(ent.src);
+    else if (ent.type === 'new') newKeys.push(ent.key);
+  });
+  item.gallery = legacySrcs;
+  var prefix = 'detail_img_' + idx + '_';
+  var blobs = [];
+  for (var i = 0; i < newKeys.length; i++) {
+    try { blobs.push(await fetch(imgCache[newKeys[i]]).then(function (r) { return r.blob(); })); }
+    catch (e) { blobs.push(null); }
+  }
+  for (var j = 0; j < newKeys.length; j++) { await deleteImage(newKeys[j]); }
+  for (var k = 0; k < blobs.length; k++) { if (blobs[k]) await putImage(prefix + k, blobs[k]); }
+  var existing = getContent();
+  existing.workItems = siteContent.workItems;
+  localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
+  renderWorkDetail(idx);
+  showSaveToast('图片顺序已调整');
 }
 async function removeDetailImage(vi) {
   var idx = currentDetailIndex;
@@ -3616,6 +3694,12 @@ function enterEditMode() {
     addBtn.style.display = 'block';
   }
   updateEditStatus();
+  // 若当前在作品详情页，以编辑态重渲染（删除按钮+拖拽）
+  var _h = location.hash.replace('#/', '');
+  if (_h.indexOf('work/detail/') === 0) {
+    var _di = parseInt(_h.split('/')[2], 10);
+    if (!isNaN(_di)) renderWorkDetail(_di);
+  }
   syncMoodboardEditMode(true);
 }
 
