@@ -758,113 +758,6 @@ button {
   padding-top: 16px;
   text-align: left;
 }
-/* ===== Gallery 媒体墙（等宽网格） ===== */
-.gallery-page {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 70px 40px 100px;
-}
-.gallery-title {
-  font-size: 32px;
-  font-weight: 400;
-  color: var(--gray-light);
-  letter-spacing: 2px;
-  margin-bottom: 44px;
-}
-.medias {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-}
-.media {
-  position: relative;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-  border-radius: 10px;
-  background: #111;
-}
-.media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  user-select: none;
-}
-.gallery-del-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: rgba(0,0,0,0.65);
-  color: #fff;
-  border: none;
-  font-size: 16px;
-  line-height: 1;
-  cursor: pointer;
-  display: none;
-  z-index: 5;
-  align-items: center;
-  justify-content: center;
-}
-body.edit-mode .gallery-del-btn { display: flex; }
-body.edit-mode .gallery-del-btn:hover { background: rgba(0,0,0,0.9); }
-.gallery-add-btn { margin-top: 44px; }
-@media (max-width: 1024px) {
-  .medias { grid-template-columns: repeat(3, 1fr); gap: 18px; }
-}
-@media (max-width: 640px) {
-  .gallery-page { padding: 44px 16px 80px; }
-  .medias { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-}
-
-
-.work-card {
-  padding: 0 15px 45px;
-  cursor: pointer;
-  transition: opacity 0.3s ease;
-}
-
-.work-card:hover {
-  opacity: 0.75;
-}
-
-.work-card-image {
-  width: 100%;
-  aspect-ratio: 3/2;
-  overflow: hidden;
-  background: var(--gray-dark);
-}
-
-.work-card-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
-}
-
-.work-card:hover .work-card-image img {
-  transform: scale(1.03);
-}
-
-.work-card-info {
-  padding-top: 14px;
-}
-
-.work-card-title {
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--white);
-  margin-bottom: 3px;
-}
-
-.work-card-author {
-  font-size: 13px;
-  color: var(--gray);
-}
-
-
 /* ===== Work Category Detail (visuelle style) ===== */
 .category-detail-header {
   display: flex;
@@ -2155,7 +2048,6 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
       <a href="#/work" onclick="navigate('work')" data-editable="navWork">作品项目</a>
       <a href="#/about" onclick="navigate('about')" data-editable="navAbout">关于我</a>
 
-      <a href="#/gallery" onclick="navigate('gallery')" data-editable="navGallery">媒体墙</a>
     </div>
     <button class="menu-btn" id="menuBtn" onclick="toggleMenu()">
       <span></span>
@@ -2170,7 +2062,6 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
   <a href="#/work" onclick="navigate('work'); toggleMenu();" data-editable="navWork">作品项目</a>
   <a href="#/about" onclick="navigate('about'); toggleMenu();" data-editable="navAbout">关于我</a>
 
-  <a href="#/gallery" onclick="navigate('gallery'); toggleMenu();" data-editable="navGallery">媒体墙</a>
   <div class="menu-footer">
     <span data-editable="menuFooterLeft">ZHISHAOCUI DESIGN STUDIO</span>
     <span data-editable="menuFooterRight">&copy; 2026 ALL RIGHTS RESERVED</span>
@@ -2328,20 +2219,6 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
 
   <!-- ===== Moodboard View ===== -->
 
-  <!-- ===== View: Gallery 媒体墙 ===== -->
-  <section class="view" id="view-gallery">
-    <div class="gallery-page">
-      <div class="gallery-title" data-editable="galleryTitle">媒体墙</div>
-      <div class="medias" id="galleryGrid"></div>
-      <div class="file-upload-zone" id="galleryAddBtn" data-target="gallery" onclick="addGalleryMedia()" style="display:none;">
-        <p class="fu-title">上传图片</p>
-        <p class="fu-sub">拖拽图片到此处，或点击选择</p>
-        <div class="fu-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        </div>
-      </div>
-    </div>
-  </section>
   <section class="view" id="view-moodboard">
     <button class="moodboard-back" onclick="navigate('home')">&larr; 返回首页</button>
     <iframe class="moodboard-frame" src="moodboard-preview.html" title="Moodboard"></iframe>
@@ -2457,7 +2334,6 @@ const DEFAULT_CONTENT = {
   logoText: 'ZHISHAOCUI',
   navWork: '作品项目',
   navAbout: '关于我',
-  navGallery: '媒体墙',
   heroSubtitle: 'VISUAL DESIGNER / CREATIVE PORTFOLIO',
   menuFooterLeft: 'ZHISHAOCUI DESIGN STUDIO',
   menuFooterRight: '\u00a9 2026 ALL RIGHTS RESERVED',
@@ -2545,9 +2421,6 @@ const DEFAULT_CONTENT = {
   cargoContact3: '7/F Meridian House<br>22 Wyndham Street<br>Sheung Wan<br>Hong Kong<br>T: +852 3186 9040<br>F: +852 3186 0044<br>asia@teststudio.eu',
   cargoContact4Title: 'Test Studio Pacific',
   cargoContact4: 'Level 6<br>85 Clarence Street<br>Sydney NSW 2000<br>Australia<br>T: +61 2 8218 4470<br>F: +61 69 7421 382<br>pacific@teststudio.au',
-  // 媒体墙
-  galleryTitle: '媒体墙',
-  galleryImages: ['data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E'],
 };
 
 function getContent() {
@@ -2590,7 +2463,6 @@ function applyContent() {
   renderCategories();
   // 渲染作品和经历
   renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
-  renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
   renderHistoryList(document.getElementById('workExperienceList'), siteContent.workExperience);
   renderHistoryList(document.getElementById('projectList'), siteContent.projectExperience);
   // 应用用户上传的图片
@@ -2659,77 +2531,6 @@ function deleteCategory(key) {
 
 // ===== Render Work Grid =====
 
-// ===== Gallery 媒体墙 =====
-function renderGalleryGrid(container, items) {
-  if (!container) return;
-  items = items || [];
-  const imgs = getImages();
-  container.innerHTML = items.map(function (src, i) {
-    const key = 'gallery_' + i;
-    const imgSrc = imgs[key] || src;
-    return '<div class="media">'
-      + (editMode ? delBtnHtml('gal_' + i, function () { removeGalleryMedia(i); }) : '')
-      + '<img src="' + imgSrc + '" alt="" loading="lazy" data-image-key="' + key + '"></div>';
-  }).join('');
-  const addBtn = document.getElementById('galleryAddBtn');
-  if (addBtn) addBtn.style.display = editMode ? 'block' : 'none';
-  if (editMode) setupImageEditing();
-}
-function addGalleryMedia(externalFiles) {
-  siteContent.galleryImages = siteContent.galleryImages || [];
-  var placeholder = 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E';
-  var files = (externalFiles && externalFiles.length) ? Array.prototype.slice.call(externalFiles) : null;
-  if (files) {
-    for (var i = 0; i < files.length; i++) {
-      var idx = siteContent.galleryImages.length;
-      siteContent.galleryImages.push(placeholder);
-      putImage('gallery_' + idx, files[i]);
-    }
-  } else {
-    siteContent.galleryImages.push(placeholder);
-  }
-  const existing = getContent();
-  existing.galleryImages = siteContent.galleryImages;
-  localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
-  renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
-  showSaveToast(files ? ('已上传 ' + files.length + ' 张图片') : '已添加图片');
-}
-// 拖拽到上传区
-document.addEventListener('dragover', function (e) {
-  var z = e.target.closest && e.target.closest('.file-upload-zone');
-  if (z) { e.preventDefault(); z.classList.add('dragover'); }
-});
-document.addEventListener('dragleave', function (e) {
-  var z = e.target.closest && e.target.closest('.file-upload-zone');
-  if (z) z.classList.remove('dragover');
-});
-document.addEventListener('drop', function (e) {
-  var z = e.target.closest && e.target.closest('.file-upload-zone');
-  if (!z) return;
-  e.preventDefault();
-  z.classList.remove('dragover');
-  var fs = e.dataTransfer && e.dataTransfer.files;
-  if (!fs || !fs.length) return;
-  if (z.dataset.target === 'detail') addDetailImage(fs);
-  else if (z.dataset.target === 'gallery') addGalleryMedia(fs);
-});
-function removeGalleryMedia(idx) {
-  if (!siteContent.galleryImages || idx < 0 || idx >= siteContent.galleryImages.length) return;
-  siteContent.galleryImages.splice(idx, 1);
-  // 后续图片 key 前移，保持与 IndexedDB 图片对齐
-  let i = idx;
-  while (imgCache['gallery_' + (i + 1)]) {
-    putImage('gallery_' + i, imgCache['gallery_' + (i + 1)]);
-    deleteImage('gallery_' + (i + 1));
-    i++;
-  }
-  deleteImage('gallery_' + i);
-  const existing = getContent();
-  existing.galleryImages = siteContent.galleryImages;
-  localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
-  renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
-  showSaveToast('已删除图片');
-}
 function renderWorkGrid(container, items) {
   if (!container) return;
   const imgs = getImages();
@@ -2781,7 +2582,6 @@ function deleteWorkItem(idx) {
   existing.workItems = siteContent.workItems;
   localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
   renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
-  renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
   if (editMode) { setupEditables(); setupImageEditing(); }
   showSaveToast('作品已删除');
 }
@@ -2804,7 +2604,6 @@ function addFeaturedWork() {
   existing.workItems = siteContent.workItems;
   localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
   renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
-  renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
   if (editMode) { setupEditables(); setupImageEditing(); }
   showSaveToast('已添加新作品');
 }
@@ -3530,7 +3329,6 @@ function applyImages() {
 // 图片加载完成后重渲染所有用到图片的模块
 function rerenderAllImages() {
   renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
-  renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
   renderHistoryList(document.getElementById('workExperienceList'), siteContent.workExperience);
   renderHistoryList(document.getElementById('projectList'), siteContent.projectExperience);
   applyImages();
@@ -3624,7 +3422,6 @@ function enterEditMode() {
   // 渲染分类与作品网格为可编辑模式
   renderCategories();
   renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
-  renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
   // 文字可编辑
   setupEditables();
   // 图片可替换
@@ -3664,7 +3461,6 @@ function exitEditMode() {
   // 恢复分类与作品网格为访客模板
   renderCategories();
   renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
-  renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
   // 隐藏添加按钮
   const addBtn = document.getElementById('addProjectBtn');
   if (addBtn) addBtn.style.display = 'none';
@@ -4374,7 +4170,6 @@ var adminPages = [
   { id: 'home', name: '首页', route: 'home', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMCIvPjx0ZXh0IHg9IjE2MCIgeT0iMTAwIiBmb250LWZhbWlseT0iSW1wYWN0LEFyaWFsIiBmb250LXNpemU9IjM0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXdlaWdodD0iYm9sZCI+REVTSUdOPC90ZXh0Pjx0ZXh0IHg9IjE2MCIgeT0iMTQwIiBmb250LWZhbWlseT0iSW1wYWN0LEFyaWFsIiBmb250LXNpemU9IjM0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXdlaWdodD0iYm9sZCI+UE9SVEZPTElPPC90ZXh0Pjwvc3ZnPg==' },
   { id: 'work', name: '作品项目', route: 'work', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzExMSIvPjxyZWN0IHg9IjIwIiB5PSIzMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjMzMzIi8+PHJlY3QgeD0iMTE1IiB5PSIzMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjNDQ0Ii8+PHJlY3QgeD0iMjEwIiB5PSIzMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjMzMzIi8+PHJlY3QgeD0iMjAiIHk9IjEwMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjNDQ0Ii8+PHJlY3QgeD0iMTE1IiB5PSIxMDAiIHdpZHRoPSI4NSIgaGVpZ2h0PSI2MCIgZmlsbD0iIzMzMyIvPjxyZWN0IHg9IjIxMCIgeT0iMTAwIiB3aWR0aD0iODUiIGhlaWdodD0iNjAiIGZpbGw9IiM0NDQiLz48dGV4dCB4PSIxNjAiIHk9IjE4NSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiM4ODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiPldvcmtzPC90ZXh0Pjwvc3ZnPg==' },
   { id: 'about', name: '关于我', route: 'about', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMCIvPjxyZWN0IHg9IjI1IiB5PSIzNSIgd2lkdGg9IjEyMCIgaGVpZ2h0PSIxMzAiIGZpbGw9IiMyMjIiLz48dGV4dCB4PSIxNzAiIHk9IjcwIiBmb250LWZhbWlseT0iSW1wYWN0LEFyaWFsIiBmb250LXNpemU9IjI2IiBmaWxsPSIjZmZmIiBmb250LXdlaWdodD0iYm9sZCI+WkhJU0hBTzwvdGV4dD48cmVjdCB4PSIxNzAiIHk9Ijg1IiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjMiIGZpbGw9IiNmZmYiLz48cmVjdCB4PSIxNzAiIHk9IjEwMCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIyIiBmaWxsPSIjNTU1Ii8+PHJlY3QgeD0iMTcwIiB5PSIxMTAiIHdpZHRoPSIxMTAiIGhlaWdodD0iMiIgZmlsbD0iIzU1NSIvPjxyZWN0IHg9IjE3MCIgeT0iMTIwIiB3aWR0aD0iOTAiIGhlaWdodD0iMiIgZmlsbD0iIzU1NSIvPjwvc3ZnPg==' },
-  { id: 'gallery', name: '媒体墙', route: 'gallery', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBhMGEwYSIvPjxyZWN0IHg9IjIwIiB5PSIzMCIgd2lkdGg9IjEzMCIgaGVpZ2h0PSI5MCIgZmlsbD0iIzIyMiIvPjxyZWN0IHg9IjE3MCIgeT0iMzAiIHdpZHRoPSIxMzAiIGhlaWdodD0iOTAiIGZpbGw9IiMzMzMiLz48cmVjdCB4PSIyMCIgeT0iMTM1IiB3aWR0aD0iMTMwIiBoZWlnaHQ9IjQ1IiBmaWxsPSIjMzMzIi8+PHJlY3QgeD0iMTcwIiB5PSIxMzUiIHdpZHRoPSIxMzAiIGhlaWdodD0iNDUiIGZpbGw9IiMyMjIiLz48dGV4dCB4PSIxNjAiIHk9IjE5NSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiM4ODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdhbGxlcnk8L3RleHQ+PC9zdmc+' },
   { id: 'moodboard', name: 'Moodboard', route: 'moodboard', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBhMGEwYSIvPjxyZWN0IHg9IjIwIiB5PSIzMCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjMjIyIiByeD0iMiIvPjxyZWN0IHg9IjExMCIgeT0iMzAiIHdpZHRoPSI2MCIgaGVpZ2h0PSI4MCIgZmlsbD0iIzMzMyIgcng9IjIiLz48cmVjdCB4PSIxODAiIHk9IjMwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjMWExYTFhIiByeD0iMiIvPjxyZWN0IHg9IjIwIiB5PSIxMDAiIHdpZHRoPSIxMDAiIGhlaWdodD0iNzAiIGZpbGw9IiMzMzMiIHJ4PSIyIi8+PHJlY3QgeD0iMTMwIiB5PSIxMjAiIHdpZHRoPSI3MCIgaGVpZ2h0PSI1MCIgZmlsbD0iIzIyMiIgcng9IjIiLz48cmVjdCB4PSIyMTAiIHk9IjkwIiB3aWR0aD0iOTAiIGhlaWdodD0iODAiIGZpbGw9IiMxYTFhMWEiIHJ4PSIyIi8+PHRleHQgeD0iMTYwIiB5PSIxOTAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEwIiBmaWxsPSIjNjY2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5Nb29kYm9hcmQ8L3RleHQ+PC9zdmc+' },
 ];
 var adminCurrentFilter = 'all';
@@ -4580,14 +4375,6 @@ function adminRenamePage(pageId, newName) {
     existing.navAbout = newName;
     siteContent.navAbout = newName;
     document.querySelectorAll('[data-editable="navAbout"]').forEach(function(el){ el.textContent = newName; });
-  } else if (pageId === 'gallery') {
-    existing.navGallery = newName;
-    existing.galleryTitle = newName;
-    siteContent.navGallery = newName;
-    siteContent.galleryTitle = newName;
-    document.querySelectorAll('[data-editable="navGallery"]').forEach(function(el){ el.textContent = newName; });
-    var gt = document.querySelector('[data-editable="galleryTitle"]');
-    if (gt) gt.textContent = newName;
   } else if (pageId === 'moodboard') {
     existing.moodboardName = newName;
     siteContent.moodboardName = newName;
@@ -4601,7 +4388,6 @@ function adminRenamePage(pageId, newName) {
       existing.workItems[idx].title = newName;
       siteContent.workItems[idx].title = newName;
       renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
-  renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
     }
   }
   localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
@@ -4686,7 +4472,6 @@ function exitEditModeSilent() {
   editMode = false;
   document.body.classList.remove('edit-mode');
   renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
-  renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
   if (typeof sbState !== 'undefined') sbState.paused = true;
   var toolbar = document.getElementById('editToolbar');
   if (toolbar) toolbar.classList.remove('show');
