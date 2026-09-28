@@ -3370,9 +3370,7 @@ function showView(path) {
   }
 
   if (path === 'about' && !editMode) {
-    showPaperIntro(function () {
-      document.getElementById('view-about').classList.add('active');
-    });
+    document.getElementById('view-about').classList.add('active');
     return;
   }
   if (path.startsWith('work/detail/')) {
