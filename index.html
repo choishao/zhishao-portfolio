@@ -1173,221 +1173,86 @@ body.edit-mode .file-upload-zone { display: block; }
   color: var(--gray);
 }
 
-/* ===== View: About ===== */
+/* ===== View: About (Horizontal Scroll) ===== */
 #view-about {
   background: var(--black);
-  padding: 0 50px 60px;
-}
-
-.about-hero {
-  padding-top: 40px;
-}
-
-.about-header {
-  font-family: var(--font-display);
-  font-size: clamp(90px, 13vw, 180px);
-  color: var(--white);
-  line-height: 0.9;
-  letter-spacing: -3px;
-  margin-bottom: 50px;
-}
-
-.about-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 70px;
-  align-items: start;
-}
-
-.about-image {
-  position: relative;
-  width: 100%;
-}
-
-.about-image img {
-  width: 100%;
-  height: auto;
-  display: block;
-  filter: grayscale(100%) contrast(1.1);
-}
-
-.about-image .timestamp {
-  position: absolute;
-  bottom: 18px;
-  right: 18px;
-  font-family: var(--font-mono);
-  font-size: 14px;
-  color: var(--white);
-  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
-}
-
-.about-text {
-  font-family: var(--font-display);
-  font-size: clamp(30px, 3.8vw, 52px);
-  color: var(--white);
-  line-height: 1.2;
-  letter-spacing: -1px;
-}
-
-.about-bottom {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 50px;
-  margin-top: 70px;
-  padding-top: 35px;
-  border-top: 1px solid var(--gray-dark);
-}
-
-.about-bottom p {
-  font-size: 14px;
-  color: var(--gray-light);
-  line-height: 1.9;
-}
-
-.about-bottom p strong {
-  color: var(--white);
-  font-weight: 500;
-}
-
-/* ===== Work History Section ===== */
-.work-history {
-  margin-top: 80px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
-  border-top: 1px solid var(--gray-dark);
-}
-
-.history-col {
-  padding: 50px 40px 50px 0;
-}
-
-.history-col:last-child {
-  padding: 50px 0 50px 40px;
-  background: var(--gray-darker);
-  margin-left: -1px;
-  border-left: 1px solid var(--gray-dark);
-}
-
-.history-title {
-  font-family: var(--font-display);
-  font-size: clamp(32px, 4vw, 52px);
-  color: var(--white);
-  margin-bottom: 40px;
-  letter-spacing: -1px;
-}
-
-.history-list {
-  display: flex;
-  flex-direction: column;
-}
-
-.history-item {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-  padding: 25px 0;
-  border-bottom: 1px solid var(--gray-dark);
-  cursor: pointer;
-  transition: opacity 0.3s ease;
-}
-
-.history-item:hover {
-  opacity: 0.7;
-}
-
-.history-item:last-child {
-  border-bottom: none;
-}
-
-.history-thumb {
-  width: 100px;
-  height: 70px;
-  flex-shrink: 0;
+  padding: 0;
   overflow: hidden;
-  background: var(--gray-dark);
 }
-
-.history-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.history-info {
-  flex: 1;
-}
-
-.history-name {
-  font-size: 17px;
-  font-weight: 500;
-  color: var(--white);
-  margin-bottom: 4px;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.history-meta {
-  font-size: 13px;
-  color: var(--gray);
-}
-
-/* ===== Download Resume Button ===== */
-.resume-section {
-  margin-top: 80px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 30px;
-  padding-bottom: 20px;
-}
-
-.resume-btn {
-  position: relative;
-  font-family: var(--font-display);
-  font-size: 22px;
-  color: var(--white);
-  background: var(--black);
-  border: 1px solid var(--white);
-  border-radius: 60px;
-  padding: 22px 70px;
-  letter-spacing: 2px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.resume-btn:hover {
-  background: var(--white);
-  color: var(--black);
-}
-
-/* ===== Resume Specular Button (WebGL 扫光) ===== */
-.sb-fx {
-  position: absolute;
-  inset: -20px;
-  pointer-events: none;
-  z-index: 1;
-}
-.sb-fx canvas {
+#view-about.active {
   display: block;
-  width: 100%;
-  height: 100%;
 }
-.sb-label {
+.about-hscroll {
+  display: flex;
+  width: 200%;
+  height: calc(100vh - 80px);
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.about-hscroll.page2 {
+  transform: translateX(-50%);
+}
+.about-page {
+  width: 50%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+}
+.about-page-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.5) 100%);
+  pointer-events: none;
+}
+.about-page-content {
   position: relative;
   z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 100px 60px 60px;
+  color: #fff;
 }
-/* 扫光仅前台（访客）显示，后台编辑模式隐藏 */
-body.edit-mode .sb-fx {
-  display: none !important;
+.about-dual-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  max-width: 900px;
 }
-
-.resume-copyright {
-  font-family: var(--font-display);
+.about-col-label {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+.about-col-item {
+  font-size: 16px;
+  line-height: 2;
+  color: rgba(255,255,255,0.85);
+}
+.about-col-name {
   font-size: 20px;
-  color: var(--white);
-  text-align: center;
-  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+.about-bottom-text {
+  max-width: 500px;
+}
+.about-bottom-text p {
+  font-size: 15px;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.8);
+}
+#aboutPage2 .about-col-item {
+  font-size: 15px;
+  line-height: 2;
+}
+@media (max-width: 768px) {
+  .about-page-content { padding: 90px 24px 40px; }
+  .about-dual-col { gap: 30px; }
+  .about-col-item { font-size: 14px; line-height: 1.8; }
 }
 
 /* ===== Cargo-style About Page (Test Studio template) - hidden backup ===== */
@@ -2222,39 +2087,44 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
   <!-- ===== View: About ===== -->
   <!-- ===== Legacy About Page (hidden backup, 可随时恢复) ===== -->
   <section class="view" id="view-about">
-    <div class="about-hero">
-      <div class="about-header" data-editable="aboutHeader">ZHISHAO</div>
-      <div class="about-content">
-        <div class="about-image">
-          <div class="editable-image-wrap" data-image-wrap="aboutPhoto"><img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E" alt="Urban scene" data-image-key="aboutPhoto"></div>
-          <div class="timestamp">2026/ 8/ 28 17:18</div>
+    <div class="about-hscroll" id="aboutHScroll">
+      <!-- Page 1: Personal intro -->
+      <div class="about-page" id="aboutPage1" style="background-image:url('https://aka.doubaocdn.com/s/M6zsdT8JPw')">
+        <div class="about-page-overlay"></div>
+        <div class="about-page-content">
+          <div class="about-dual-col">
+            <div class="about-col-left">
+              <div class="about-col-label" data-editable="aboutRoleLabel">职位</div>
+              <div class="about-col-item" data-editable="aboutRole1">视觉设计师</div>
+              <div class="about-col-item" data-editable="aboutRole2">小红书博主</div>
+            </div>
+            <div class="about-col-right">
+              <div class="about-col-label" data-editable="aboutNameLabel">名称</div>
+              <div class="about-col-item about-col-name" data-editable="aboutName">ZHISHAOCUI</div>
+            </div>
+          </div>
+          <div class="about-bottom-text">
+            <div class="about-col-label" data-editable="aboutCareerLabel">职业生涯</div>
+            <p data-editable="aboutCareerText">你好，我是志韶Ciao。设计师。小红书博主。拥有一只黑色美卡犬和两只猫。喜欢运动和时尚。</p>
+          </div>
         </div>
-        <div class="about-text">
-          <span data-editable="aboutText">你好，我是志韶Ciao。设计师。小红书博主。拥有一只黑色美卡犬和两只猫。喜欢运动和时尚。</span>
+      </div>
+      <!-- Page 2: Work experience -->
+      <div class="about-page" id="aboutPage2" style="background-image:url('https://aka.doubaocdn.com/s/vu2kYTHKbd')">
+        <div class="about-page-overlay"></div>
+        <div class="about-page-content">
+          <div class="about-dual-col">
+            <div class="about-col-left">
+              <div class="about-col-label" data-editable="aboutWorkLabel">工作经历</div>
+              <div id="workExperienceList"></div>
+            </div>
+            <div class="about-col-right">
+              <div class="about-col-label" data-editable="aboutProjLabel">项目经历</div>
+              <div id="projectList"></div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="about-bottom">
-        <p data-editable="aboutBottom1"><strong>ZHISHAOCUI</strong> 是一位多学科设计师，现居杭州，来自视觉设计领域。</p>
-        <p data-editable="aboutBottom2">他结合多元专业知识，提供卓越的视觉体验，清晰且富有风格地表达复杂的理念。他以高保真度设计的精湛技艺著称，不断突破创意边界，创作出引人入胜且精致的作品。</p>
-        <p data-editable="aboutBottom3">他对细节有敏锐的观察力和对创新的热情，擅长在各个领域打造精致且精致的设计。</p>
-      </div>
-    </div>
-
-    <!-- ===== Work History ===== -->
-    <div class="work-history">
-      <div class="history-col">
-        <div class="history-title" data-editable="historyWorkTitle">工作经历</div>
-        <div class="history-list" id="workExperienceList"></div>
-      </div>
-      <div class="history-col">
-        <div class="history-title" data-editable="historyProjectTitle">项目经历</div>
-        <div class="history-list" id="projectList"></div>
-      </div>
-    </div>
-
-    <!-- ===== Download Resume ===== -->
-    <div class="resume-section">
-      <div class="resume-copyright" data-editable="resumeCopyright">&copy; 2026. ZHISHAOCUI, Cui Zhishao, All rights reserved.</div>
     </div>
   </section>
 
@@ -3311,7 +3181,41 @@ function showView(path) {
   }
   window.scrollTo(0, 0);
   if (path === 'home') setTimeout(fitHeroTitle, 60);
+  if (path === 'about') {
+    setTimeout(() => {
+      const hs = document.getElementById('aboutHScroll');
+      if (hs) hs.classList.remove('page2');
+    }, 100);
+  }
 }
+
+// ===== About horizontal scroll (wheel) =====
+(function() {
+  let aboutPage = 1;
+  let lock = false;
+  window.addEventListener('wheel', function(e) {
+    const aboutView = document.getElementById('view-about');
+    if (!aboutView || !aboutView.classList.contains('active')) return;
+    const hs = document.getElementById('aboutHScroll');
+    if (!hs) return;
+    if (lock) { e.preventDefault(); return; }
+    const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+    if (Math.abs(delta) < 10) return;
+    if (delta > 0 && aboutPage === 1) {
+      aboutPage = 2;
+      hs.classList.add('page2');
+      lock = true;
+      setTimeout(() => lock = false, 900);
+      e.preventDefault();
+    } else if (delta < 0 && aboutPage === 2) {
+      aboutPage = 1;
+      hs.classList.remove('page2');
+      lock = true;
+      setTimeout(() => lock = false, 900);
+      e.preventDefault();
+    }
+  }, { passive: false });
+})();
 window.addEventListener('hashchange', () => {
   const hash = location.hash.replace('#/', '') || 'home';
   showView(hash);
