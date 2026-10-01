@@ -1092,7 +1092,7 @@ body.edit-mode .detail-gallery-item.drag-over { outline: 2px solid #1a1a1a; outl
 body.edit-mode .add-gallery-btn { display: block; }
 .add-gallery-btn:hover { border-color: rgba(0,0,0,0.4); color: #1a1a1a; background: rgba(0,0,0,0.03); }
 
-/* ===== Native FileUpload (ReactBits 拖拽上传区) ===== */
+/* ===== Unified Image Upload Zone ===== */
 .file-upload-zone {
   position: relative;
   margin-top: 30px;
@@ -1124,15 +1124,35 @@ body.edit-mode .file-upload-zone { display: block; }
 .file-upload-zone .fu-icon {
   position: relative;
   margin: 24px auto 0;
-  width: 128px; height: 128px;
+  width: 96px; height: 96px;
   background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 10px 50px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
   display: grid; place-items: center;
   transition: transform 0.35s cubic-bezier(0.32,0.72,0,1);
 }
 .file-upload-zone:hover .fu-icon { transform: translate(20px, -20px); }
-.file-upload-zone .fu-icon svg { color: #525252; }
+.file-upload-zone .fu-icon svg { color: #525252; width: 32px; height: 32px; }
+
+/* Unified editable image hover in admin */
+body.edit-mode .editable-image-wrap {
+  cursor: pointer;
+  position: relative;
+}
+body.edit-mode .editable-image-wrap::after {
+  content: "点击替换";
+  position: absolute;
+  bottom: 8px; right: 8px;
+  background: rgba(26,26,26,0.85);
+  color: #fff;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+body.edit-mode .editable-image-wrap:hover::after { opacity: 1; }
 .detail-next-project {
   margin-top: 80px;
   padding-top: 40px;
