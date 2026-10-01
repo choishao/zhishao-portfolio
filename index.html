@@ -1352,7 +1352,10 @@ body[data-page="about"] .wake-slider { display: block; }
 /* ===== Draggable Cards (about page 3) ===== */
 .drag-stage {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   background: #000;
   overflow: hidden;
   z-index: 1;
@@ -2314,10 +2317,9 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
         </div>
       </div>
     </div>
-    <div class="about-page" id="aboutPage3" style="background:#000;">
-      <div class="drag-stage" id="dragStage">
-        <!-- draggable cards injected by JS -->
-      </div>
+    <div class="about-page" id="aboutPage3" style="background:#000; flex:0 0 100vw; width:100vw;">
+      <div class="drag-stage" id="dragStage"></div>
+    </div>
     </div>
     <div class="wake-slider" id="wakeSlider">
       <div class="wake-slider-track" id="wakeTrack"></div>
