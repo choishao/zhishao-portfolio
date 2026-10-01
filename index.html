@@ -1308,6 +1308,44 @@ body.edit-mode .file-upload-zone { display: block; }
   font-size: 15px;
   line-height: 2;
 }
+
+/* ===== Wake Slider (about page bottom) ===== */
+.wake-slider {
+  position: fixed;
+  bottom: 65px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  max-width: 60vw;
+  z-index: 50;
+  display: none;
+}
+body[data-page="about"] .wake-slider { display: flex; }
+.wake-slider-track {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 32px;
+  width: 100%;
+  cursor: pointer;
+}
+.wake-bar {
+  flex: 1;
+  height: 32px;
+  border-radius: 9999px;
+  background: rgba(255,255,255,0.15);
+  transform: scaleY(0.25);
+  transform-origin: center;
+  transition: background-color 120ms ease;
+}
+.wake-bar.on { background: rgba(255,255,255,0.9); }
+.wake-bar.crest {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: #fff;
+  opacity: 0;
+}
 /* History list items (work experience / project) */
 .history-item {
   margin-bottom: 20px;
@@ -2210,6 +2248,9 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
           </div>
         </div>
       </div>
+    </div>
+    <div class="wake-slider" id="wakeSlider">
+      <div class="wake-slider-track" id="wakeTrack"></div>
     </div>
   </section>
 
@@ -3336,6 +3377,62 @@ function showView(path) {
     setTimeout(() => lock = false, 850);
   }, { passive: true });
 })();
+
+// ===== Wake Slider =====
+(function() {
+  const track = document.getElementById('wakeTrack');
+  if (!track) return;
+  const BAR_COUNT = 24;
+  const bars = [];
+  for (let i = 0; i < BAR_COUNT; i++) {
+    const b = document.createElement('span');
+    b.className = 'wake-bar';
+    track.appendChild(b);
+    bars.push(b);
+  }
+  let progress = 0; // 0 = page1, 1 = page2
+  let displayProgress = 0;
+  let wakeVelocity = 0;
+  let lastTime = performance.now();
+  function render(now) {
+    const dt = Math.min(0.05, (now - lastTime) / 1000);
+    lastTime = now;
+    // ease display progress toward target
+    displayProgress += (progress - displayProgress) * Math.min(1, dt * 8);
+    // decay wake
+    wakeVelocity *= Math.pow(0.92, dt * 60);
+    const lit = Math.round(displayProgress * (BAR_COUNT - 1));
+    const amp = Math.min(1, Math.abs(wakeVelocity) / 8);
+    const reach = 4;
+    for (let i = 0; i < BAR_COUNT; i++) {
+      const b = bars[i];
+      b.classList.toggle('on', i <= lit);
+      const d = Math.abs(i - lit);
+      const lift = d < reach ? amp * Math.cos((Math.PI * d) / (2 * reach)) ** 2 : 0;
+      const restH = 0.25;
+      b.style.transform = `scaleY(${restH + lift * (1 - restH)})`;
+    }
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
+  // watch about page changes
+  const hs = document.getElementById('aboutHScroll');
+  const observer = new MutationObserver(() => {
+    const isPage2 = hs.classList.contains('page2');
+    const old = progress;
+    progress = isPage2 ? 1 : 0;
+    wakeVelocity = Math.abs(progress - old) * 15;
+  });
+  observer.observe(hs, { attributes: true, attributeFilter: ['class'] });
+  // set body data-page
+  const navObs = new MutationObserver(() => {
+    const aboutActive = document.getElementById('view-about')?.classList.contains('active');
+    document.body.dataset.page = aboutActive ? 'about' : '';
+  });
+  const aboutView = document.getElementById('view-about');
+  if (aboutView) navObs.observe(aboutView, { attributes: true, attributeFilter: ['class'] });
+})();
+
 window.addEventListener('hashchange', () => {
   const hash = location.hash.replace('#/', '') || 'home';
   showView(hash);
