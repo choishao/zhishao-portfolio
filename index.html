@@ -1352,44 +1352,39 @@ body[data-page="about"] .wake-slider { display: block; }
   position: absolute;
   inset: 0;
   background: #000;
-  perspective: 3000px;
   overflow: hidden;
+  z-index: 1;
 }
-.drag-card {
+.drag-card-el {
   position: absolute;
   width: 280px;
   cursor: grab;
   will-change: transform;
   user-select: none;
+  touch-action: none;
 }
-.drag-card:active { cursor: grabbing; }
-.drag-card-inner {
+.drag-card-el:active { cursor: grabbing; }
+.drag-card-el .drag-card-inner {
   background: #1a1a1a;
-  border: 1px solid rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.12);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
   transform-style: preserve-3d;
-  position: relative;
-  width: 280px;
-  height: 420px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: rgba(255,255,255,0.25);
-  font-size: 13px;
-  letter-spacing: 2px;
 }
-.drag-card-inner img {
+.drag-card-el .drag-card-inner img {
   width: 100%;
   height: 360px;
   object-fit: cover;
-  display: none;
+  display: block;
   pointer-events: none;
 }
-.drag-card-inner img[src]:not([src=""]) {
-  display: block;
+.drag-card-el .drag-card-inner h3 {
+  padding: 16px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.8);
 }
 .drag-card-glare {
   position: absolute;
@@ -1398,6 +1393,7 @@ body[data-page="about"] .wake-slider { display: block; }
   opacity: 0;
   pointer-events: none;
   border-radius: 8px;
+  z-index: 2;
 }
 /* History list items (work experience / project) */
 .history-item {
@@ -3507,34 +3503,39 @@ function showView(path) {
   const stage = document.getElementById('dragStage');
   if (!stage) return;
   const cardData = [
-    { title: '', x: 0.18, y: 0.25, rot: -6 },
-    { title: '', x: 0.42, y: 0.15, rot: 8 },
-    { title: '', x: 0.62, y: 0.3, rot: -4 },
-    { title: '', x: 0.3, y: 0.55, rot: 10 },
+    { title: '', x: 0.18, y: 0.18, rot: -6 },
+    { title: '', x: 0.42, y: 0.1, rot: 8 },
+    { title: '', x: 0.62, y: 0.25, rot: -4 },
+    { title: '', x: 0.28, y: 0.55, rot: 10 },
     { title: '', x: 0.55, y: 0.6, rot: -8 },
   ];
   const cards = [];
   cardData.forEach((d, i) => {
     const el = document.createElement('div');
-    el.className = 'drag-card';
-    el.dataset.idx = i;
-    el.innerHTML = `<div class="drag-card-inner"><span>PHOTO ${i+1}</span><img src="" alt="" data-editable="dragCard${i}Img"><div class="drag-card-glare"></div></div>`;
-    el.style.left = (d.x * 100) + '%';
-    el.style.top = (d.y * 100) + '%';
-    el.style.transform = `rotate(${d.rot}deg)`;
+    el.className = 'drag-card-el';
+    el.innerHTML =
+      '<div class="drag-card-inner">' +
+        '<img src="" alt="" data-editable="dragCard' + i + 'Img">' +
+        '<h3 data-editable="dragCard' + i + 'Title"></h3>' +
+      '</div>' +
+      '<div class="drag-card-glare"></div>';
+    el.style.left = (window.innerWidth * d.x) + 'px';
+    el.style.top = (window.innerHeight * d.y) + 'px';
+    el.style.transform = 'rotate(' + d.rot + 'deg)';
     stage.appendChild(el);
-    cards.push({ el, rot: d.rot, x: 0, y: 0, vx: 0, vy: 0 });
+    cards.push({ el, rot: d.rot, ox: 0, oy: 0, vx: 0, vy: 0 });
   });
-  let dragging = null;
-  let lastPX = 0, lastPY = 0, lastT = 0;
+  let dragging = null, lastPX = 0, lastPY = 0, lastT = 0;
   cards.forEach(c => {
     const el = c.el;
     el.addEventListener('pointerdown', e => {
-      e.stopPropagation();
+      if (e.target.closest('[data-editable]')) return;
+      e.preventDefault();
       dragging = c;
       el.setPointerCapture(e.pointerId);
       lastPX = e.clientX; lastPY = e.clientY; lastT = performance.now();
       c.vx = 0; c.vy = 0;
+      el.style.zIndex = 10;
     });
     el.addEventListener('pointermove', e => {
       if (dragging !== c) return;
@@ -3542,28 +3543,27 @@ function showView(path) {
       const dy = e.clientY - lastPY;
       const now = performance.now();
       const dt = Math.max(1, now - lastT) / 1000;
-      c.x += dx; c.y += dy;
+      c.ox += dx; c.oy += dy;
       c.vx = dx / dt; c.vy = dy / dt;
       lastPX = e.clientX; lastPY = e.clientY; lastT = now;
       apply(c);
     });
-    el.addEventListener('pointerup', e => {
+    const endDrag = e => {
       if (dragging !== c) return;
       dragging = null;
-      el.releasePointerCapture(e.pointerId);
-    });
-    el.addEventListener('pointercancel', () => { dragging = null; });
-    // 3D tilt on hover
+      try { el.releasePointerCapture(e.pointerId); } catch(_) {}
+      el.style.zIndex = 1;
+    };
+    el.addEventListener('pointerup', endDrag);
+    el.addEventListener('pointercancel', endDrag);
     el.addEventListener('mousemove', e => {
       const r = el.getBoundingClientRect();
-      const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-      const dx = e.clientX - cx, dy = e.clientY - cy;
-      const ry = (dx / 300) * 15;
-      const rx = -(dy / 300) * 15;
-      el.style.setProperty('--rx', rx + 'deg');
-      el.style.setProperty('--ry', ry + 'deg');
-      el.querySelector('.drag-card-inner').style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg)`;
-      el.querySelector('.drag-card-glare').style.opacity = Math.min(0.15, Math.abs(dx) / 1500);
+      const dx = e.clientX - (r.left + r.width/2);
+      const dy = e.clientY - (r.top + r.height/2);
+      const ry = (dx / 300) * 12;
+      const rx = -(dy / 300) * 12;
+      el.querySelector('.drag-card-inner').style.transform = 'perspective(1000px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
+      el.querySelector('.drag-card-glare').style.opacity = Math.min(0.12, Math.abs(dx)/2000);
     });
     el.addEventListener('mouseleave', () => {
       el.querySelector('.drag-card-inner').style.transform = '';
@@ -3571,22 +3571,27 @@ function showView(path) {
     });
   });
   function apply(c) {
-    c.el.style.transform = `translate(${c.x}px, ${c.y}px) rotate(${c.rot}deg)`;
+    c.el.style.transform = 'translate(' + c.ox + 'px, ' + c.oy + 'px) rotate(' + c.rot + 'deg)';
   }
-  // momentum animation
   function anim() {
     cards.forEach(c => {
       if (c === dragging) return;
       if (Math.abs(c.vx) > 1 || Math.abs(c.vy) > 1) {
-        c.x += c.vx * 0.016;
-        c.y += c.vy * 0.016;
-        c.vx *= 0.94; c.vy *= 0.94;
+        c.ox += c.vx * 0.016;
+        c.oy += c.vy * 0.016;
+        c.vx *= 0.93; c.vy *= 0.93;
         apply(c);
       }
     });
     requestAnimationFrame(anim);
   }
   requestAnimationFrame(anim);
+  window.addEventListener('resize', () => {
+    cards.forEach((c, i) => {
+      c.el.style.left = (window.innerWidth * cardData[i].x) + 'px';
+      c.el.style.top = (window.innerHeight * cardData[i].y) + 'px';
+    });
+  });
 })();
 
 window.addEventListener('hashchange', () => {
