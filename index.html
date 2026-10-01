@@ -3215,6 +3215,8 @@ function showView(path) {
 (function() {
   let aboutPage = 1;
   let lock = false;
+  let scrollAccum = 0;
+  const THRESHOLD = 15;
   window.addEventListener('wheel', function(e) {
     const aboutView = document.getElementById('view-about');
     if (!aboutView || !aboutView.classList.contains('active')) return;
@@ -3222,21 +3224,51 @@ function showView(path) {
     if (!hs) return;
     if (lock) { e.preventDefault(); return; }
     const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-    if (Math.abs(delta) < 10) return;
-    if (delta > 0 && aboutPage === 1) {
+    scrollAccum += delta;
+    if (Math.abs(scrollAccum) < THRESHOLD) { e.preventDefault(); return; }
+    const dir = scrollAccum > 0 ? 1 : -1;
+    scrollAccum = 0;
+    if (dir > 0 && aboutPage === 1) {
       aboutPage = 2;
       hs.classList.add('page2');
       lock = true;
-      setTimeout(() => lock = false, 900);
+      setTimeout(() => lock = false, 850);
       e.preventDefault();
-    } else if (delta < 0 && aboutPage === 2) {
+    } else if (dir < 0 && aboutPage === 2) {
       aboutPage = 1;
       hs.classList.remove('page2');
       lock = true;
-      setTimeout(() => lock = false, 900);
+      setTimeout(() => lock = false, 850);
+      e.preventDefault();
+    } else {
       e.preventDefault();
     }
   }, { passive: false });
+  // touch swipe support
+  let touchStartX = 0, touchStartY = 0;
+  window.addEventListener('touchstart', function(e) {
+    const aboutView = document.getElementById('view-about');
+    if (!aboutView || !aboutView.classList.contains('active')) return;
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  window.addEventListener('touchend', function(e) {
+    const aboutView = document.getElementById('view-about');
+    if (!aboutView || !aboutView.classList.contains('active')) return;
+    if (lock) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy)) return;
+    const hs = document.getElementById('aboutHScroll');
+    if (!hs) return;
+    if (dx < 0 && aboutPage === 1) {
+      aboutPage = 2; hs.classList.add('page2');
+    } else if (dx > 0 && aboutPage === 2) {
+      aboutPage = 1; hs.classList.remove('page2');
+    } else return;
+    lock = true;
+    setTimeout(() => lock = false, 850);
+  }, { passive: true });
 })();
 window.addEventListener('hashchange', () => {
   const hash = location.hash.replace('#/', '') || 'home';
