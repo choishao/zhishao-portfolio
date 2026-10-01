@@ -1326,17 +1326,17 @@ body[data-page="about"] .wake-slider { display: block; }
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 3px;
+  gap: 4px;
   height: 48px;
   width: 100%;
 }
 .wake-bar {
-  flex: 1 1 0;
-  min-width: 2px;
-  height: 48px;
+  width: 6px;
+  height: 16px;
+  flex-shrink: 0;
   border-radius: 0;
   background: rgba(255,255,255,0.1);
-  transform: scaleY(0.25);
+  transform: scaleY(1);
   transform-origin: center center;
   transition: background 150ms ease;
 }
@@ -3402,14 +3402,14 @@ function showView(path) {
     const amp = smoothstep(Math.min(1, Math.abs(wakeVel) / 6));
     const lit = head * (BAR_COUNT - 1);
     const litIdx = Math.round(lit);
-    const rest = 0.25;
+    const rest = 1;
     const reach = 5;
     for (let i = 0; i < BAR_COUNT; i++) {
       const b = bars[i];
       b.classList.toggle('on', i <= litIdx);
       const d = Math.abs(i - lit);
       const lift = d < reach ? amp * Math.cos((Math.PI * d) / (2 * reach)) ** 2 : 0;
-      b.style.transform = `scaleY(${rest + lift * (1 - rest)})`;
+      b.style.transform = `scaleY(${rest + lift * 2})`;
     }
     requestAnimationFrame(render);
   }
