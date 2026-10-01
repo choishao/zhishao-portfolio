@@ -1351,7 +1351,7 @@ body[data-page="about"] .wake-slider { display: block; }
 
 /* ===== Draggable Cards (about page 3) ===== */
 .drag-stage {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
@@ -1359,6 +1359,10 @@ body[data-page="about"] .wake-slider { display: block; }
   background: #000;
   overflow: hidden;
   z-index: 1;
+  display: none;
+}
+.drag-stage.active {
+  display: block;
 }
 .drag-card-el {
   position: absolute;
@@ -3386,8 +3390,9 @@ function showView(path) {
     setTimeout(() => {
       const hs = document.getElementById('aboutHScroll');
       if (hs) { hs.classList.remove('page2','page3'); }
-      // reset about page index
       if (window._aboutPage) window._aboutPage = 1;
+      var ds = document.getElementById('dragStage');
+      if (ds) ds.classList.remove('active');
     }, 100);
   }
 }
@@ -3414,6 +3419,8 @@ function showView(path) {
       hs.classList.remove('page2','page3');
       if (window._aboutPage === 2) hs.classList.add('page2');
       else if (window._aboutPage === 3) hs.classList.add('page3');
+      var ds = document.getElementById('dragStage');
+      if (ds) ds.classList.toggle('active', window._aboutPage === 3);
       lock = true;
       setTimeout(() => lock = false, 850);
       e.preventDefault();
@@ -3422,6 +3429,8 @@ function showView(path) {
       hs.classList.remove('page2','page3');
       if (window._aboutPage === 2) hs.classList.add('page2');
       else if (window._aboutPage === 3) hs.classList.add('page3');
+      var ds2 = document.getElementById('dragStage');
+      if (ds2) ds2.classList.toggle('active', window._aboutPage === 3);
       lock = true;
       setTimeout(() => lock = false, 850);
       e.preventDefault();
@@ -3454,6 +3463,8 @@ function showView(path) {
     hs.classList.remove('page2','page3');
     if (window._aboutPage === 2) hs.classList.add('page2');
     else if (window._aboutPage === 3) hs.classList.add('page3');
+    var ds3 = document.getElementById('dragStage');
+    if (ds3) ds3.classList.toggle('active', window._aboutPage === 3);
     lock = true;
     setTimeout(() => lock = false, 850);
   }, { passive: true });
