@@ -3536,8 +3536,10 @@ function showView(path) {
         '<h3 data-editable="dragCard' + i + 'Title">Photo ' + (i+1) + '</h3>' +
       '</div>' +
       '<div class="drag-card-glare"></div>';
-    el.style.left = (window.innerWidth * d.x) + 'px';
-    el.style.top = (window.innerHeight * d.y) + 'px';
+    el.style.left = (d.x * 100) + '%';
+    el.style.top = (d.y * 100) + '%';
+    el.style.marginLeft = '-140px';
+    el.style.marginTop = '-210px';
     el.style.transform = 'rotate(' + d.rot + 'deg)';
     stage.appendChild(el);
     cards.push({ el, rot: d.rot, ox: 0, oy: 0, vx: 0, vy: 0 });
@@ -3605,8 +3607,8 @@ function showView(path) {
   requestAnimationFrame(anim);
   window.addEventListener('resize', () => {
     cards.forEach((c, i) => {
-      c.el.style.left = (window.innerWidth * cardData[i].x) + 'px';
-      c.el.style.top = (window.innerHeight * cardData[i].y) + 'px';
+      c.el.style.left = (cardData[i].x * 100) + '%';
+      c.el.style.top = (cardData[i].y * 100) + '%';
     });
   });
 })();
