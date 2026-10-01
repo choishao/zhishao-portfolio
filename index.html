@@ -1364,11 +1364,13 @@ body[data-page="about"] .wake-slider { display: block; }
 }
 .drag-card:active { cursor: grabbing; }
 .drag-card-inner {
-  background: #111;
+  background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.1);
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0,0,0,0.5);
   transform-style: preserve-3d;
+  position: relative;
 }
 .drag-card-inner img {
   width: 100%;
@@ -1376,6 +1378,19 @@ body[data-page="about"] .wake-slider { display: block; }
   object-fit: cover;
   display: block;
   pointer-events: none;
+}
+.drag-card-inner img:not([src]), .drag-card-inner img[src=""] {
+  display: none;
+}
+.drag-card-inner:has(img[src=""])::after {
+  content: 'photo';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 360px;
+  color: rgba(255,255,255,0.2);
+  font-size: 14px;
+  letter-spacing: 2px;
 }
 .drag-card-glare {
   position: absolute;
