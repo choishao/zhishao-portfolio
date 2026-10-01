@@ -2316,10 +2316,10 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
       <div class="about-page" id="aboutPage2" style="background-image:url('https://aka.doubaocdn.com/s/HyIjlpvaaY')">
         <div class="about-page-overlay"></div>
         <div class="about-page-content">
-          <div style="position:absolute;top:50%;left:4%;transform:translateY(-50%);max-width:45%;font-size:18px;line-height:1.9;color:rgba(255,255,255,0.9);text-align:left;">
+          <div style="position:absolute;top:50%;left:4%;transform:translateY(-50%);max-width:45%;font-size:18px;line-height:1.9;color:rgba(255,255,255,0.9);text-align:left;" data-editable="aboutPage2Left">
             我始终在设计各个领域寻找合适项目型岗位，热爱设计并与时俱进。<br>如果您认为我适合你们，欢迎联系我。
           </div>
-          <div style="position:absolute;top:50%;right:4%;transform:translateY(-50%);width:55%;display:grid;grid-template-columns:auto 1fr auto;gap:10px 40px;font-size:18px;line-height:1.9;align-items:start;">
+          <div style="position:absolute;top:50%;right:4%;transform:translateY(-50%);width:55%;display:grid;grid-template-columns:auto 1fr auto;gap:10px 40px;font-size:18px;line-height:1.9;align-items:start;" data-editable="aboutPage2Table">
             <span style="color:rgba(255,255,255,0.5);">岗位</span>
             <span style="color:rgba(255,255,255,0.5);">公司</span>
             <span style="color:rgba(255,255,255,0.5);">年份</span>
@@ -4005,17 +4005,26 @@ function updateEditStatus() {
 }
 
 function setupImageEditing() {
+  // Global click delegation for all editable image wraps
+  if (!window._imgClickBound) {
+    window._imgClickBound = true;
+    document.addEventListener('click', function(e) {
+      if (!document.body.classList.contains('edit-mode')) return;
+      var wrap = e.target.closest('.editable-image-wrap');
+      if (!wrap) return;
+      e.preventDefault();
+      e.stopPropagation();
+      var img = wrap.querySelector('img[data-image-key]');
+      var key = wrap.dataset.imageWrap || (img && img.dataset.imageKey);
+      if (key) uploadImageByKey(key);
+    });
+  }
   // Static images with data-image-key
   document.querySelectorAll('img[data-image-key]').forEach(img => {
     const wrap = img.closest('.editable-image-wrap') || img.parentElement;
     if (wrap) {
       wrap.classList.add('editable-image-wrap');
-      wrap.onclick = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        uploadImageByKey(img.dataset.imageKey);
-      };
-      // 拖拽上传
+      wrap.dataset.imageWrap = img.dataset.imageKey;
       wrap.ondragover = (e) => {
         e.preventDefault();
         e.stopPropagation();
