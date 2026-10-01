@@ -64,9 +64,8 @@ button {
   color: inherit;
 }
 
-/* ===== CRT Splash Screen ===== */
+/* ===== Shiny Text Splash Screen ===== */
 #splash {
-  display: none !important;
   position: fixed;
   inset: 0;
   z-index: 9999;
@@ -76,15 +75,37 @@ button {
   justify-content: center;
   transition: opacity 0.8s ease, visibility 0.8s ease;
   overflow: hidden;
-  filter: url(#crt-fisheye);
-  transform: scale(1.06);
-  transform-origin: center;
 }
 
 #splash.hidden {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+}
+
+.shiny-splash-text {
+  font-size: 50px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  background-image: linear-gradient(
+    120deg,
+    #b5b5b5 0%,
+    #b5b5b5 35%,
+    #ffffff 50%,
+    #b5b5b5 65%,
+    #b5b5b5 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: shinySweep 2.5s linear infinite;
+}
+
+@keyframes shinySweep {
+  0% { background-position: 150% center; }
+  100% { background-position: -50% center; }
 }
 
 .crt-screen {
@@ -2200,27 +2221,9 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
   </defs>
 </svg>
 
-<!-- ===== CRT Splash Screen ===== -->
+<!-- ===== Shiny Text Splash Screen ===== -->
 <div id="splash">
-  <div class="crt-screen crt-flicker" id="crtScreen">
-    <div class="crt-line" data-text="ZHISHAOCUI TERMINAL v1.0  (c) 2026 Cui Zhishao"></div>
-    <div class="crt-line" data-text="CONSTRUCT Visual System  Rev.1  S/N ZS-001"></div>
-    <div class="crt-line" data-text=""></div>
-    <div class="crt-line" data-text="Initializing design framework ............ <span class='amber'>OK</span>"></div>
-    <div class="crt-line" data-text="Loading Impact font module ............... <span class='amber'>OK</span>"></div>
-    <div class="crt-line" data-text="Mounting creative workspace .............. <span class='amber'>OK</span>"></div>
-    <div class="crt-line" data-text="Scanning portfolio assets ................ 6 found"></div>
-    <div class="crt-line" data-text="Calibrating black & white palette ........ <span class='amber'>OK</span>"></div>
-    <div class="crt-line" data-text="Rendering high-fidelity visuals .......... <span class='amber'>OK</span>"></div>
-    <div class="crt-line" data-text="Connecting client database ............... <span class='amber'>LINK</span>"></div>
-    <div class="crt-line" data-text=""></div>
-    <div class="crt-line" data-text="SYSTEM READY."></div>
-    <div class="crt-line" data-text="subject: <span class='dim'>Cui Zhishao</span>  status: <span class='amber'>ONLINE</span>"></div>
-    <div class="crt-line" data-text=""></div>
-    <div class="splash-enter" id="splashEnter">
-      <button onclick="enterSite()">PRESS ENTER TO CONTINUE<span class="crt-cursor"></span></button>
-    </div>
-  </div>
+  <span class="shiny-splash-text">CIAO DESIGN</span>
 </div>
 
 <!-- ===== Top Navigation ===== -->
@@ -3705,42 +3708,18 @@ function toggleMenu() {
   btn.classList.toggle('active');
 }
 
-// ===== CRT Splash =====
-function startCRT() {
-  const lines = document.querySelectorAll('.crt-line');
-  let delay = 0;
-  lines.forEach((line) => {
-    const text = line.dataset.text;
-    if (text === '') { delay += 200; return; }
-    setTimeout(() => {
-      line.classList.add('visible');
-      typeLine(line, text);
-    }, delay);
-    delay += text.length * 22 + 350;
-  });
+// ===== Shiny Splash =====
+function startSplash() {
+  // 3秒后自动淡出进入网站
   setTimeout(() => {
-    document.getElementById('splashEnter').classList.add('visible');
-  }, delay + 200);
+    const splash = document.getElementById('splash');
+    splash.classList.add('hidden');
+    setTimeout(() => { splash.style.display = 'none'; }, 800);
+  }, 3000);
 }
-function typeLine(element, html) {
-  if (html.includes('<')) { element.innerHTML = html; return; }
-  element.textContent = '';
-  let i = 0;
-  const interval = setInterval(() => {
-    if (i < html.length) { element.textContent += html[i]; i++; }
-    else { clearInterval(interval); }
-  }, 18);
-}
-function enterSite() {
-  const splash = document.getElementById('splash');
-  splash.classList.add('hidden');
-  setTimeout(() => { splash.style.display = 'none'; }, 800);
-}
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' && !document.getElementById('splash').classList.contains('hidden')) {
-    enterSite();
-  }
-});
+
+// 页面加载后自动启动 splash
+window.addEventListener('load', startSplash);
 
 // ===== Admin Form =====
 // ===== WYSIWYG Edit Mode =====
