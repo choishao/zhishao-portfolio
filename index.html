@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/png" href="https://aka.doubaocdn.com/s/YGS0cUprmU">
-<title>ZHISHAOCUI 鈥?Designer Portfolio</title>
+<title>ZHISHAOCUI — Designer Portfolio</title>
 <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Share+Tech+Mono&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap">
 <style>
@@ -223,7 +223,7 @@ button {
   line-height: 1;
 }
 
-/* MAISON 寮忛《閮ㄦí鎺掑鑸?*/
+/* MAISON 式顶部横排导航 */
 .top-nav-links {
   display: flex;
   align-items: center;
@@ -570,7 +570,7 @@ button {
   gap: 16px;
 }
 
-/* ===== konolee 椋庢牸浣滃搧鍗＄墖 ===== */
+/* ===== konolee 风格作品卡片 ===== */
 .kono-card {
   position: relative;
   padding: 0 !important;
@@ -640,7 +640,7 @@ button {
   flex-shrink: 0;
 }
 
-/* ===== rare-ui folder-component (white theme) 鍘熺敓鐗?===== */
+/* ===== rare-ui folder-component (white theme) 原生版 ===== */
 .fw-item {
   width: 321px;
   padding: 0 0 44px !important;
@@ -761,7 +761,7 @@ button {
   padding-top: 16px;
   text-align: left;
 }
-/* ===== Gallery 濯掍綋澧欙紙绛夊缃戞牸锛?===== */
+/* ===== Gallery 媒体墙（等宽网格） ===== */
 .gallery-page {
   max-width: 1280px;
   margin: 0 auto;
@@ -1061,7 +1061,7 @@ body.edit-mode .detail-gallery-item.drag-over { outline: 2px solid #1a1a1a; outl
 body.edit-mode .add-gallery-btn { display: block; }
 .add-gallery-btn:hover { border-color: rgba(0,0,0,0.4); color: #1a1a1a; background: rgba(0,0,0,0.03); }
 
-/* ===== Native FileUpload (ReactBits 鎷栨嫿涓婁紶鍖? ===== */
+/* ===== Native FileUpload (ReactBits 拖拽上传区) ===== */
 .file-upload-zone {
   position: relative;
   margin-top: 30px;
@@ -1714,7 +1714,7 @@ body.edit-mode [data-editable]:focus {
   display: inline-block;
 }
 body.edit-mode .editable-image-wrap::after {
-  content: '鐐瑰嚮鏇挎崲鍥剧墖';
+  content: '点击替换图片';
   position: absolute;
   inset: 0;
   background: rgba(0,0,0,0.55);
@@ -2006,11 +2006,11 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
 
 <!-- ===== Fullscreen Menu ===== -->
 <div id="menu-overlay">
-  <a href="#/work" onclick="navigate('work'); toggleMenu();" data-editable="navWork">浣滃搧椤圭洰</a>
-  <a href="#/about" onclick="navigate('about'); toggleMenu();" data-editable="navAbout">鍏充簬鎴?/a>
+  <a href="#/work" onclick="navigate('work'); toggleMenu();" data-editable="navWork">作品项目</a>
+  <a href="#/about" onclick="navigate('about'); toggleMenu();" data-editable="navAbout">关于我</a>
 
-  <a href="#/gallery" onclick="navigate('gallery'); toggleMenu();" data-editable="navGallery">濯掍綋澧?/a>
-  <a href="#" onclick="handleResumeClick(); return false;">涓嬭浇绠€鍘?/a>
+  <a href="#/gallery" onclick="navigate('gallery'); toggleMenu();" data-editable="navGallery">媒体墙</a>
+  <a href="#" onclick="handleResumeClick(); return false;">下载简历</a>
   <div class="menu-footer">
     <span data-editable="menuFooterLeft">ZHISHAOCUI DESIGN STUDIO</span>
     <span data-editable="menuFooterRight">&copy; 2026 ALL RIGHTS RESERVED</span>
@@ -2047,7 +2047,7 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
   <section class="view" id="view-work">
     <div class="work-featured">
       <div class="work-grid" id="workGrid"></div>
-    <button class="add-work-btn" onclick="addFeaturedWork()">+ 娣诲姞浣滃搧</button>
+    <button class="add-work-btn" onclick="addFeaturedWork()">+ 添加作品</button>
     </div>
   </section>
 
@@ -2056,27 +2056,27 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
     <div class="category-detail-header">
       <div class="category-detail-back" onclick="navigate('work')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-        <span data-editable="categoryBack">杩斿洖鍒嗙被</span>
+        <span data-editable="categoryBack">返回分类</span>
       </div>
-      <div class="category-detail-title" id="categoryTitle">骞抽潰璁捐</div>
-      <div class="category-detail-count" id="categoryCount">0 涓綔鍝?/div>
+      <div class="category-detail-title" id="categoryTitle">平面设计</div>
+      <div class="category-detail-count" id="categoryCount">0 个作品</div>
     </div>
     <div id="categoryProjects"></div>
-    <button class="add-project-btn" id="addProjectBtn" style="display:none;" onclick="addProject()">+ 娣诲姞浣滃搧</button>
+    <button class="add-project-btn" id="addProjectBtn" style="display:none;" onclick="addProject()">+ 添加作品</button>
   </section>
   <!-- ===== View: Work Detail (ablackcover style) ===== -->
   <section class="view" id="view-work-detail">
     <div class="detail-back-bar">
       <div class="detail-back" onclick="navigate('work')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-        <span data-editable="detailBackText">杩斿洖浣滃搧</span>
+        <span data-editable="detailBackText">返回作品</span>
       </div>
       <div class="detail-cat-label" id="detailCatLabel">GRAPHIC DESIGN</div>
     </div>
     <div class="detail-gallery" id="detailGallery"></div>
     <div class="file-upload-zone" data-target="detail" onclick="addDetailImage()">
-      <p class="fu-title">涓婁紶鍥剧墖</p>
-      <p class="fu-sub">鎷栨嫿鍥剧墖鍒版澶勶紝鎴栫偣鍑婚€夋嫨锛堟敮鎸佸寮狅級</p>
+      <p class="fu-title">上传图片</p>
+      <p class="fu-sub">拖拽图片到此处，或点击选择（支持多张）</p>
       <div class="fu-icon">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
       </div>
@@ -2085,7 +2085,7 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
 
 
   <!-- ===== View: About ===== -->
-  <!-- ===== Legacy About Page (hidden backup, 鍙殢鏃舵仮澶? ===== -->
+  <!-- ===== Legacy About Page (hidden backup, 可随时恢复) ===== -->
   <section class="view" id="view-about">
     <div class="about-hscroll" id="aboutHScroll">
       <!-- Page 1: Personal intro -->
@@ -2094,18 +2094,18 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
         <div class="about-page-content">
           <div class="about-dual-col">
             <div class="about-col-left">
-              <div class="about-col-label" data-editable="aboutRoleLabel">鑱屼綅</div>
-              <div class="about-col-item" data-editable="aboutRole1">瑙嗚璁捐甯?/div>
-              <div class="about-col-item" data-editable="aboutRole2">灏忕孩涔﹀崥涓?/div>
+              <div class="about-col-label" data-editable="aboutRoleLabel">职位</div>
+              <div class="about-col-item" data-editable="aboutRole1">视觉设计师</div>
+              <div class="about-col-item" data-editable="aboutRole2">小红书博主</div>
             </div>
             <div class="about-col-right">
-              <div class="about-col-label" data-editable="aboutNameLabel">鍚嶇О</div>
+              <div class="about-col-label" data-editable="aboutNameLabel">名称</div>
               <div class="about-col-item about-col-name" data-editable="aboutName">ZHISHAOCUI</div>
             </div>
           </div>
           <div class="about-bottom-text">
-            <div class="about-col-label" data-editable="aboutCareerLabel">鑱屼笟鐢熸动</div>
-            <p data-editable="aboutCareerText">浣犲ソ锛屾垜鏄織闊禖iao銆傝璁″笀銆傚皬绾功鍗氫富銆傛嫢鏈変竴鍙粦鑹茬編鍗＄姮鍜屼袱鍙尗銆傚枩娆㈣繍鍔ㄥ拰鏃跺皻銆?/p>
+            <div class="about-col-label" data-editable="aboutCareerLabel">职业生涯</div>
+            <p data-editable="aboutCareerText">你好，我是志韶Ciao。设计师。小红书博主。拥有一只黑色美卡犬和两只猫。喜欢运动和时尚。</p>
           </div>
         </div>
       </div>
@@ -2115,11 +2115,11 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
         <div class="about-page-content">
           <div class="about-dual-col">
             <div class="about-col-left">
-              <div class="about-col-label" data-editable="aboutWorkLabel">宸ヤ綔缁忓巻</div>
+              <div class="about-col-label" data-editable="aboutWorkLabel">工作经历</div>
               <div id="workExperienceList"></div>
             </div>
             <div class="about-col-right">
-              <div class="about-col-label" data-editable="aboutProjLabel">椤圭洰缁忓巻</div>
+              <div class="about-col-label" data-editable="aboutProjLabel">项目经历</div>
               <div id="projectList"></div>
             </div>
           </div>
@@ -2133,7 +2133,7 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
   <section class="view" id="view-about-cargo">
     <div class="cargo-card">
       <div class="cargo-topbar">
-        <div class="cargo-topbar-left" data-editable="cargoStudioName">Test庐 Studio</div>
+        <div class="cargo-topbar-left" data-editable="cargoStudioName">Test® Studio</div>
         <div class="cargo-topbar-right">
           <a href="#" data-editable="cargoEmailLink">Email</a>
           <a href="#" data-editable="cargoIgLink">Instagram</a>
@@ -2170,14 +2170,14 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
 
   <!-- ===== Moodboard View ===== -->
 
-  <!-- ===== View: Gallery 濯掍綋澧?===== -->
+  <!-- ===== View: Gallery 媒体墙 ===== -->
   <section class="view" id="view-gallery">
     <div class="gallery-page">
-      <div class="gallery-title" data-editable="galleryTitle">濯掍綋澧?/div>
+      <div class="gallery-title" data-editable="galleryTitle">媒体墙</div>
       <div class="medias" id="galleryGrid"></div>
       <div class="file-upload-zone" id="galleryAddBtn" data-target="gallery" onclick="addGalleryMedia()" style="display:none;">
-        <p class="fu-title">涓婁紶鍥剧墖</p>
-        <p class="fu-sub">鎷栨嫿鍥剧墖鍒版澶勶紝鎴栫偣鍑婚€夋嫨</p>
+        <p class="fu-title">上传图片</p>
+        <p class="fu-sub">拖拽图片到此处，或点击选择</p>
         <div class="fu-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         </div>
@@ -2185,7 +2185,7 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
     </div>
   </section>
   <section class="view" id="view-moodboard">
-    <button class="moodboard-back" onclick="navigate('home')">&larr; 杩斿洖棣栭〉</button>
+    <button class="moodboard-back" onclick="navigate('home')">&larr; 返回首页</button>
     <iframe class="moodboard-frame" src="moodboard-preview.html" title="Moodboard"></iframe>
   </section>
 
@@ -2196,90 +2196,91 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
 <section class="view" id="view-admin">
   <div class="admin-topbar">
     <div class="admin-topbar-left">
-      <span>椤甸潰绠＄悊</span>
-      <span class="badge">鏂?/span>
+      <span>页面管理</span>
+      <span class="badge">新</span>
     </div>
     <div class="admin-topbar-right">
-      <button onclick="exitAdminToSite()" title="杩斿洖缃戠珯">&#8962;</button>
-      <button class="admin-exit-btn" onclick="exitAdminToSite()">閫€鍑哄悗鍙?/button>
+      <button onclick="exitAdminToSite()" title="返回网站">&#8962;</button>
+      <button class="admin-exit-btn" onclick="exitAdminToSite()">退出后台</button>
     </div>
   </div>
   <div class="admin-sidebar">
     <div class="admin-nav">
-      <div class="admin-nav-item active" onclick="filterAdminPages('all', this)">&#128196; 鍏ㄩ儴</div>
-      <div class="admin-nav-item" onclick="filterAdminPages('main', this)">&#128193; 涓昏椤甸潰</div>
-      <div class="admin-nav-item" onclick="filterAdminPages('work', this)">&#128193; 浣滃搧椤甸潰</div>
+      <div class="admin-nav-item active" onclick="filterAdminPages('all', this)">&#128196; 全部</div>
+      <div class="admin-nav-item" onclick="filterAdminPages('main', this)">&#128193; 主要页面</div>
+      <div class="admin-nav-item" onclick="filterAdminPages('work', this)">&#128193; 作品页面</div>
     </div>
     <div class="admin-tools">
-      <div class="admin-tool-btn" onclick="openFontManager()">&#128260; 瀛椾綋绠＄悊</div>
+      <div class="admin-tool-btn" onclick="openFontManager()">&#128260; 字体管理</div>
     </div>
     <div class="admin-search">
-      <input type="text" placeholder="鎼滅储椤甸潰..." oninput="searchAdminPages(this.value)">
+      <input type="text" placeholder="搜索页面..." oninput="searchAdminPages(this.value)">
     </div>
   </div>
   <div class="admin-main">
-    <div id="thumbGenStatus" style="display:none"><span class="spin"></span> 姝ｅ湪鐢熸垚椤甸潰缂╃暐鍥锯€?/div>
+    <div id="thumbGenStatus" style="display:none"><span class="spin"></span> 正在生成页面缩略图…</div>
     <div class="admin-grid" id="adminGrid"></div>
   </div>
 </section>
 <!-- Context Menu -->
 <div class="admin-context-menu" id="adminContextMenu">
-  <div class="admin-context-menu-item" onclick="adminAction('edit')">&#9998; 缂栬緫</div>
-  <div class="admin-context-menu-item" onclick="adminAction('duplicate')">&#128203; 閲嶅</div>
-  <div class="admin-context-menu-item" onclick="adminAction('copy')">&#128279; 澶嶅埗閾炬帴</div>
+  <div class="admin-context-menu-item" onclick="adminAction('edit')">&#9998; 编辑</div>
+  <div class="admin-context-menu-item" onclick="adminAction('duplicate')">&#128203; 重复</div>
+  <div class="admin-context-menu-item" onclick="adminAction('copy')">&#128279; 复制链接</div>
   <div class="admin-context-menu-divider"></div>
-  <div class="admin-context-menu-item danger" onclick="adminAction('delete')">&#128465; 鍒犻櫎</div>
+  <div class="admin-context-menu-item danger" onclick="adminAction('delete')">&#128465; 删除</div>
 </div>
 
 <div id="editToolbar">
   <div class="edit-toolbar-left">
     <span class="edit-toolbar-title">EDIT MODE</span>
-    <span class="edit-toolbar-status" id="editStatus">鐐瑰嚮鏂囧瓧鐩存帴缂栬緫锛岀偣鍑诲浘鐗囨浛鎹?/span>
+    <span class="edit-toolbar-status" id="editStatus">点击文字直接编辑，点击图片替换</span>
   </div>
   <div class="edit-toolbar-right">
-    <button class="edit-btn edit-btn-reset" onclick="resetAllContent()">鎭㈠榛樿</button>
-    <button class="edit-btn edit-btn-exit" onclick="exitEditMode()">閫€鍑虹紪杈?/button>
-    <button class="edit-btn edit-btn-save" onclick="saveAllContent()">淇濆瓨</button>
+    <button class="edit-btn edit-btn-reset" onclick="resetAllContent()">恢复默认</button>
+    <button class="edit-btn edit-btn-exit" onclick="exitEditMode()">退出编辑</button>
+    <button class="edit-btn edit-btn-save" onclick="saveAllContent()">保存</button>
   </div>
 </div>
-<div id="editSaveToast">宸蹭繚瀛?/div>
+<div id="editSaveToast">已保存</div>
 <!-- ===== Font Manager Modal ===== -->
 <div id="fontManagerModal">
   <div class="font-manager">
     <div class="font-manager-header">
-      <span class="font-manager-title">瀛椾綋绠＄悊 / Font Manager</span>
+      <span class="font-manager-title">字体管理 / Font Manager</span>
       <button class="font-manager-close" onclick="closeFontManager()">&times;</button>
     </div>
     <div class="font-manager-body">
       <div class="font-section">
-        <div class="font-section-label">鑻辨枃瀛椾綋 / English Font (鏍囬灞曠ず鐢?</div>
+        <div class="font-section-label">英文字体 / English Font (标题展示用)</div>
         <div class="font-current">
-          <span class="font-current-name" id="currentEnFontName">榛樿: Impact</span>
+          <span class="font-current-name" id="currentEnFontName">默认: Impact</span>
           <span class="font-current-preview" id="currentEnFontPreview" style="font-family:var(--font-display);">Aa</span>
-          <button class="font-reset-btn" onclick="resetFont('en')">鎭㈠榛樿</button>
+          <button class="font-reset-btn" onclick="resetFont('en')">恢复默认</button>
         </div>
         <div class="font-upload-area" id="enFontDropzone" onclick="document.getElementById('enFontInput').click()">
-          <div class="font-upload-text">鐐瑰嚮鎴栨嫋鎷戒笂浼犺嫳鏂囧瓧浣?/div>
-          <div class="font-upload-hint">鏀寔 .ttf / .otf / .woff / .woff2 鏍煎紡</div>
+          <div class="font-upload-text">点击或拖拽上传英文字体</div>
+          <div class="font-upload-hint">支持 .ttf / .otf / .woff / .woff2 格式</div>
         </div>
         <input type="file" id="enFontInput" accept=".ttf,.otf,.woff,.woff2,font/ttf,font/otf,font/woff,font/woff2" style="display:none" onchange="handleFontUpload(event, 'en')">
       </div>
       <div class="font-section">
-        <div class="font-section-label">涓枃瀛椾綋 / Chinese Font (姝ｆ枃鐢?</div>
+        <div class="font-section-label">中文字体 / Chinese Font (正文用)</div>
         <div class="font-current">
-          <span class="font-current-name" id="currentZhFontName">榛樿: 鑻规柟 PingFang SC</span>
-          <span class="font-current-preview" id="currentZhFontPreview" style="font-family:var(--font-body);">鏂囧瓧</span>
-          <button class="font-reset-btn" onclick="resetFont('zh')">鎭㈠榛樿</button>
+          <span class="font-current-name" id="currentZhFontName">默认: 苹方 PingFang SC</span>
+          <span class="font-current-preview" id="currentZhFontPreview" style="font-family:var(--font-body);">文字</span>
+          <button class="font-reset-btn" onclick="resetFont('zh')">恢复默认</button>
         </div>
         <div class="font-upload-area" id="zhFontDropzone" onclick="document.getElementById('zhFontInput').click()">
-          <div class="font-upload-text">鐐瑰嚮鎴栨嫋鎷戒笂浼犱腑鏂囧瓧浣?/div>
-          <div class="font-upload-hint">鏀寔 .ttf / .otf / .woff / .woff2 鏍煎紡</div>
+          <div class="font-upload-text">点击或拖拽上传中文字体</div>
+          <div class="font-upload-hint">支持 .ttf / .otf / .woff / .woff2 格式</div>
         </div>
         <input type="file" id="zhFontInput" accept=".ttf,.otf,.woff,.woff2,font/ttf,font/otf,font/woff,font/woff2" style="display:none" onchange="handleFontUpload(event, 'zh')">
       </div>
       <div class="font-apply-all-notice">
-        &#10003; 瀛椾綋涓婁紶鍚庡皢鑷姩搴旂敤鍒扮綉绔欏叏閮ㄩ〉闈紙棣栭〉/浣滃搧/鍏充簬鎴?瀹㈡埛鍚嶅崟/鍚庡彴锛?      </div>
-      <button class="font-confirm-btn" onclick="closeFontManager()">纭畾</button>
+        &#10003; 字体上传后将自动应用到网站全部页面（首页/作品/关于我/客户名单/后台）
+      </div>
+      <button class="font-confirm-btn" onclick="closeFontManager()">确定</button>
     </div>
   </div>
 </div>
@@ -2294,29 +2295,30 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
 const CONTENT_KEY = 'zhishao_site_content';
 
 const DEFAULT_CONTENT = {
-  // 鍏ㄥ眬瀵艰埅
+  // 全局导航
   logoText: 'ZHISHAOCUI',
-  navWork: '浣滃搧椤圭洰',
-  navAbout: '鍏充簬鎴?,
-  navGallery: '濯掍綋澧?,
+  navWork: '作品项目',
+  navAbout: '关于我',
+  navGallery: '媒体墙',
   heroSubtitle: 'VISUAL DESIGNER / CREATIVE PORTFOLIO',
   menuFooterLeft: 'ZHISHAOCUI DESIGN STUDIO',
   menuFooterRight: '\u00a9 2026 ALL RIGHTS RESERVED',
-  // 棣栭〉
+  // 首页
   heroTitle: 'DESIGN PORTFOLIO',
   heroCopyright1: '\u00a9 2026 ZHISHAOCUI',
   heroCopyright2: 'ALL RIGHTS RESERVED',
-  // 浣滃搧椤?  workLogo: 'visuelle.',
-  workSearch: '鎼滅储',
-  workFeaturedTitle: 'Selected Works / 绮鹃€変綔鍝?,
-  categoryBack: '杩斿洖鍒嗙被',
-  detailBackText: '杩斿洖浣滃搧',
-  detailSideTitle: 'Cargo庐 Basic Grid',
+  // 作品页
+  workLogo: 'visuelle.',
+  workSearch: '搜索',
+  workFeaturedTitle: 'Selected Works / 精选作品',
+  categoryBack: '返回分类',
+  detailBackText: '返回作品',
+  detailSideTitle: 'Cargo® Basic Grid',
   detailSideDesc: 'Lorem Ipsum dolor sit amet',
   detailInfoLabel: 'Information',
   detailInfoEmail: 'Email',
   detailInfoInstagram: 'Instagram',
-  detailSideCopyright: 'All Rights Reserved 漏 2026',
+  detailSideCopyright: 'All Rights Reserved © 2026',
   detailProj0: 'Project Name One',
   detailProj1: 'Project Name Two',
   detailProj2: 'Project Name Three',
@@ -2329,45 +2331,46 @@ const DEFAULT_CONTENT = {
   detailProj9: 'Project Name Ten',
   detailProj10: 'Project Name Eleven',
   detailProj11: 'Project Name Twelve',
-  categoryCountSuffix: ' 涓綔鍝?,
+  categoryCountSuffix: ' 个作品',
   categories: {
-    graphic: '骞抽潰璁捐',
-    brand: '鍝佺墝',
-    ecommerce: '鐢靛晢',
+    graphic: '平面设计',
+    brand: '品牌',
+    ecommerce: '电商',
     aigc: 'AIGC',
-    packaging: '鍖呰'
+    packaging: '包装'
   },
   workItems: [
-    { title: '鍑犱綍瀹為獙', author: 'ZHISHAOCUI', cat: 'graphic', year: '2025', client: '涓汉椤圭洰', role: 'Designer', desc: '浠ュ嚑浣曞舰鎬佷负鏍稿績鐨勮瑙夊疄楠岀郴鍒楋紝鎺㈢储榛戠櫧鐏颁箣闂寸殑寮犲姏涓庡钩琛°€?, fullDescription: '鏈」鐩互鍑犱綍褰㈡€佷负鏍稿績锛岄€氳繃瀵瑰渾褰€佹柟褰€佷笁瑙掑舰绛夊熀纭€鍑犱綍鍏冪礌鐨勮В鏋勪笌閲嶇粍锛屾帰绱㈤粦鐧界伆涓夎壊涔嬮棿鐨勮瑙夊紶鍔涗笌骞宠　鍏崇郴銆傜郴鍒椾綔鍝佹兜鐩栨捣鎶ャ€佽瑙夌郴缁熴€佺┖闂磋缃瓑澶氱褰㈠紡锛屾棬鍦ㄧ敤鏈€绠€娲佺殑瑙嗚璇█浼犺揪鏈€涓板瘜鐨勬儏鎰熻〃杈俱€?, img: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', gallery: ['data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E'] },
-    { title: '閲戝睘璐ㄦ劅', author: 'ZHISHAOCUI', cat: 'graphic', year: '2025', client: '鍝佺墝瑙嗚', role: 'Designer', desc: '閲戝睘鏉愯川涓庡厜褰辩殑鏋佽嚧琛ㄧ幇锛岀敤浜庨珮绔搧鐗岀殑瑙嗚绯荤粺銆?, fullDescription: '閫氳繃瀵归噾灞炴潗璐ㄧ殑缁嗚吇鍒荤敾涓庡厜褰辨晥鏋滅殑鏋佽嚧杩芥眰锛屼负楂樼鍝佺墝鎵撻€犲叿鏈夋湭鏉ユ劅鐨勮瑙夎瘑鍒郴缁熴€傞」鐩秹鍙婂搧鐗屼富瑙嗚銆佸寘瑁呰璁°€佺┖闂村瑙嗙瓑澶氫釜缁村害锛岀粺涓€鐨勯噾灞炶川鎰熻瑷€璐┛濮嬬粓銆?, img: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', gallery: ['data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E'] },
-    { title: '娴佷綋闆曞', author: 'ZHISHAOCUI', cat: 'brand', year: '2024', client: '鑹烘湳灞曡', role: 'Art Director', desc: '娴佷綋褰㈡€佺殑涓夌淮瑙嗚琛ㄨ揪锛屼负褰撲唬鑹烘湳灞曟墦閫犵殑涓昏瑙夌郴缁熴€?, fullDescription: '涓哄綋浠ｈ壓鏈睍瑙堟墦閫犵殑涓昏瑙夌郴缁燂紝浠ユ祦浣撳舰鎬佷负鏍稿績瑙嗚鍏冪礌锛岄€氳繃涓夌淮娓叉煋鎶€鏈憟鐜板嚭娴佸姩銆佸彉骞荤殑瑙嗚鏁堟灉銆傞」鐩兜鐩栧睍瑙堟捣鎶ャ€佸瑙嗙郴缁熴€佺敾鍐岃璁°€佹暟瀛楀獟浣撶瓑瀹屾暣瑙嗚浣撶郴銆?, img: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', gallery: ['data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E'] },
-    { title: '鏆楀厜娓愬彉', author: 'ZHISHAOCUI', cat: 'ecommerce', year: '2024', client: '鐢靛晢澶т績', role: 'Designer', desc: '鏆楄壊璋冩笎鍙樿儗鏅郴鍒楋紝閫傜敤浜庨珮绔數鍟嗕骇鍝佺殑灞曠ず鍦烘櫙銆?, fullDescription: '涓洪珮绔數鍟嗗钩鍙板ぇ淇冩椿鍔ㄨ璁＄殑鏆楄壊璋冩笎鍙樿儗鏅郴鍒楋紝閫氳繃缁嗚吇鐨勫厜褰辫繃娓″拰璐ㄦ劅琛ㄧ幇锛屼负浜у搧鎻愪緵楂樼骇鎰熺殑灞曠ず鑸炲彴銆傜郴鍒楀寘鍚绉嶆笎鍙樻柟妗堬紝閫傞厤涓嶅悓鍝佺被鐨勪骇鍝佸睍绀洪渶姹傘€?, img: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', gallery: ['data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E'] },
-    { title: '瀛椾綋瑙ｆ瀯', author: 'ZHISHAOCUI', cat: 'aigc', year: '2025', client: 'AI瀹為獙', role: 'Creative Director', desc: '鍩轰簬AI鐢熸垚鐨勫瓧浣撹В鏋勪笌閲嶇粍瀹為獙锛屾帰绱㈡枃瀛楃殑杈圭晫鍙兘鎬с€?, fullDescription: '鍩轰簬AI鐢熸垚鎶€鏈殑瀛椾綋瀹為獙椤圭洰锛岄€氳繃瀵逛紶缁熷瓧浣撶殑瑙ｆ瀯銆佸彉褰笌閲嶇粍锛屾帰绱㈡枃瀛椾綔涓鸿瑙夊厓绱犵殑杈圭晫鍙兘鎬с€傞」鐩骇鍑轰竴绯诲垪瀹為獙鎬у瓧浣撲綔鍝侊紝鎸戞垬浼犵粺闃呰涔犳儻锛岄噸鏂板畾涔夋枃瀛楃殑瑙嗚琛ㄨ揪銆?, img: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', gallery: ['data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E'] },
-    { title: '寤虹瓚搴忓垪', author: 'ZHISHAOCUI', cat: 'packaging', year: '2023', client: '浜у搧鍖呰', role: 'Designer', desc: '浠庡缓绛戞憚褰变腑鎻愬彇鐨勫簭鍒楁劅锛岀敤浜庝骇鍝佸寘瑁呯殑瑙嗚璇█銆?, fullDescription: '浠庡缓绛戞憚褰变腑鎻愬彇鐨勫簭鍒楁劅涓庡嚑浣曠З搴忥紝杞寲涓轰骇鍝佸寘瑁呯殑瑙嗚璇█銆傞」鐩负涓€绯诲垪楂樼浜у搧璁捐鍖呰锛岄€氳繃寤虹瓚寮忕殑鏋勫浘涓庢帓鐗堬紝璧嬩簣浜у搧绋抽噸銆侀珮绾х殑瑙嗚姘旇川銆?, img: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', gallery: ['data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E'] }
+    { title: '几何实验', author: 'ZHISHAOCUI', cat: 'graphic', year: '2025', client: '个人项目', role: 'Designer', desc: '以几何形态为核心的视觉实验系列，探索黑白灰之间的张力与平衡。', fullDescription: '本项目以几何形态为核心，通过对圆形、方形、三角形等基础几何元素的解构与重组，探索黑白灰三色之间的视觉张力与平衡关系。系列作品涵盖海报、视觉系统、空间装置等多种形式，旨在用最简洁的视觉语言传达最丰富的情感表达。', img: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', gallery: ['data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E'] },
+    { title: '金属质感', author: 'ZHISHAOCUI', cat: 'graphic', year: '2025', client: '品牌视觉', role: 'Designer', desc: '金属材质与光影的极致表现，用于高端品牌的视觉系统。', fullDescription: '通过对金属材质的细腻刻画与光影效果的极致追求，为高端品牌打造具有未来感的视觉识别系统。项目涉及品牌主视觉、包装设计、空间导视等多个维度，统一的金属质感语言贯穿始终。', img: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', gallery: ['data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E'] },
+    { title: '流体雕塑', author: 'ZHISHAOCUI', cat: 'brand', year: '2024', client: '艺术展览', role: 'Art Director', desc: '流体形态的三维视觉表达，为当代艺术展打造的主视觉系统。', fullDescription: '为当代艺术展览打造的主视觉系统，以流体形态为核心视觉元素，通过三维渲染技术呈现出流动、变幻的视觉效果。项目涵盖展览海报、导视系统、画册设计、数字媒体等完整视觉体系。', img: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', gallery: ['data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E'] },
+    { title: '暗光渐变', author: 'ZHISHAOCUI', cat: 'ecommerce', year: '2024', client: '电商大促', role: 'Designer', desc: '暗色调渐变背景系列，适用于高端电商产品的展示场景。', fullDescription: '为高端电商平台大促活动设计的暗色调渐变背景系列，通过细腻的光影过渡和质感表现，为产品提供高级感的展示舞台。系列包含多种渐变方案，适配不同品类的产品展示需求。', img: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', gallery: ['data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E'] },
+    { title: '字体解构', author: 'ZHISHAOCUI', cat: 'aigc', year: '2025', client: 'AI实验', role: 'Creative Director', desc: '基于AI生成的字体解构与重组实验，探索文字的边界可能性。', fullDescription: '基于AI生成技术的字体实验项目，通过对传统字体的解构、变形与重组，探索文字作为视觉元素的边界可能性。项目产出一系列实验性字体作品，挑战传统阅读习惯，重新定义文字的视觉表达。', img: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', gallery: ['data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E'] },
+    { title: '建筑序列', author: 'ZHISHAOCUI', cat: 'packaging', year: '2023', client: '产品包装', role: 'Designer', desc: '从建筑摄影中提取的序列感，用于产品包装的视觉语言。', fullDescription: '从建筑摄影中提取的序列感与几何秩序，转化为产品包装的视觉语言。项目为一系列高端产品设计包装，通过建筑式的构图与排版，赋予产品稳重、高级的视觉气质。', img: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', gallery: ['data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E'] }
   ],
   socialLinks: {
     instagram: 'https://instagram.com',
     twitter: 'https://twitter.com',
     linkedin: 'https://linkedin.com'
   },
-  // 鍏充簬鎴?  aboutHeader: 'ZHISHAO',
-  aboutText: '浣犲ソ锛屾垜鏄織闊禖iao銆傝璁″笀銆傚皬绾功鍗氫富銆傛嫢鏈変竴鍙粦鑹茬編鍗＄姮鍜屼袱鍙尗銆傚枩娆㈣繍鍔ㄥ拰鏃跺皻銆?,
-  aboutBottom1: '<strong>ZHISHAOCUI</strong> 鏄竴浣嶅瀛︾璁捐甯堬紝鐜板眳鏉窞锛屾潵鑷瑙夎璁￠鍩熴€?,
-  aboutBottom2: '浠栫粨鍚堝鍏冧笓涓氱煡璇嗭紝鎻愪緵鍗撹秺鐨勮瑙変綋楠岋紝娓呮櫚涓斿瘜鏈夐鏍煎湴琛ㄨ揪澶嶆潅鐨勭悊蹇点€備粬浠ラ珮淇濈湡搴﹁璁＄殑绮炬箾鎶€鑹鸿憲绉帮紝涓嶆柇绐佺牬鍒涙剰杈圭晫锛屽垱浣滃嚭寮曚汉鍏ヨ儨涓旂簿鑷寸殑浣滃搧銆?,
-  aboutBottom3: '浠栧缁嗚妭鏈夋晱閿愮殑瑙傚療鍔涘拰瀵瑰垱鏂扮殑鐑儏锛屾搮闀垮湪鍚勪釜棰嗗煙鎵撻€犵簿鑷翠笖绮捐嚧鐨勮璁°€?,
-  historyWorkTitle: '宸ヤ綔缁忓巻',
-  historyProjectTitle: '椤圭洰缁忓巻',
+  // 关于我
+  aboutHeader: 'ZHISHAO',
+  aboutText: '你好，我是志韶Ciao。设计师。小红书博主。拥有一只黑色美卡犬和两只猫。喜欢运动和时尚。',
+  aboutBottom1: '<strong>ZHISHAOCUI</strong> 是一位多学科设计师，现居杭州，来自视觉设计领域。',
+  aboutBottom2: '他结合多元专业知识，提供卓越的视觉体验，清晰且富有风格地表达复杂的理念。他以高保真度设计的精湛技艺著称，不断突破创意边界，创作出引人入胜且精致的作品。',
+  aboutBottom3: '他对细节有敏锐的观察力和对创新的热情，擅长在各个领域打造精致且精致的设计。',
+  historyWorkTitle: '工作经历',
+  historyProjectTitle: '项目经历',
   workExperience: [
-    { name: '鏉窞涓栧垵绉戠編鐢熺墿绉戞妧', meta: '2023骞?- 鑷充粖 / 瑙嗚璁捐缁?, img: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E' },
-    { name: '鏌愬搧鐗岃璁″伐浣滃', meta: '2021骞?- 2023骞?/ 骞抽潰璁捐甯?, img: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E' },
-    { name: '鏌愬垱鎰忓挩璇㈠叕鍙?, meta: '2019骞?- 2021骞?/ 瑙嗚璁捐甯?, img: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E' }
+    { name: '杭州世初科美生物科技', meta: '2023年 - 至今 / 视觉设计组', img: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E' },
+    { name: '某品牌设计工作室', meta: '2021年 - 2023年 / 平面设计师', img: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E' },
+    { name: '某创意咨询公司', meta: '2019年 - 2021年 / 视觉设计师', img: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E' }
   ],
   projectExperience: [
-    { name: '鍝佺墝鍏ㄦ瑙嗚璁捐', meta: '2022骞?/ 鍝佺墝瑙嗚绯荤粺', img: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E' },
-    { name: '鐢靛晢澶т績瑙嗚涓籏V', meta: '2021骞?/ 鐢靛晢璁捐', img: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E' },
-    { name: '浜у搧鍖呰绯诲垪璁捐', meta: '2020骞?/ 鍖呰璁捐', img: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E' }
+    { name: '品牌全案视觉设计', meta: '2022年 / 品牌视觉系统', img: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E' },
+    { name: '电商大促视觉主KV', meta: '2021年 / 电商设计', img: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E' },
+    { name: '产品包装系列设计', meta: '2020年 / 包装设计', img: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E' }
   ],
-  resumeBtnText: '涓嬭浇PDF绠€鍘?,
+  resumeBtnText: '下载PDF简历',
   resumeCopyright: '\u00a9 2026. ZHISHAOCUI, Cui Zhishao, All rights reserved.',
   // Cargo-style about page
   cargoStudioName: 'Test\u00ae Studio',
@@ -2384,7 +2387,8 @@ const DEFAULT_CONTENT = {
   cargoContact3: '7/F Meridian House<br>22 Wyndham Street<br>Sheung Wan<br>Hong Kong<br>T: +852 3186 9040<br>F: +852 3186 0044<br>asia@teststudio.eu',
   cargoContact4Title: 'Test Studio Pacific',
   cargoContact4: 'Level 6<br>85 Clarence Street<br>Sydney NSW 2000<br>Australia<br>T: +61 2 8218 4470<br>F: +61 69 7421 382<br>pacific@teststudio.au',
-  // 濯掍綋澧?  galleryTitle: '濯掍綋澧?,
+  // 媒体墙
+  galleryTitle: '媒体墙',
   galleryImages: ['data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E', 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E'],
 };
 
@@ -2413,27 +2417,31 @@ let siteContent = getContent();
 
 function applyContent() {
   siteContent = getContent();
-  // 绠€鍗曟枃鏈瓧娈?  document.querySelectorAll('[data-editable]').forEach(el => {
+  // 简单文本字段
+  document.querySelectorAll('[data-editable]').forEach(el => {
     const key = el.dataset.editable;
     if (siteContent[key] !== undefined) {
       el.innerHTML = siteContent[key];
     }
   });
-  // 绠€鍘嗘寜閽枃瀛?闈炵紪杈戞ā寮忓浐瀹氫负涓嬭浇)
-  setResumeBtnText('涓嬭浇PDF绠€鍘?);
-  // 娴忚鍣ㄦ爣棰?  document.title = siteContent.logoText + ' \u2014 Designer Portfolio';
-  // 浣滃搧鍒嗙被瀵艰埅
+  // 简历按钮文字(非编辑模式固定为下载)
+  setResumeBtnText('下载PDF简历');
+  // 浏览器标题
+  document.title = siteContent.logoText + ' \u2014 Designer Portfolio';
+  // 作品分类导航
   renderCategories();
-  // 娓叉煋浣滃搧鍜岀粡鍘?  renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
+  // 渲染作品和经历
+  renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
   renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
   renderHistoryList(document.getElementById('workExperienceList'), siteContent.workExperience);
   renderHistoryList(document.getElementById('projectList'), siteContent.projectExperience);
-  // 搴旂敤鐢ㄦ埛涓婁紶鐨勫浘鐗?  applyImages();
-  // 搴旂敤绀句氦閾炬帴
+  // 应用用户上传的图片
+  applyImages();
+  // 应用社交链接
   applySocialLinks();
 }
 
-// ===== 娓叉煋鍒嗙被(鏀寔缂栬緫妯″紡) =====
+// ===== 渲染分类(支持编辑模式) =====
 function renderCategories() {
   const catContainer = document.getElementById('workCategories');
   if (!catContainer) return;
@@ -2444,7 +2452,7 @@ function renderCategories() {
     }
     return '<a href="#/work/' + key + '" onclick="navigate(\'work/' + key + '\')">' + name + '</a>';
   }).join('');
-  if (editMode) html += '<button class="add-category-btn" onclick="addCategory()">+ 娣诲姞鍒嗙被</button>';
+  if (editMode) html += '<button class="add-category-btn" onclick="addCategory()">+ 添加分类</button>';
   catContainer.innerHTML = html;
   if (editMode) {
     catContainer.querySelectorAll('[data-editable]').forEach(el => {
@@ -2466,7 +2474,7 @@ function handleCategoryClick(e, key) {
 }
 
 function addCategory() {
-  const name = prompt('杈撳叆鏂板垎绫诲悕绉帮細', '鏂板垎绫?);
+  const name = prompt('输入新分类名称：', '新分类');
   if (!name) return;
   const key = 'cat_' + Date.now();
   siteContent.categories[key] = name;
@@ -2476,11 +2484,11 @@ function addCategory() {
   renderCategories();
   unsavedChanges = true;
   updateEditStatus();
-  showSaveToast('鍒嗙被宸叉坊鍔?);
+  showSaveToast('分类已添加');
 }
 
 function deleteCategory(key) {
-  if (!confirm('纭畾鍒犻櫎鍒嗙被銆? + siteContent.categories[key] + '銆嶅悧锛熻鍒嗙被涓嬬殑浣滃搧涓嶄細琚垹闄ゃ€?)) return;
+  if (!confirm('确定删除分类「' + siteContent.categories[key] + '」吗？该分类下的作品不会被删除。')) return;
   delete siteContent.categories[key];
   const existing = getContent();
   existing.categories = siteContent.categories;
@@ -2488,12 +2496,12 @@ function deleteCategory(key) {
   renderCategories();
   unsavedChanges = true;
   updateEditStatus();
-  showSaveToast('鍒嗙被宸插垹闄?);
+  showSaveToast('分类已删除');
 }
 
 // ===== Render Work Grid =====
 
-// ===== Gallery 濯掍綋澧?=====
+// ===== Gallery 媒体墙 =====
 function renderGalleryGrid(container, items) {
   if (!container) return;
   items = items || [];
@@ -2526,9 +2534,9 @@ function addGalleryMedia(externalFiles) {
   existing.galleryImages = siteContent.galleryImages;
   localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
   renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
-  showSaveToast(files ? ('宸蹭笂浼?' + files.length + ' 寮犲浘鐗?) : '宸叉坊鍔犲浘鐗?);
+  showSaveToast(files ? ('已上传 ' + files.length + ' 张图片') : '已添加图片');
 }
-// 鎷栨嫿鍒颁笂浼犲尯
+// 拖拽到上传区
 document.addEventListener('dragover', function (e) {
   var z = e.target.closest && e.target.closest('.file-upload-zone');
   if (z) { e.preventDefault(); z.classList.add('dragover'); }
@@ -2550,7 +2558,7 @@ document.addEventListener('drop', function (e) {
 function removeGalleryMedia(idx) {
   if (!siteContent.galleryImages || idx < 0 || idx >= siteContent.galleryImages.length) return;
   siteContent.galleryImages.splice(idx, 1);
-  // 鍚庣画鍥剧墖 key 鍓嶇Щ锛屼繚鎸佷笌 IndexedDB 鍥剧墖瀵归綈
+  // 后续图片 key 前移，保持与 IndexedDB 图片对齐
   let i = idx;
   while (imgCache['gallery_' + (i + 1)]) {
     putImage('gallery_' + i, imgCache['gallery_' + (i + 1)]);
@@ -2562,7 +2570,7 @@ function removeGalleryMedia(idx) {
   existing.galleryImages = siteContent.galleryImages;
   localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
   renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
-  showSaveToast('宸插垹闄ゅ浘鐗?);
+  showSaveToast('已删除图片');
 }
 function renderWorkGrid(container, items) {
   if (!container) return;
@@ -2609,7 +2617,7 @@ function handleWorkCardClick(e, idx) {
 }
 
 function deleteWorkItem(idx) {
-  if (!confirm('纭畾鍒犻櫎浣滃搧銆? + siteContent.workItems[idx].title + '銆嶅悧锛?)) return;
+  if (!confirm('确定删除作品「' + siteContent.workItems[idx].title + '」吗？')) return;
   siteContent.workItems.splice(idx, 1);
   const existing = getContent();
   existing.workItems = siteContent.workItems;
@@ -2617,19 +2625,19 @@ function deleteWorkItem(idx) {
   renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
   renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
   if (editMode) { setupEditables(); setupImageEditing(); }
-  showSaveToast('浣滃搧宸插垹闄?);
+  showSaveToast('作品已删除');
 }
 
 function addFeaturedWork() {
   const newItem = {
-    title: '鏂颁綔鍝佹爣棰?,
+    title: '新作品标题',
     author: 'ZHISHAOCUI',
     cat: 'graphic',
     year: '2026',
-    client: '瀹㈡埛鍚嶇О',
+    client: '客户名称',
     role: 'Designer',
-    desc: '鍦ㄨ繖閲屽～鍐欓」鐩弿杩?..',
-    fullDescription: '鍦ㄨ繖閲屽～鍐欓」鐩缁嗘弿杩?..',
+    desc: '在这里填写项目描述...',
+    fullDescription: '在这里填写项目详细描述...',
     img: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E',
     gallery: []
   };
@@ -2640,7 +2648,7 @@ function addFeaturedWork() {
   renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
   renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
   if (editMode) { setupEditables(); setupImageEditing(); }
-  showSaveToast('宸叉坊鍔犳柊浣滃搧');
+  showSaveToast('已添加新作品');
 }
 
 
@@ -2682,12 +2690,13 @@ function buildDetailGallery(idx) {
   var item = siteContent.workItems[idx];
   if (!item) return [];
   var list = [];
-  // hero锛堥鍥撅紝鍙 work_N 瑕嗙洊锛?  list.push({ type: 'hero', src: imgCache['work_' + idx] || item.img, key: 'work_' + idx });
-  // 鏃х増 gallery锛堝巻鍙?dataURL锛屽吋瀹逛繚鐣欐樉绀猴級
+  // hero（首图，可被 work_N 覆盖）
+  list.push({ type: 'hero', src: imgCache['work_' + idx] || item.img, key: 'work_' + idx });
+  // 旧版 gallery（历史 dataURL，兼容保留显示）
   (item.gallery || []).forEach(function (g) {
     list.push({ type: 'legacy', src: g });
   });
-  // 鏂扮増 IDB 楂樻竻澶у浘娴?detail_img_<idx>_<n>
+  // 新版 IDB 高清大图流 detail_img_<idx>_<n>
   var prefix = 'detail_img_' + idx + '_';
   Object.keys(imgCache).filter(function (k) { return k.indexOf(prefix) === 0; })
     .sort(function (a, b) { return parseInt(a.slice(prefix.length), 10) - parseInt(b.slice(prefix.length), 10); })
@@ -2699,7 +2708,7 @@ function buildDetailGallery(idx) {
 function renderWorkDetail(idx) {
   var item = siteContent.workItems[idx];
   if (!item) return;
-  var catName = siteContent.categories[item.cat] || item.cat || '鈥?;
+  var catName = siteContent.categories[item.cat] || item.cat || '—';
   var catLabel = document.getElementById('detailCatLabel');
   if (catLabel) catLabel.textContent = (catName + '').toUpperCase();
   var list = buildDetailGallery(idx);
@@ -2731,7 +2740,7 @@ async function _doDetailUpload(files) {
     await putImage(key, files[i]);
   }
   renderWorkDetail(idx);
-  showSaveToast('宸叉壒閲忎笂浼?' + files.length + ' 寮犲浘鐗?);
+  showSaveToast('已批量上传 ' + files.length + ' 张图片');
 }
 function addDetailImage(externalFiles) {
   if (externalFiles && externalFiles.length) {
@@ -2750,14 +2759,14 @@ var _delCallbacks = {};
 function delBtnHtml(id, onConfirm) {
   _delCallbacks[id] = onConfirm;
   return '<div class="dlt" data-del="' + id + '">'
-    + '<button class="dlt__btn" type="button" aria-label="鍒犻櫎">'
+    + '<button class="dlt__btn" type="button" aria-label="删除">'
     + '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
     + '<path d="M19 8v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8"/>'
     + '<g class="dlt__lid"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></g>'
     + '</svg></button>'
     + '<span class="dlt__actions">'
-    + '<button class="dlt__yes" type="button" aria-label="纭鍒犻櫎">\u2713</button>'
-    + '<button class="dlt__no" type="button" aria-label="鍙栨秷">\u00d7</button>'
+    + '<button class="dlt__yes" type="button" aria-label="确认删除">\u2713</button>'
+    + '<button class="dlt__no" type="button" aria-label="取消">\u00d7</button>'
     + '</span></div>';
 }
 document.addEventListener('click', function (e) {
@@ -2783,7 +2792,8 @@ document.addEventListener('click', function (e) {
     root.classList.toggle('open', !wasOpen);
   }
 });
-// 鍔犺浇澶辫触鐨勫浘鑷姩浠庢暟鎹腑绉婚櫎锛堟湭璇嗗埆閾炬帴锛?function handleDetailImgError(imgEl, vi) {
+// 加载失败的图自动从数据中移除（未识别链接）
+function handleDetailImgError(imgEl, vi) {
   var idx = currentDetailIndex;
   var item = siteContent.workItems[idx];
   if (!item) return;
@@ -2791,7 +2801,7 @@ document.addEventListener('click', function (e) {
   if (vi < 0 || vi >= list.length) return;
   var ent = list[vi];
   if (ent.type === 'legacy') {
-    var gIdx = vi - 1; // list[0] 鏄?hero
+    var gIdx = vi - 1; // list[0] 是 hero
     item.gallery = item.gallery || [];
     if (gIdx >= 0 && gIdx < item.gallery.length) {
       item.gallery.splice(gIdx, 1);
@@ -2804,7 +2814,7 @@ document.addEventListener('click', function (e) {
   }
   renderWorkDetail(idx);
 }
-// ===== 鎷栨嫿鎺掑簭 =====
+// ===== 拖拽排序 =====
 var _detailDragFrom = -1;
 function detailDragStart(ev, vi) {
   _detailDragFrom = vi;
@@ -2851,7 +2861,7 @@ async function detailDrop(ev, toVi) {
   existing.workItems = siteContent.workItems;
   localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
   renderWorkDetail(idx);
-  showSaveToast('鍥剧墖椤哄簭宸茶皟鏁?);
+  showSaveToast('图片顺序已调整');
 }
 async function removeDetailImage(vi) {
   var idx = currentDetailIndex;
@@ -2861,7 +2871,8 @@ async function removeDetailImage(vi) {
   if (vi < 0 || vi >= list.length) return;
   var ent = list[vi];
   if (vi === 0) {
-    // 鍒犻櫎 hero锛氭竻绌?work_N 瑕嗙洊锛屽苟鎶婄涓€寮犺鎯呭浘鎻愬崌涓轰富鍥?    deleteImage('work_' + idx);
+    // 删除 hero：清空 work_N 覆盖，并把第一张详情图提升为主图
+    deleteImage('work_' + idx);
     var first = list[1];
     if (first) {
       if (first.type === 'legacy') {
@@ -2886,7 +2897,7 @@ async function removeDetailImage(vi) {
   existing.workItems = siteContent.workItems;
   localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
   renderWorkDetail(idx);
-  showSaveToast('鍥剧墖宸插垹闄?);
+  showSaveToast('图片已删除');
 }
 function goNextProject() {
   const nextIdx = (currentDetailIndex + 1) % siteContent.workItems.length;
@@ -2898,14 +2909,14 @@ function addProject() {
   const hash = location.hash.replace('#/', '');
   const cat = hash.split('/')[1] || 'graphic';
   const newItem = {
-    title: '鏂伴」鐩爣棰?,
+    title: '新项目标题',
     author: 'ZHISHAOCUI',
     cat: cat,
     year: '2026',
-    client: '瀹㈡埛鍚嶇О',
+    client: '客户名称',
     role: 'Designer',
-    desc: '鍦ㄨ繖閲屽～鍐欓」鐩弿杩?..',
-    fullDescription: '鍦ㄨ繖閲屽～鍐欓」鐩缁嗘弿杩?..',
+    desc: '在这里填写项目描述...',
+    fullDescription: '在这里填写项目详细描述...',
     img: 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E3E3E3%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2230%22%20fill%3D%22%239a9a9a%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E5%9B%BE%E7%89%87%E5%BE%85%E4%B8%8A%E4%BC%A0%3C%2Ftext%3E%3C%2Fsvg%3E',
     gallery: []
   };
@@ -2918,7 +2929,7 @@ function addProject() {
     setupEditables();
     setupImageEditing();
   }
-  showSaveToast('宸叉坊鍔犳柊椤圭洰');
+  showSaveToast('已添加新项目');
 }
 
 // ===== Render History Lists =====
@@ -2952,7 +2963,7 @@ function renderClients() {
     const logo = imgCache['client_' + i];
     const slotClick = editMode ? (clientRemoveMode ? 'removeClientSlot(' + i + ')' : 'uploadClientLogo(' + i + ')') : '';
     html += '<div class="client-slot" data-index="' + i + '"' + (slotClick ? ' onclick="' + slotClick + '"' : '') + '>' +
-      (editMode ? '<button class="remove-slot-btn" onclick="event.stopPropagation();removeClientSlot(' + i + ')">脳</button>' : '') +
+      (editMode ? '<button class="remove-slot-btn" onclick="event.stopPropagation();removeClientSlot(' + i + ')">×</button>' : '') +
       (logo
         ? '<img src="' + logo + '" alt="Client ' + (i+1) + '">'
         : '<div class="placeholder">+</div><div class="upload-hint">' + siteContent.clientUploadHint + '</div>'
@@ -2964,13 +2975,13 @@ function addClientSlot() {
   const count = getClientCount();
   localStorage.setItem(CLIENT_COUNT_KEY, count + 1);
   renderClients();
-  showSaveToast('宸插鍔犲鎴蜂綅');
+  showSaveToast('已增加客户位');
 }
 function removeClientSlot(index) {
-  if (!confirm('纭畾鍒犻櫎杩欎釜瀹㈡埛浣嶅悧锛熷凡涓婁紶鐨刲ogo涔熶細琚竻闄ゃ€?)) return;
+  if (!confirm('确定删除这个客户位吗？已上传的logo也会被清除。')) return;
   const count = getClientCount();
-  if (count <= 1) { alert('鑷冲皯淇濈暀涓€涓鎴蜂綅'); return; }
-  // 鍒犻櫎璇ヤ綅锛屽悗闈㈢殑 logo 渚濇鍓嶇Щ
+  if (count <= 1) { alert('至少保留一个客户位'); return; }
+  // 删除该位，后面的 logo 依次前移
   deleteImage('client_' + index);
   for (let i = index + 1; i < count; i++) {
     if (imgCache['client_' + i]) {
@@ -2980,12 +2991,12 @@ function removeClientSlot(index) {
   }
   localStorage.setItem(CLIENT_COUNT_KEY, count - 1);
   renderClients();
-  showSaveToast('宸插垹闄ゅ鎴蜂綅');
+  showSaveToast('已删除客户位');
 }
 function toggleRemoveMode() {
   clientRemoveMode = !clientRemoveMode;
   const btns = document.querySelectorAll('.client-remove-btn');
-  btns.forEach(b => { b.textContent = clientRemoveMode ? '閫€鍑哄垹闄? : '鍒犻櫎妯″紡'; });
+  btns.forEach(b => { b.textContent = clientRemoveMode ? '退出删除' : '删除模式'; });
   renderClients();
 }
 function uploadClientLogo(index) {
@@ -2996,7 +3007,7 @@ function uploadClientLogo(index) {
   input.onchange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    // 鍘熷浘瀛樺叆 IndexedDB
+    // 原图存入 IndexedDB
     putImage('client_' + index, file);
     renderClients();
   };
@@ -3020,7 +3031,7 @@ function handleSocialClick(e, platform) {
   if (editMode) {
     e.preventDefault();
     const current = (siteContent.socialLinks && siteContent.socialLinks[platform]) || '';
-    const url = prompt('杈撳叆 ' + platform + ' 閾炬帴鍦板潃锛?, current);
+    const url = prompt('输入 ' + platform + ' 链接地址：', current);
     if (url !== null) {
       const existing = getContent();
       if (!existing.socialLinks) existing.socialLinks = {};
@@ -3030,7 +3041,7 @@ function handleSocialClick(e, platform) {
       applySocialLinks();
       unsavedChanges = true;
       updateEditStatus();
-      showSaveToast(platform + ' 閾炬帴宸叉洿鏂?);
+      showSaveToast(platform + ' 链接已更新');
     }
     return false;
   }
@@ -3057,18 +3068,18 @@ function uploadResume() {
     const file = e.target.files[0];
     if (!file) return;
     if (file.size > 20 * 1024 * 1024) {
-      alert('鏂囦欢杩囧ぇ锛岃涓婁紶 20MB 浠ュ唴鐨?PDF 鏂囦欢銆?);
+      alert('文件过大，请上传 20MB 以内的 PDF 文件。');
       return;
     }
     try {
       const db = await openResumeDB();
       const tx = db.transaction('resume', 'readwrite');
       tx.objectStore('resume').put({ id: 'resume', data: file, name: file.name });
-      showSaveToast('绠€鍘?PDF 宸蹭笂浼?);
+      showSaveToast('简历 PDF 已上传');
       unsavedChanges = true;
       updateEditStatus();
     } catch(err) {
-      alert('涓婁紶澶辫触锛? + err.message);
+      alert('上传失败：' + err.message);
     }
   };
   input.click();
@@ -3089,11 +3100,11 @@ async function downloadResume() {
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
       } else {
-        alert('绠€鍘?PDF 鍗冲皢涓婄嚎锛屾暚璇锋湡寰呫€?);
+        alert('简历 PDF 即将上线，敬请期待。');
       }
     };
   } catch(err) {
-    alert('绠€鍘?PDF 鍗冲皢涓婄嚎锛屾暚璇锋湡寰呫€?);
+    alert('简历 PDF 即将上线，敬请期待。');
   }
 }
 
@@ -3150,7 +3161,7 @@ function showView(path) {
     document.getElementById('view-work-detail').classList.add('active');
   } else if (path.startsWith('work/')) {
     const cat = path.split('/')[1];
-    const catName = siteContent.categories[cat] || '浣滃搧';
+    const catName = siteContent.categories[cat] || '作品';
     const catItems = siteContent.workItems.filter(i => i.cat === cat);
     document.getElementById('categoryTitle').textContent = catName;
     document.getElementById('categoryCount').textContent = catItems.length + siteContent.categoryCountSuffix;
@@ -3269,7 +3280,7 @@ let unsavedChanges = false;
 let imgCache = {};
 let imgReady = false;
 
-// ===== 鍥剧墖瀛樺偍锛欼ndexedDB锛堟敮鎸侀珮鍍忕礌 + 澶ч噺鍥剧墖锛屼笉鍐嶅帇缂╃敾璐級 =====
+// ===== 图片存储：IndexedDB（支持高像素 + 大量图片，不再压缩画质） =====
 function openImgDB() {
   return new Promise(function (resolve, reject) {
     var req = indexedDB.open(IMG_DB_NAME, 1);
@@ -3284,7 +3295,7 @@ function openImgDB() {
   });
 }
 
-// 鍐欏叆鍗曞紶鍥剧墖锛歞ata 涓?File/Blob锛堝師鐢昏川锛夋垨瀛楃涓?dataURL)
+// 写入单张图片：data 为 File/Blob（原画质）或字符串(dataURL)
 function putImage(key, data) {
   imgCache[key] = (data instanceof Blob) ? URL.createObjectURL(data) : data;
   return openImgDB().then(function (db) {
@@ -3296,7 +3307,7 @@ function putImage(key, data) {
     });
   }).catch(function (e) {
     console.error('putImage failed', e);
-    alert('鍥剧墖淇濆瓨澶辫触锛氭祻瑙堝櫒瀛樺偍涓嶅彲鐢ㄦ垨纾佺洏绌洪棿涓嶈冻銆傚彲娓呯悊娴忚鍣ㄧ珯鐐规暟鎹悗閲嶈瘯銆?);
+    alert('图片保存失败：浏览器存储不可用或磁盘空间不足。可清理浏览器站点数据后重试。');
   });
 }
 
@@ -3332,7 +3343,7 @@ function clearAllImages() {
   }).catch(function (e) { console.error('clearAllImages failed', e); });
 }
 
-// 鍚姩鏃朵粠 IndexedDB 璇诲彇鍏ㄩ儴鍥剧墖鍒板唴瀛樼紦瀛橈紝骞惰縼绉绘棫鐗?localStorage 鍥剧墖
+// 启动时从 IndexedDB 读取全部图片到内存缓存，并迁移旧版 localStorage 图片
 function loadImagesFromIDB() {
   openImgDB().then(function (db) {
     return new Promise(function (resolve) {
@@ -3363,7 +3374,8 @@ function loadImagesFromIDB() {
   });
 }
 
-// 鏃х増 localStorage 鍥剧墖杩佺Щ鍒?IndexedDB锛堜綔鍝佸浘 / 瀹㈡埛logo锛夛紝淇濈暀鏃ф暟鎹?function migrateLegacyImages() {
+// 旧版 localStorage 图片迁移到 IndexedDB（作品图 / 客户logo），保留旧数据
+function migrateLegacyImages() {
   try {
     var legacy = JSON.parse(localStorage.getItem(IMAGE_KEY) || '{}');
     if (Object.keys(legacy).length) {
@@ -3385,7 +3397,7 @@ function applyImages() {
   });
 }
 
-// 鍥剧墖鍔犺浇瀹屾垚鍚庨噸娓叉煋鎵€鏈夌敤鍒板浘鐗囩殑妯″潡
+// 图片加载完成后重渲染所有用到图片的模块
 function rerenderAllImages() {
   renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
   renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
@@ -3411,14 +3423,15 @@ function setupEditables() {
     el.spellcheck = false;
     el.onblur = onTextBlur;
     el.oninput = () => { unsavedChanges = true; };
-    // 鍗曞嚮鑷敱缂栬緫锛堝厜鏍囬殢鐐瑰嚮浣嶇疆锛夛紝鍙屽嚮鎵ц鍘熻烦杞?    el.onclick = (e) => {
+    // 单击自由编辑（光标随点击位置），双击执行原跳转
+    el.onclick = (e) => {
       if (editMode) {
         e.preventDefault();
         e.stopPropagation();
         el.focus();
-        // 涓嶆墽琛屽叏閫夛紝璁╃敤鎴疯嚜鐢辩Щ鍔ㄥ厜鏍囩紪杈戞垨鍒犻櫎
+        // 不执行全选，让用户自由移动光标编辑或删除
       } else {
-        // 闈炵紪杈戞ā寮忥細鎵ц鍘熷鑸紙濡傜偣鍑诲乏涓婅logo鍥為椤碉級
+        // 非编辑模式：执行原导航（如点击左上角logo回首页）
         var onclickAttr = el.getAttribute('onclick');
         if (onclickAttr) {
           var navMatch = onclickAttr.match(/navigate\('([^']+)'\)/);
@@ -3433,14 +3446,14 @@ function setupEditables() {
       if (editMode) {
         e.preventDefault();
         e.stopPropagation();
-        // 鍙屽嚮鎵ц瀵艰埅/璺宠浆
+        // 双击执行导航/跳转
         const href = el.getAttribute('href') || el.closest('a')?.getAttribute('href');
         const onclick = el.getAttribute('onclick') || el.closest('a')?.getAttribute('onclick');
         if (href && href !== '#') {
           const hash = href.replace('#/', '');
           if (hash) showView(hash);
         } else if (onclick) {
-          // 鎻愬彇navigate璋冪敤
+          // 提取navigate调用
           const match = onclick.match(/navigate\('([^']+)'\)/);
           if (match) showView(match[1]);
         }
@@ -3449,7 +3462,8 @@ function setupEditables() {
   });
 }
 
-// 鍚屾 Moodboard iframe 缂栬緫鐘舵€?(function initMoodboardFrameSync() {
+// 同步 Moodboard iframe 编辑状态
+(function initMoodboardFrameSync() {
   window.addEventListener('load', function() {
     var mf = document.querySelector('.moodboard-frame');
     if (!mf) return;
@@ -3474,21 +3488,27 @@ function enterEditMode() {
   unsavedChanges = false;
   document.body.classList.add('edit-mode');
   document.getElementById('editToolbar').classList.add('show');
-  // 绠€鍘嗘寜閽紙鎵厜浠呭墠鍙版樉绀猴紝缂栬緫妯″紡鏆傚仠锛?  setResumeBtnText('涓婁紶PDF绠€鍘?);
+  // 简历按钮（扫光仅前台显示，编辑模式暂停）
+  setResumeBtnText('上传PDF简历');
   if (typeof sbState !== 'undefined') sbState.paused = true;
-  // 娓叉煋鍒嗙被涓庝綔鍝佺綉鏍间负鍙紪杈戞ā寮?  renderCategories();
+  // 渲染分类与作品网格为可编辑模式
+  renderCategories();
   renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
   renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
-  // 鏂囧瓧鍙紪杈?  setupEditables();
-  // 鍥剧墖鍙浛鎹?  setupImageEditing();
-  // 鎷栨嫿涓婁紶
+  // 文字可编辑
+  setupEditables();
+  // 图片可替换
+  setupImageEditing();
+  // 拖拽上传
   setupDragAndDrop();
-  // 浣滃搧鍒嗙被椤垫樉绀烘坊鍔犳寜閽?  const addBtn = document.getElementById('addProjectBtn');
+  // 作品分类页显示添加按钮
+  const addBtn = document.getElementById('addProjectBtn');
   if (addBtn && document.getElementById('view-work-category').classList.contains('active')) {
     addBtn.style.display = 'block';
   }
   updateEditStatus();
-  // 鑻ュ綋鍓嶅湪浣滃搧璇︽儏椤碉紝浠ョ紪杈戞€侀噸娓叉煋锛堝垹闄ゆ寜閽?鎷栨嫿锛?  var _h = location.hash.replace('#/', '');
+  // 若当前在作品详情页，以编辑态重渲染（删除按钮+拖拽）
+  var _h = location.hash.replace('#/', '');
   if (_h.indexOf('work/detail/') === 0) {
     var _di = parseInt(_h.split('/')[2], 10);
     if (!isNaN(_di)) renderWorkDetail(_di);
@@ -3498,7 +3518,7 @@ function enterEditMode() {
 
 function exitEditMode() {
   if (unsavedChanges) {
-    if (!confirm('鏈夋湭淇濆瓨鐨勬洿鏀癸紝纭畾閫€鍑哄悧锛?)) return;
+    if (!confirm('有未保存的更改，确定退出吗？')) return;
   }
   editMode = false;
   document.body.classList.remove('edit-mode');
@@ -3508,17 +3528,17 @@ function exitEditMode() {
     el.onclick = null;
     el.ondblclick = null;
   });
-  // 鎭㈠绠€鍘嗘寜閽枃瀛椾笌鍓嶅彴鎵厜
-  setResumeBtnText(siteContent.resumeBtnText || '涓嬭浇PDF绠€鍘?);
+  // 恢复简历按钮文字与前台扫光
+  setResumeBtnText(siteContent.resumeBtnText || '下载PDF简历');
   if (typeof sbState !== 'undefined') sbState.paused = false;
-  // 鎭㈠鍒嗙被涓庝綔鍝佺綉鏍间负璁垮妯℃澘
+  // 恢复分类与作品网格为访客模板
   renderCategories();
   renderWorkGrid(document.getElementById('workGrid'), siteContent.workItems);
   renderGalleryGrid(document.getElementById('galleryGrid'), siteContent.galleryImages);
-  // 闅愯棌娣诲姞鎸夐挳
+  // 隐藏添加按钮
   const addBtn = document.getElementById('addProjectBtn');
   if (addBtn) addBtn.style.display = 'none';
-  // 绉婚櫎鎷栨嫿
+  // 移除拖拽
   teardownDragAndDrop();
   syncMoodboardEditMode(false);
   location.hash = '#/home';
@@ -3532,7 +3552,7 @@ function onTextBlur(e) {
 function updateEditStatus() {
   const status = document.getElementById('editStatus');
   if (status) {
-    status.textContent = unsavedChanges ? '鏈夋湭淇濆瓨鐨勬洿鏀? : '宸蹭繚瀛?- 鐐瑰嚮鏂囧瓧缂栬緫锛岀偣鍑诲浘鐗囨浛鎹?;
+    status.textContent = unsavedChanges ? '有未保存的更改' : '已保存 - 点击文字编辑，点击图片替换';
     status.style.color = unsavedChanges ? '#ffaa33' : '#888';
   }
 }
@@ -3548,7 +3568,7 @@ function setupImageEditing() {
         e.stopPropagation();
         uploadImageByKey(img.dataset.imageKey);
       };
-      // 鎷栨嫿涓婁紶
+      // 拖拽上传
       wrap.ondragover = (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -3603,7 +3623,7 @@ function setupImageEditing() {
 
 function handleImageFile(file, key) {
   if (!file) return;
-  // PDF鐩存帴瀛樺偍(dataURL)
+  // PDF直接存储(dataURL)
   if (file.type === 'application/pdf') {
     var reader = new FileReader();
     reader.onload = function (ev) {
@@ -3615,19 +3635,19 @@ function handleImageFile(file, key) {
       }
       unsavedChanges = true;
       updateEditStatus();
-      showSaveToast('PDF 宸蹭笂浼?);
+      showSaveToast('PDF 已上传');
     };
     reader.readAsDataURL(file);
     return;
   }
-  // 鍥剧墖锛氫繚鐣欏師濮嬮珮鍍忕礌锛岀洿鎺ュ瓨 Blob锛屼笉鍘嬬缉
+  // 图片：保留原始高像素，直接存 Blob，不压缩
   putImage(key, file);
   var src = imgCache[key];
   var imgEl = document.querySelector('img[data-image-key="' + key + '"]');
   if (imgEl && src) imgEl.src = src;
   unsavedChanges = true;
   updateEditStatus();
-  showSaveToast('鍥剧墖宸蹭笂浼狅紙鍘熺敾璐級');
+  showSaveToast('图片已上传（原画质）');
 }
 
 function uploadImageByKey(key) {
@@ -3683,7 +3703,7 @@ function pickLocalUpload(key) {
 
 function showSaveToast(msg) {
   const toast = document.getElementById('editSaveToast');
-  toast.textContent = msg || '宸蹭繚瀛?;
+  toast.textContent = msg || '已保存';
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 2000);
 }
@@ -3692,9 +3712,9 @@ function collectTextContent() {
   const data = {};
   document.querySelectorAll('[data-editable]').forEach(el => {
     const key = el.dataset.editable;
-    // 璺宠繃绠€鍘嗘寜閽?鏃燿ata-editable锛岃繖閲岄槻寰℃€ф鏌?
+    // 跳过简历按钮(无data-editable，这里防御性检查)
     if (el.id === 'resumeBtn') return;
-    // 鍒嗙被缂栬緫: cat_鍓嶇紑
+    // 分类编辑: cat_前缀
     if (key.startsWith('cat_')) {
       const catKey = key.replace('cat_', '');
       if (siteContent.categories[catKey] !== undefined) {
@@ -3713,7 +3733,7 @@ function saveAllContent() {
   for (const key in textData) {
     existing[key] = textData[key];
   }
-  // 淇濆瓨鍒嗙被淇敼
+  // 保存分类修改
   existing.categories = siteContent.categories;
   // Save work item dynamic fields
   document.querySelectorAll('.project-item').forEach(item => {
@@ -3758,12 +3778,12 @@ function saveAllContent() {
   siteContent = existing;
   unsavedChanges = false;
   updateEditStatus();
-  showSaveToast('鍏ㄩ儴宸蹭繚瀛?);
+  showSaveToast('全部已保存');
   clearThumbDB();
 }
 
 function resetAllContent() {
-  if (!confirm('纭畾瑕佹仮澶嶆墍鏈夋枃瀛楀拰鍥剧墖涓洪粯璁ゅ€煎悧锛熸鎿嶄綔涓嶅彲鎾ら攢銆?)) return;
+  if (!confirm('确定要恢复所有文字和图片为默认值吗？此操作不可撤销。')) return;
   localStorage.removeItem(CONTENT_KEY);
   clearAllImages();
   siteContent = getContent();
@@ -3778,7 +3798,7 @@ function resetAllContent() {
   }
   unsavedChanges = false;
   updateEditStatus();
-  showSaveToast('宸叉仮澶嶉粯璁?);
+  showSaveToast('已恢复默认');
   clearThumbDB();
 }
 
@@ -3806,11 +3826,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if (window.location.search.indexOf('mode=edit') !== -1) {
     setTimeout(function() { enterEditMode(); }, 150);
   }
-  // 绠€鍘嗘寜閽?WebGL 鎵厜鏁堟灉
+  // 简历按钮 WebGL 扫光效果
   initResumeSpecular();
 });
 
-// ===== Resume Specular Button (ReactBits SpecularButton -> 鍘熺敓 WebGL) =====
+// ===== Resume Specular Button (ReactBits SpecularButton -> 原生 WebGL) =====
 var SB_PAD = 20;
 var SB_VERT = '#version 300 es\nin vec2 position; void main(){ gl_Position = vec4(position, 0.0, 1.0); }';
 var SB_FRAG = '#version 300 es\n' +
@@ -3861,7 +3881,8 @@ function initResumeSpecular() {
   var btn = document.getElementById('resumeBtn');
   if (!btn || btn._sbInited) return;
   btn._sbInited = true;
-  // 鏂囨湰绉诲叆 label span锛堜繚鐣欏師鏈?textContent 閫昏緫鍏煎锛?  var label = document.createElement('span');
+  // 文本移入 label span（保留原有 textContent 逻辑兼容）
+  var label = document.createElement('span');
   label.className = 'sb-label';
   label.textContent = btn.textContent;
   btn.textContent = '';
@@ -3870,7 +3891,7 @@ function initResumeSpecular() {
   fx.className = 'sb-fx';
   fx.setAttribute('aria-hidden', 'true');
   btn.insertBefore(fx, label);
-  // WebGL2 娓叉煋灞傦紙涓嶆敮鎸佹椂鎸夐挳淇濇寔鍘熸牱寮忥級
+  // WebGL2 渲染层（不支持时按钮保持原样式）
   var canvas = document.createElement('canvas');
   var gl = null;
   try { gl = canvas.getContext('webgl2', { alpha: true, premultipliedAlpha: true, antialias: true, preserveDrawingBuffer: true }); } catch (e) { gl = null; }
@@ -3979,7 +4000,7 @@ function initResumeSpecular() {
 }
 
 // ============================================================
-// ===== Global Drag & Drop (鍏ㄥ眬鎷栨嫿) =====
+// ===== Global Drag & Drop (全局拖拽) =====
 // ============================================================
 let dragCounter = 0;
 
@@ -4015,11 +4036,11 @@ function handleGlobalDrop(e) {
 
 // ===== Admin Dashboard Functions =====
 var adminPages = [
-  { id: 'home', name: '棣栭〉', route: 'home', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMCIvPjx0ZXh0IHg9IjE2MCIgeT0iMTAwIiBmb250LWZhbWlseT0iSW1wYWN0LEFyaWFsIiBmb250LXNpemU9IjM0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXdlaWdodD0iYm9sZCI+REVTSUdOPC90ZXh0Pjx0ZXh0IHg9IjE2MCIgeT0iMTQwIiBmb250LWZhbWlseT0iSW1wYWN0LEFyaWFsIiBmb250LXNpemU9IjM0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXdlaWdodD0iYm9sZCI+UE9SVEZPTElPPC90ZXh0Pjwvc3ZnPg==' },
-  { id: 'work', name: '浣滃搧椤圭洰', route: 'work', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzExMSIvPjxyZWN0IHg9IjIwIiB5PSIzMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjMzMzIi8+PHJlY3QgeD0iMTE1IiB5PSIzMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjNDQ0Ii8+PHJlY3QgeD0iMjEwIiB5PSIzMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjMzMzIi8+PHJlY3QgeD0iMjAiIHk9IjEwMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjNDQ0Ii8+PHJlY3QgeD0iMTE1IiB5PSIxMDAiIHdpZHRoPSI4NSIgaGVpZ2h0PSI2MCIgZmlsbD0iIzMzMyIvPjxyZWN0IHg9IjIxMCIgeT0iMTAwIiB3aWR0aD0iODUiIGhlaWdodD0iNjAiIGZpbGw9IiM0NDQiLz48dGV4dCB4PSIxNjAiIHk9IjE4NSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiM4ODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiPldvcmtzPC90ZXh0Pjwvc3ZnPg==' },
-  { id: 'about', name: '鍏充簬鎴?, route: 'about', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMCIvPjxyZWN0IHg9IjI1IiB5PSIzNSIgd2lkdGg9IjEyMCIgaGVpZ2h0PSIxMzAiIGZpbGw9IiMyMjIiLz48dGV4dCB4PSIxNzAiIHk9IjcwIiBmb250LWZhbWlseT0iSW1wYWN0LEFyaWFsIiBmb250LXNpemU9IjI2IiBmaWxsPSIjZmZmIiBmb250LXdlaWdodD0iYm9sZCI+WkhJU0hBTzwvdGV4dD48cmVjdCB4PSIxNzAiIHk9Ijg1IiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjMiIGZpbGw9IiNmZmYiLz48cmVjdCB4PSIxNzAiIHk9IjEwMCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIyIiBmaWxsPSIjNTU1Ii8+PHJlY3QgeD0iMTcwIiB5PSIxMTAiIHdpZHRoPSIxMTAiIGhlaWdodD0iMiIgZmlsbD0iIzU1NSIvPjxyZWN0IHg9IjE3MCIgeT0iMTIwIiB3aWR0aD0iOTAiIGhlaWdodD0iMiIgZmlsbD0iIzU1NSIvPjwvc3ZnPg==' },
+  { id: 'home', name: '首页', route: 'home', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMCIvPjx0ZXh0IHg9IjE2MCIgeT0iMTAwIiBmb250LWZhbWlseT0iSW1wYWN0LEFyaWFsIiBmb250LXNpemU9IjM0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXdlaWdodD0iYm9sZCI+REVTSUdOPC90ZXh0Pjx0ZXh0IHg9IjE2MCIgeT0iMTQwIiBmb250LWZhbWlseT0iSW1wYWN0LEFyaWFsIiBmb250LXNpemU9IjM0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXdlaWdodD0iYm9sZCI+UE9SVEZPTElPPC90ZXh0Pjwvc3ZnPg==' },
+  { id: 'work', name: '作品项目', route: 'work', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzExMSIvPjxyZWN0IHg9IjIwIiB5PSIzMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjMzMzIi8+PHJlY3QgeD0iMTE1IiB5PSIzMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjNDQ0Ii8+PHJlY3QgeD0iMjEwIiB5PSIzMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjMzMzIi8+PHJlY3QgeD0iMjAiIHk9IjEwMCIgd2lkdGg9Ijg1IiBoZWlnaHQ9IjYwIiBmaWxsPSIjNDQ0Ii8+PHJlY3QgeD0iMTE1IiB5PSIxMDAiIHdpZHRoPSI4NSIgaGVpZ2h0PSI2MCIgZmlsbD0iIzMzMyIvPjxyZWN0IHg9IjIxMCIgeT0iMTAwIiB3aWR0aD0iODUiIGhlaWdodD0iNjAiIGZpbGw9IiM0NDQiLz48dGV4dCB4PSIxNjAiIHk9IjE4NSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiM4ODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiPldvcmtzPC90ZXh0Pjwvc3ZnPg==' },
+  { id: 'about', name: '关于我', route: 'about', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMCIvPjxyZWN0IHg9IjI1IiB5PSIzNSIgd2lkdGg9IjEyMCIgaGVpZ2h0PSIxMzAiIGZpbGw9IiMyMjIiLz48dGV4dCB4PSIxNzAiIHk9IjcwIiBmb250LWZhbWlseT0iSW1wYWN0LEFyaWFsIiBmb250LXNpemU9IjI2IiBmaWxsPSIjZmZmIiBmb250LXdlaWdodD0iYm9sZCI+WkhJU0hBTzwvdGV4dD48cmVjdCB4PSIxNzAiIHk9Ijg1IiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjMiIGZpbGw9IiNmZmYiLz48cmVjdCB4PSIxNzAiIHk9IjEwMCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIyIiBmaWxsPSIjNTU1Ii8+PHJlY3QgeD0iMTcwIiB5PSIxMTAiIHdpZHRoPSIxMTAiIGhlaWdodD0iMiIgZmlsbD0iIzU1NSIvPjxyZWN0IHg9IjE3MCIgeT0iMTIwIiB3aWR0aD0iOTAiIGhlaWdodD0iMiIgZmlsbD0iIzU1NSIvPjwvc3ZnPg==' },
 
-  { id: 'gallery', name: '濯掍綋澧?, route: 'gallery', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBhMGEwYSIvPjxyZWN0IHg9IjIwIiB5PSIzMCIgd2lkdGg9IjEzMCIgaGVpZ2h0PSI5MCIgZmlsbD0iIzIyMiIvPjxyZWN0IHg9IjE3MCIgeT0iMzAiIHdpZHRoPSIxMzAiIGhlaWdodD0iOTAiIGZpbGw9IiMzMzMiLz48cmVjdCB4PSIyMCIgeT0iMTM1IiB3aWR0aD0iMTMwIiBoZWlnaHQ9IjQ1IiBmaWxsPSIjMzMzIi8+PHJlY3QgeD0iMTcwIiB5PSIxMzUiIHdpZHRoPSIxMzAiIGhlaWdodD0iNDUiIGZpbGw9IiMyMjIiLz48dGV4dCB4PSIxNjAiIHk9IjE5NSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiM4ODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdhbGxlcnk8L3RleHQ+PC9zdmc+' },
+  { id: 'gallery', name: '媒体墙', route: 'gallery', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBhMGEwYSIvPjxyZWN0IHg9IjIwIiB5PSIzMCIgd2lkdGg9IjEzMCIgaGVpZ2h0PSI5MCIgZmlsbD0iIzIyMiIvPjxyZWN0IHg9IjE3MCIgeT0iMzAiIHdpZHRoPSIxMzAiIGhlaWdodD0iOTAiIGZpbGw9IiMzMzMiLz48cmVjdCB4PSIyMCIgeT0iMTM1IiB3aWR0aD0iMTMwIiBoZWlnaHQ9IjQ1IiBmaWxsPSIjMzMzIi8+PHJlY3QgeD0iMTcwIiB5PSIxMzUiIHdpZHRoPSIxMzAiIGhlaWdodD0iNDUiIGZpbGw9IiMyMjIiLz48dGV4dCB4PSIxNjAiIHk9IjE5NSIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiM4ODgiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkdhbGxlcnk8L3RleHQ+PC9zdmc+' },
   { id: 'moodboard', name: 'Moodboard', route: 'moodboard', type: 'main', thumb: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBhMGEwYSIvPjxyZWN0IHg9IjIwIiB5PSIzMCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjMjIyIiByeD0iMiIvPjxyZWN0IHg9IjExMCIgeT0iMzAiIHdpZHRoPSI2MCIgaGVpZ2h0PSI4MCIgZmlsbD0iIzMzMyIgcng9IjIiLz48cmVjdCB4PSIxODAiIHk9IjMwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjMWExYTFhIiByeD0iMiIvPjxyZWN0IHg9IjIwIiB5PSIxMDAiIHdpZHRoPSIxMDAiIGhlaWdodD0iNzAiIGZpbGw9IiMzMzMiIHJ4PSIyIi8+PHJlY3QgeD0iMTMwIiB5PSIxMjAiIHdpZHRoPSI3MCIgaGVpZ2h0PSI1MCIgZmlsbD0iIzIyMiIgcng9IjIiLz48cmVjdCB4PSIyMTAiIHk9IjkwIiB3aWR0aD0iOTAiIGhlaWdodD0iODAiIGZpbGw9IiMxYTFhMWEiIHJ4PSIyIi8+PHRleHQgeD0iMTYwIiB5PSIxOTAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEwIiBmaWxsPSIjNjY2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5Nb29kYm9hcmQ8L3RleHQ+PC9zdmc+' },
 ];
 var adminCurrentFilter = 'all';
@@ -4031,7 +4052,7 @@ function getAdminPages() {
   pages.forEach(function(p){ if (p.id === 'moodboard') p.name = (siteContent && siteContent.moodboardName) || 'Moodboard'; });
   if (siteContent && siteContent.workItems) {
     siteContent.workItems.forEach(function(item, idx) {
-      pages.push({ id: 'detail-' + idx, name: item.title || ('浣滃搧 ' + (idx + 1)), route: 'work/detail/' + idx, type: 'work', thumb: item.cover || '' });
+      pages.push({ id: 'detail-' + idx, name: item.title || ('作品 ' + (idx + 1)), route: 'work/detail/' + idx, type: 'work', thumb: item.cover || '' });
     });
   }
   return pages;
@@ -4061,7 +4082,7 @@ function renderAdminDashboard() {
       + '<div class="admin-thumb" onclick="adminEditPage(\'' + page.route + '\')">' + thumbContent + '</div>'
       + '<div class="admin-card-footer">'
       + '<span class="admin-card-name" contenteditable="true" spellcheck="false" onblur="adminRenamePage(\'' + page.id + '\', this.textContent)" onkeydown="if(event.key===\'Enter\'){event.preventDefault();this.blur();}">' + page.name + '</span>'
-      + '<span class="admin-card-eye" onclick="event.stopPropagation();adminPreviewPage(\'' + page.route + '\')" title="棰勮">&#128065;</span>'
+      + '<span class="admin-card-eye" onclick="event.stopPropagation();adminPreviewPage(\'' + page.route + '\')" title="预览">&#128065;</span>'
       + '</div></div>';
   });
   grid.innerHTML = html;
@@ -4251,7 +4272,7 @@ function adminRenamePage(pageId, newName) {
   }
   localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
   unsavedChanges = false;
-  showSaveToast('椤甸潰鍚嶇О宸叉洿鏂?);
+  showSaveToast('页面名称已更新');
   renderAdminDashboard();
 }
 
@@ -4299,22 +4320,22 @@ function adminAction(action) {
   if (action === 'edit') {
     adminEditPage(page.route);
   } else if (action === 'duplicate') {
-    alert('澶嶅埗椤甸潰锛? + page.name + '锛堝姛鑳藉紑鍙戜腑锛?);
+    alert('复制页面：' + page.name + '（功能开发中）');
     hideAdminContextMenu();
   } else if (action === 'copy') {
     var url = window.location.origin + window.location.pathname + '#/' + page.route;
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(url).then(function() { alert('閾炬帴宸插鍒讹細' + url); }).catch(function() { prompt('澶嶅埗浠ヤ笅閾炬帴锛?, url); });
-    } else { prompt('澶嶅埗浠ヤ笅閾炬帴锛?, url); }
+      navigator.clipboard.writeText(url).then(function() { alert('链接已复制：' + url); }).catch(function() { prompt('复制以下链接：', url); });
+    } else { prompt('复制以下链接：', url); }
     hideAdminContextMenu();
   } else if (action === 'delete') {
-    if (confirm('纭畾鍒犻櫎椤甸潰銆? + page.name + '銆嶅悧锛?)) {
+    if (confirm('确定删除页面「' + page.name + '」吗？')) {
       if (page.type === 'work' && page.id.indexOf('detail-') === 0) {
         var idx = parseInt(page.id.replace('detail-', ''));
         siteContent.workItems.splice(idx, 1);
         if (typeof saveSiteContent === 'function') saveSiteContent();
         renderAdminDashboard();
-      } else { alert('绯荤粺椤甸潰涓嶅彲鍒犻櫎'); }
+      } else { alert('系统页面不可删除'); }
     }
     hideAdminContextMenu();
   }
@@ -4342,7 +4363,7 @@ function exitEditModeSilent() {
 
 
 // ============================================================
-// ===== Font Management (瀛椾綋涓婁紶涓庡叏绔欏簲鐢? =====
+// ===== Font Management (字体上传与全站应用) =====
 // ============================================================
 const FONT_DB_NAME = 'zhishao_font_db';
 const FONT_DB_STORE = 'fonts';
@@ -4424,12 +4445,12 @@ function applyCustomFont(type, file, fontName) {
   if (type === 'en') {
     root.style.setProperty('--font-display', "'" + fontFamily + "', 'PingFang SC', sans-serif");
     customFonts.en = { url: url, name: fontName || file.name };
-    document.getElementById('currentEnFontName').textContent = '褰撳墠: ' + (fontName || file.name);
+    document.getElementById('currentEnFontName').textContent = '当前: ' + (fontName || file.name);
     document.getElementById('currentEnFontPreview').style.fontFamily = "'" + fontFamily + "'";
   } else {
     root.style.setProperty('--font-body', "'" + fontFamily + "', sans-serif");
     customFonts.zh = { url: url, name: fontName || file.name };
-    document.getElementById('currentZhFontName').textContent = '褰撳墠: ' + (fontName || file.name);
+    document.getElementById('currentZhFontName').textContent = '当前: ' + (fontName || file.name);
     document.getElementById('currentZhFontPreview').style.fontFamily = "'" + fontFamily + "'";
   }
   
@@ -4447,27 +4468,27 @@ function handleFontUpload(event, type) {
   var validExts = ['.ttf', '.otf', '.woff', '.woff2'];
   var ext = '.' + file.name.split('.').pop().toLowerCase();
   if (validExts.indexOf(ext) === -1) {
-    alert('璇蜂笂浼?.ttf / .otf / .woff / .woff2 鏍煎紡鐨勫瓧浣撴枃浠?);
+    alert('请上传 .ttf / .otf / .woff / .woff2 格式的字体文件');
     return;
   }
   
   if (file.size > 30 * 1024 * 1024) {
-    alert('瀛椾綋鏂囦欢杩囧ぇ锛岃涓婁紶 30MB 浠ュ唴鐨勬枃浠?);
+    alert('字体文件过大，请上传 30MB 以内的文件');
     return;
   }
   
   saveFontToDB(type, file).then(function() {
     applyCustomFont(type, file, file.name);
-    showSaveToast((type === 'en' ? '鑻辨枃' : '涓枃') + '瀛椾綋宸蹭笂浼犲苟搴旂敤鍒板叏绔?);
+    showSaveToast((type === 'en' ? '英文' : '中文') + '字体已上传并应用到全站');
   }).catch(function(err) {
-    alert('瀛椾綋淇濆瓨澶辫触锛? + err.message);
+    alert('字体保存失败：' + err.message);
   });
   
   event.target.value = '';
 }
 
 function resetFont(type) {
-  if (!confirm('纭畾鎭㈠' + (type === 'en' ? '鑻辨枃' : '涓枃') + '榛樿瀛椾綋鍚楋紵')) return;
+  if (!confirm('确定恢复' + (type === 'en' ? '英文' : '中文') + '默认字体吗？')) return;
   
   deleteFontFromDB(type).then(function() {
     var style = document.getElementById('custom-font-' + type);
@@ -4477,12 +4498,12 @@ function resetFont(type) {
     if (type === 'en') {
       root.style.setProperty('--font-display', "'Impact', 'PingFang SC', sans-serif");
       customFonts.en = null;
-      document.getElementById('currentEnFontName').textContent = '榛樿: Impact';
+      document.getElementById('currentEnFontName').textContent = '默认: Impact';
       document.getElementById('currentEnFontPreview').style.fontFamily = "var(--font-display)";
     } else {
       root.style.setProperty('--font-body', "'PingFang SC', sans-serif");
       customFonts.zh = null;
-      document.getElementById('currentZhFontName').textContent = '榛樿: 鑻规柟 PingFang SC';
+      document.getElementById('currentZhFontName').textContent = '默认: 苹方 PingFang SC';
       document.getElementById('currentZhFontPreview').style.fontFamily = "var(--font-body)";
     }
     
@@ -4490,7 +4511,7 @@ function resetFont(type) {
     document.body.offsetHeight;
     document.body.style.display = '';
     setTimeout(fitHeroTitle, 150);
-    showSaveToast((type === 'en' ? '鑻辨枃' : '涓枃') + '瀛椾綋宸叉仮澶嶉粯璁?);
+    showSaveToast((type === 'en' ? '英文' : '中文') + '字体已恢复默认');
   });
 }
 
