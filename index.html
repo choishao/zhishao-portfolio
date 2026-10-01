@@ -1312,39 +1312,36 @@ body.edit-mode .file-upload-zone { display: block; }
 /* ===== Wake Slider (about page bottom) ===== */
 .wake-slider {
   position: fixed;
-  bottom: 65px;
+  bottom: 60px;
   left: 50%;
   transform: translateX(-50%);
-  width: 400px;
-  max-width: 60vw;
+  width: 420px;
+  max-width: 55vw;
   z-index: 50;
   display: none;
 }
-body[data-page="about"] .wake-slider { display: flex; }
+body[data-page="about"] .wake-slider { display: block; }
 .wake-slider-track {
   display: flex;
+  flex-direction: row;
   align-items: center;
+  justify-content: center;
   gap: 3px;
-  height: 32px;
+  height: 48px;
   width: 100%;
-  cursor: pointer;
 }
 .wake-bar {
-  flex: 1;
-  height: 32px;
+  flex: 1 1 0;
+  min-width: 2px;
+  height: 48px;
   border-radius: 9999px;
-  background: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.1);
   transform: scaleY(0.25);
-  transform-origin: center;
-  transition: background-color 120ms ease;
+  transform-origin: center center;
+  transition: background 150ms ease;
 }
-.wake-bar.on { background: rgba(255,255,255,0.9); }
-.wake-bar.crest {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: #fff;
-  opacity: 0;
+.wake-bar.on {
+  background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(200,200,220,0.7));
 }
 /* History list items (work experience / project) */
 .history-item {
@@ -3382,7 +3379,7 @@ function showView(path) {
 (function() {
   const track = document.getElementById('wakeTrack');
   if (!track) return;
-  const BAR_COUNT = 24;
+  const BAR_COUNT = 32;
   const bars = [];
   for (let i = 0; i < BAR_COUNT; i++) {
     const b = document.createElement('span');
@@ -3390,41 +3387,41 @@ function showView(path) {
     track.appendChild(b);
     bars.push(b);
   }
-  let progress = 0; // 0 = page1, 1 = page2
-  let displayProgress = 0;
-  let wakeVelocity = 0;
+  let progress = 0;
+  let head = 0;
+  let wakeVel = 0;
   let lastTime = performance.now();
+  const smoothstep = s => s * s * (3 - 2 * s);
   function render(now) {
-    const dt = Math.min(0.05, (now - lastTime) / 1000);
+    const dt = Math.min(0.04, (now - lastTime) / 1000);
     lastTime = now;
-    // ease display progress toward target
-    displayProgress += (progress - displayProgress) * Math.min(1, dt * 8);
+    // ease head toward progress
+    head += (progress - head) * Math.min(1, dt * 6);
     // decay wake
-    wakeVelocity *= Math.pow(0.92, dt * 60);
-    const lit = Math.round(displayProgress * (BAR_COUNT - 1));
-    const amp = Math.min(1, Math.abs(wakeVelocity) / 8);
-    const reach = 4;
+    wakeVel *= Math.pow(0.90, dt * 60);
+    const amp = smoothstep(Math.min(1, Math.abs(wakeVel) / 6));
+    const lit = head * (BAR_COUNT - 1);
+    const litIdx = Math.round(lit);
+    const rest = 0.25;
+    const reach = 5;
     for (let i = 0; i < BAR_COUNT; i++) {
       const b = bars[i];
-      b.classList.toggle('on', i <= lit);
+      b.classList.toggle('on', i <= litIdx);
       const d = Math.abs(i - lit);
       const lift = d < reach ? amp * Math.cos((Math.PI * d) / (2 * reach)) ** 2 : 0;
-      const restH = 0.25;
-      b.style.transform = `scaleY(${restH + lift * (1 - restH)})`;
+      b.style.transform = `scaleY(${rest + lift * (1 - rest)})`;
     }
     requestAnimationFrame(render);
   }
   requestAnimationFrame(render);
-  // watch about page changes
   const hs = document.getElementById('aboutHScroll');
   const observer = new MutationObserver(() => {
     const isPage2 = hs.classList.contains('page2');
     const old = progress;
     progress = isPage2 ? 1 : 0;
-    wakeVelocity = Math.abs(progress - old) * 15;
+    wakeVel = Math.abs(progress - old) * 8;
   });
   observer.observe(hs, { attributes: true, attributeFilter: ['class'] });
-  // set body data-page
   const navObs = new MutationObserver(() => {
     const aboutActive = document.getElementById('view-about')?.classList.contains('active');
     document.body.dataset.page = aboutActive ? 'about' : '';
