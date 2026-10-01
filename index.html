@@ -1399,6 +1399,10 @@ body[data-page="about"] .wake-slider { display: block; }
   object-fit: cover;
   display: block;
   background: #333;
+  pointer-events: none;
+}
+body.edit-mode .drag-card-el .drag-card-inner img {
+  pointer-events: auto;
 }
 .drag-card-el .drag-card-inner img[src=""] {
   background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
@@ -3567,6 +3571,7 @@ function showView(path) {
   cards.forEach(c => {
     const el = c.el;
     el.addEventListener('pointerdown', e => {
+      if (document.body.classList.contains('edit-mode')) return;
       if (e.target.closest('[data-editable]')) return;
       e.preventDefault();
       dragging = c;
