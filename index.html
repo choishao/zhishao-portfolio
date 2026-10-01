@@ -46,8 +46,8 @@ body {
   background: var(--black);
   color: var(--white);
   overflow-x: hidden;
-  overflow-y: hidden;
-  height: 100vh;
+  overflow-y: auto;
+  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -367,6 +367,11 @@ button {
 
 .view.active {
   display: block;
+}
+
+#view-home, #view-about, #view-clients {
+  height: 100vh;
+  overflow: hidden;
 }
 
 /* ===== View: Home (Hero) - 1:1 reference ===== */
@@ -4012,12 +4017,17 @@ function setupImageEditing() {
       if (!document.body.classList.contains('edit-mode')) return;
       var wrap = e.target.closest('.editable-image-wrap');
       if (!wrap) return;
-      e.preventDefault();
-      e.stopPropagation();
-      var img = wrap.querySelector('img[data-image-key]');
-      var key = wrap.dataset.imageWrap || (img && img.dataset.imageKey);
-      if (key) uploadImageByKey(key);
-    });
+      var key = wrap.dataset.imageWrap || '';
+      if (!key) {
+        var img = wrap.querySelector('img[data-image-key]');
+        key = img ? img.dataset.imageKey : '';
+      }
+      if (key) {
+        e.preventDefault();
+        e.stopPropagation();
+        uploadImageByKey(key);
+      }
+    }, true);
   }
   // Static images with data-image-key
   document.querySelectorAll('img[data-image-key]').forEach(img => {
