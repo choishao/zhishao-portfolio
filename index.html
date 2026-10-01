@@ -633,7 +633,7 @@ button {
   align-items: baseline;
   justify-content: flex-start;
   gap: 10px;
-  padding: 0 0 12px;
+  padding: 12px 0 0;
   font-size: 14px;
   line-height: 1.4;
   letter-spacing: 0.14px;
@@ -653,6 +653,7 @@ button {
 }
 .kono-title {
   font-weight: 500;
+  font-size: 20px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -2829,6 +2830,7 @@ function renderWorkGrid(container, items) {
     const cardClick = editMode ? 'onclick="return handleWorkCardClick(event, ' + idx + ')" ondblclick="openWorkDetail(' + idx + ')"' : 'onclick="openWorkDetail(' + idx + ')"';
     return '<div class="work-card kono-card" ' + cardClick + '>' +
       (editMode ? delBtnHtml('workcard_' + idx, function () { deleteWorkItem(idx); }) : '') +
+      '<div class="kono-thumb editable-image-wrap" data-image-wrap="' + key + '"><img src="' + src + '" alt="' + item.title + '" loading="lazy" data-image-key="' + key + '"></div>' +
       '<div class="kono-meta">' +
         '<div class="kono-meta-left">' +
           '<span class="kono-num">' + num + '</span>' +
@@ -2838,7 +2840,6 @@ function renderWorkGrid(container, items) {
         '</div>' +
         '<span class="kono-year" data-editable="' + yearKey + '">' + (item.year || '') + '</span>' +
       '</div>' +
-      '<div class="kono-thumb editable-image-wrap" data-image-wrap="' + key + '"><img src="' + src + '" alt="' + item.title + '" loading="lazy" data-image-key="' + key + '"></div>' +
     '</div>';
   }).join('');
   if (editMode) { setupEditables(); setupImageEditing(); }
