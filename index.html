@@ -1237,10 +1237,36 @@ body.edit-mode .file-upload-zone { display: block; }
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 75px 40px 60px;
+  padding: 0;
   color: #fff;
 }
+.about-intro-text {
+  position: absolute;
+  top: 50%;
+  left: 30%;
+  transform: translateY(-50%);
+  max-width: 620px;
+  font-size: 14px;
+  line-height: 1.9;
+  color: rgba(255,255,255,0.9);
+}
+.about-big-name {
+  position: absolute;
+  bottom: 60px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 14vw;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 0.85;
+  transform: scaleX(-1);
+  white-space: nowrap;
+  user-select: none;
+}
+.about-big-name .part-red { color: #B22222; }
+.about-big-name .part-white { color: #fff; }
 .about-dual-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1269,6 +1295,10 @@ body.edit-mode .file-upload-zone { display: block; }
   font-size: 14px;
   line-height: 1.8;
   color: rgba(255,255,255,0.75);
+}
+#aboutPage2 .about-page-content {
+  padding: 80px 40px 60px;
+  justify-content: flex-start;
 }
 #aboutPage2 .about-col-item {
   font-size: 15px;
@@ -2148,20 +2178,11 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
       <div class="about-page" id="aboutPage1" style="background-image:url('https://aka.doubaocdn.com/s/M6zsdT8JPw')">
         <div class="about-page-overlay"></div>
         <div class="about-page-content">
-          <div class="about-dual-col">
-            <div class="about-col-left">
-              <div class="about-col-label" data-editable="aboutRoleLabel">职位</div>
-              <div class="about-col-item" data-editable="aboutRole1">视觉设计师</div>
-              <div class="about-col-item" data-editable="aboutRole2">小红书博主</div>
-            </div>
-            <div class="about-col-right">
-              <div class="about-col-label" data-editable="aboutNameLabel">名称</div>
-              <div class="about-col-item about-col-name" data-editable="aboutName">ZHISHAOCUI</div>
-            </div>
+          <div class="about-intro-text" data-editable="aboutIntroText">
+            我是崔志韶，一名驻杭州的视觉设计师。拥有超过五年的设计相关经验，具有家居电器、香氛日化和大健康快速消费品的设计经验。工作涉及电商、跨境电商、平面设计、品牌设计、摄影指导、和视频编辑，也参与过线下活动相关设计工作。业余专注发展我的设计技能与审美，在这个时代我依然热衷于互联网前沿AI人工智能的持续探索。
           </div>
-          <div class="about-bottom-text">
-            <div class="about-col-label" data-editable="aboutCareerLabel">职业生涯</div>
-            <p data-editable="aboutCareerText">你好，我是志韶Ciao。设计师。小红书博主。拥有一只黑色美卡犬和两只猫。喜欢运动和时尚。</p>
+          <div class="about-big-name" aria-hidden="true">
+            <span class="part-red">CUIZHI</span><span class="part-white">SHAO</span>
           </div>
         </div>
       </div>
