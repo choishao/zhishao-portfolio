@@ -3570,6 +3570,16 @@ function showView(path) {
     el.style.top = '0px';
     el.style.transform = 'rotate(' + d.rot + 'deg)';
     stage.appendChild(el);
+    // Bind image upload click for admin edit mode
+    const imgWrap = el.querySelector('.editable-image-wrap');
+    if (imgWrap) {
+      imgWrap.onclick = function(e) {
+        if (!document.body.classList.contains('edit-mode')) return;
+        e.preventDefault();
+        e.stopPropagation();
+        uploadImageByKey('dragCard' + i + 'Img');
+      };
+    }
     cards.push({ el, rot: d.rot, ox: 0, oy: 0, vx: 0, vy: 0 });
   });
   let dragging = null, lastPX = 0, lastPY = 0, lastT = 0;
