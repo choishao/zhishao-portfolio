@@ -1365,32 +1365,31 @@ body[data-page="about"] .wake-slider { display: block; }
 .drag-card:active { cursor: grabbing; }
 .drag-card-inner {
   background: #1a1a1a;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0,0,0,0.5);
   transform-style: preserve-3d;
   position: relative;
+  width: 280px;
+  height: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.25);
+  font-size: 13px;
+  letter-spacing: 2px;
 }
 .drag-card-inner img {
   width: 100%;
   height: 360px;
   object-fit: cover;
-  display: block;
+  display: none;
   pointer-events: none;
 }
-.drag-card-inner img:not([src]), .drag-card-inner img[src=""] {
-  display: none;
-}
-.drag-card-inner:has(img[src=""])::after {
-  content: 'photo';
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 360px;
-  color: rgba(255,255,255,0.2);
-  font-size: 14px;
-  letter-spacing: 2px;
+.drag-card-inner img[src]:not([src=""]) {
+  display: block;
 }
 .drag-card-glare {
   position: absolute;
@@ -3519,7 +3518,7 @@ function showView(path) {
     const el = document.createElement('div');
     el.className = 'drag-card';
     el.dataset.idx = i;
-    el.innerHTML = `<div class="drag-card-inner"><img src="" alt="" data-editable="dragCard${i}Img"><div class="drag-card-glare"></div></div>`;
+    el.innerHTML = `<div class="drag-card-inner"><span>PHOTO ${i+1}</span><img src="" alt="" data-editable="dragCard${i}Img"><div class="drag-card-glare"></div></div>`;
     el.style.left = (d.x * 100) + '%';
     el.style.top = (d.y * 100) + '%';
     el.style.transform = `rotate(${d.rot}deg)`;
