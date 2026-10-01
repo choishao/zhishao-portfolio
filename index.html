@@ -1401,7 +1401,10 @@ body[data-page="about"] .wake-slider { display: block; }
   background: #333;
   pointer-events: none;
 }
-body.edit-mode .drag-card-el .drag-card-inner img {
+.drag-card-el .editable-image-wrap {
+  pointer-events: none;
+}
+body.edit-mode .drag-card-el .editable-image-wrap {
   pointer-events: auto;
 }
 .drag-card-el .drag-card-inner img[src=""] {
@@ -3557,7 +3560,9 @@ function showView(path) {
     var placeholder = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="280" height="360"><rect width="100%" height="100%" fill="#2a2a2a"/><text x="50%" y="50%" font-family="Arial" font-size="14" fill="#555" text-anchor="middle" dominant-baseline="middle">Click to upload</text></svg>');
     el.innerHTML =
       '<div class="drag-card-inner">' +
-        '<img src="' + placeholder + '" alt="" data-editable="dragCard' + i + 'Img">' +
+        '<div class="editable-image-wrap" data-image-wrap="dragCard' + i + 'Img">' +
+          '<img src="' + placeholder + '" alt="" data-image-key="dragCard' + i + 'Img">' +
+        '</div>' +
         '<h3 data-editable="dragCard' + i + 'Title">Photo ' + (i+1) + '</h3>' +
       '</div>' +
       '<div class="drag-card-glare"></div>';
