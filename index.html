@@ -1373,6 +1373,15 @@ body[data-page="about"] .wake-slider { display: block; }
   touch-action: none;
 }
 .drag-card-el:active { cursor: grabbing; }
+.drag-card-el {
+  position: absolute;
+  width: 280px;
+  cursor: grab;
+  will-change: transform;
+  user-select: none;
+  touch-action: none;
+}
+.drag-card-el:active { cursor: grabbing; }
 .drag-card-el .drag-card-inner {
   background: #222;
   border: 1px solid rgba(255,255,255,0.2);
@@ -3549,10 +3558,8 @@ function showView(path) {
         '<h3 data-editable="dragCard' + i + 'Title">Photo ' + (i+1) + '</h3>' +
       '</div>' +
       '<div class="drag-card-glare"></div>';
-    el.style.left = (d.x * 100) + '%';
-    el.style.top = (d.y * 100) + '%';
-    el.style.marginLeft = '-140px';
-    el.style.marginTop = '-210px';
+    el.style.left = '0px';
+    el.style.top = '0px';
     el.style.transform = 'rotate(' + d.rot + 'deg)';
     stage.appendChild(el);
     cards.push({ el, rot: d.rot, ox: 0, oy: 0, vx: 0, vy: 0 });
@@ -3617,13 +3624,24 @@ function showView(path) {
     });
     requestAnimationFrame(anim);
   }
-  requestAnimationFrame(anim);
-  window.addEventListener('resize', () => {
-    cards.forEach((c, i) => {
-      c.el.style.left = (cardData[i].x * 100) + '%';
-      c.el.style.top = (cardData[i].y * 100) + '%';
+  function positionCards() {
+    var sw = stage.offsetWidth;
+    var sh = stage.offsetHeight;
+    cards.forEach(function(c, i) {
+      var d = cardData[i];
+      c.el.style.left = Math.round(sw * d.x - 140) + 'px';
+      c.el.style.top = Math.round(sh * d.y - 210) + 'px';
     });
+  }
+  window.addEventListener('resize', positionCards);
+  // Watch for stage becoming visible
+  var ro = new MutationObserver(function() {
+    if (stage.classList.contains('active')) {
+      setTimeout(positionCards, 50);
+    }
   });
+  ro.observe(stage, { attributes: true, attributeFilter: ['class'] });
+  requestAnimationFrame(anim);
 })();
 
 window.addEventListener('hashchange', () => {
