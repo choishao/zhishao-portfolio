@@ -2140,14 +2140,14 @@ body.edit-mode .add-category-btn { display: block; }
 
 
 /* ===== Admin Dashboard (Cargo-style) ===== */
-#view-admin { display:none; position:fixed; inset:0; background:#fff; z-index:5000; font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif; color:#1a1a1a; overflow:hidden; }
+#view-admin { display:none; position:fixed; inset:0; background:#000; z-index:5000; font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif; color:#fff; overflow:hidden; }
 #view-admin.active { display:flex; }
-.admin-topbar { position:absolute; top:0; left:0; right:0; height:52px; display:flex; align-items:center; justify-content:space-between; padding:0 24px; border-bottom:1px solid #e8e8e8; background:#fff; z-index:10; font-family:system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif; }
-.admin-topbar-left { display:flex; align-items:center; gap:8px; font-size:15px; font-weight:600; color:#1a1a1a; }
-.admin-topbar-left .badge { background:#f0f0f0; font-size:10px; padding:2px 6px; border-radius:4px; color:#666; font-weight:400; }
+.admin-topbar { position:absolute; top:0; left:0; right:0; height:52px; display:flex; align-items:center; justify-content:space-between; padding:0 24px; border-bottom:1px solid #222; background:#000; z-index:10; font-family:system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif; }
+.admin-topbar-left { display:flex; align-items:center; gap:8px; font-size:15px; font-weight:600; color:#fff; }
+.admin-topbar-left .badge { background:#222; font-size:10px; padding:2px 6px; border-radius:4px; color:#888; font-weight:400; }
 .admin-topbar-right { display:flex; align-items:center; gap:10px; }
-.admin-topbar-right button { background:none; border:none; cursor:pointer; font-size:16px; color:#666; padding:6px; border-radius:6px; transition:all 0.15s; }
-.admin-topbar-right button:hover { background:#f5f5f5; color:#1a1a1a; }
+.admin-topbar-right button { background:none; border:none; cursor:pointer; font-size:16px; color:#888; padding:6px; border-radius:6px; transition:all 0.15s; }
+.admin-topbar-right button:hover { background:#222; color:#fff; }
 .admin-exit-btn { font-size:12px !important; border:1px solid #d9d9d9 !important; padding:6px 14px !important; border-radius:6px !important; color:#333 !important; }
 .admin-exit-btn:hover { border-color:#1a1a1a !important; color:#1a1a1a !important; }
 .admin-sidebar { width:200px; border-right:1px solid #e8e8e8; padding-top:60px; padding-bottom:16px; display:flex; flex-direction:column; justify-content:space-between; flex-shrink:0; background:#fafafa; font-family:system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif; }
@@ -2161,8 +2161,8 @@ body.edit-mode .add-category-btn { display: block; }
 .admin-search { padding:10px; border-top:1px solid #eee; }
 .admin-search input { width:100%; border:1px solid #e0e0e0; outline:none; font-size:12px; padding:7px 10px; background:#fff; color:#333; border-radius:6px; font-family:inherit; }
 .admin-search input:focus { border-color:#1a1a1a; }
-.admin-main { flex:1; padding:64px 28px 28px; overflow-y:auto; background:#fff; font-family:system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif; }
-.admin-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:20px; }
+.admin-main { flex:1; padding:64px 28px 28px; overflow-y:auto; background:#000; font-family:system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif; }
+.admin-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
 .admin-page-card { cursor:pointer; position:relative; transition:transform 0.15s; }
 .admin-page-card:hover { transform:translateY(-2px); }
 .admin-page-card:hover .card-actions { opacity:1; }
@@ -2171,14 +2171,14 @@ body.edit-mode .add-category-btn { display: block; }
 .admin-thumb img { width:100%; height:100%; object-fit:cover; }
 .admin-thumb-preview { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:11px; color:#bbb; }
 .admin-card-footer { display:flex; align-items:center; justify-content:space-between; padding:10px 4px 0; }
-.admin-card-name { font-size:13px; color:#333; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:500; outline:none; cursor:text; border-radius:3px; padding:1px 3px; margin:-1px -3px; }
-.admin-card-name:hover { background:#f0f0f0; }
-.admin-card-name:focus { background:#eee; box-shadow:0 0 0 1px #ccc; white-space:normal; word-break:break-all; }
+.admin-card-name { font-size:13px; color:#fff; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:500; outline:none; cursor:text; border-radius:3px; padding:1px 3px; margin:-1px -3px; }
+.admin-card-name:hover { background:#222; }
+.admin-card-name:focus { background:#1a1a1a; box-shadow:0 0 0 1px #444; white-space:normal; word-break:break-all; }
 #thumbGenStatus { margin:0 0 12px 0; font-size:12px; color:#888; display:flex; align-items:center; gap:6px; }
 #thumbGenStatus .spin { width:12px; height:12px; border:2px solid #ddd; border-top-color:#333; border-radius:50%; animation:thumbSpin 0.8s linear infinite; }
 @keyframes thumbSpin { to { transform:rotate(360deg); } }
-.admin-card-eye { color:#bbb; font-size:14px; cursor:pointer; padding:2px 4px; border-radius:4px; }
-.admin-card-eye:hover { color:#1a1a1a; background:#f5f5f5; }
+.admin-card-eye { color:#555; font-size:14px; cursor:pointer; padding:2px 4px; border-radius:4px; }
+.admin-card-eye:hover { color:#fff; background:#222; }
 .card-actions { position:absolute; top:6px; right:6px; opacity:0; transition:opacity 0.15s; z-index:5; }
 .card-menu-btn { width:24px; height:24px; background:rgba(255,255,255,0.9); border:1px solid #ddd; border-radius:3px; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center; color:#333; }
 .admin-context-menu { position:fixed; background:#fff; border:1px solid #e8e8e8; border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,0.12); padding:6px; min-width:150px; z-index:10000; display:none; font-family:system-ui,-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif; }
@@ -2471,21 +2471,10 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
       <span class="badge">新</span>
     </div>
     <div class="admin-topbar-right">
+      <input type="text" placeholder="搜索页面..." oninput="searchAdminPages(this.value)" style="padding:6px 12px;border-radius:8px;border:1px solid #333;background:#1a1a1a;color:#fff;font-size:13px;width:180px;">
+      <div class="admin-tool-btn" onclick="openFontManager()" style="color:#fff;cursor:pointer;font-size:13px;">字体管理</div>
       <button onclick="exitAdminToSite()" title="返回网站">&#8962;</button>
       <button class="admin-exit-btn" onclick="exitAdminToSite()">退出后台</button>
-    </div>
-  </div>
-  <div class="admin-sidebar">
-    <div class="admin-nav">
-      <div class="admin-nav-item active" onclick="filterAdminPages('all', this)">&#128196; 全部</div>
-      <div class="admin-nav-item" onclick="filterAdminPages('main', this)">&#128193; 主要页面</div>
-      <div class="admin-nav-item" onclick="filterAdminPages('work', this)">&#128193; 作品页面</div>
-    </div>
-    <div class="admin-tools">
-      <div class="admin-tool-btn" onclick="openFontManager()">&#128260; 字体管理</div>
-    </div>
-    <div class="admin-search">
-      <input type="text" placeholder="搜索页面..." oninput="searchAdminPages(this.value)">
     </div>
   </div>
   <div class="admin-main">
