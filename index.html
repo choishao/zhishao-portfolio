@@ -3429,6 +3429,13 @@ function showView(path) {
     }
   }
   window.scrollTo(0, 0);
+  if (path === 'home') {
+    setTimeout(function() {
+      var c = document.getElementById('heroEvilEye');
+      if (c) { c.width = c.width; c.height = c.height; }
+      window.dispatchEvent(new Event('resize'));
+    }, 50);
+  }
   if (path === 'home') setTimeout(fitHeroTitle, 60);
   if (path === 'about') {
     setTimeout(() => {
