@@ -2473,6 +2473,7 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
     <div class="admin-topbar-right">
       <input type="text" placeholder="搜索页面..." oninput="searchAdminPages(this.value)" style="padding:6px 12px;border-radius:8px;border:1px solid #333;background:#1a1a1a;color:#fff;font-size:13px;width:180px;">
       <div class="admin-tool-btn" onclick="openFontManager()" style="color:#fff;cursor:pointer;font-size:13px;">字体管理</div>
+      <div class="admin-tool-btn" onclick="uploadResume()" style="color:#fff;cursor:pointer;font-size:13px;">上传简历</div>
       <button onclick="exitAdminToSite()" title="返回网站">&#8962;</button>
       <button class="admin-exit-btn" onclick="exitAdminToSite()">退出后台</button>
     </div>
@@ -3330,10 +3331,6 @@ function uploadResume() {
   input.onchange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    if (file.size > 20 * 1024 * 1024) {
-      alert('文件过大，请上传 20MB 以内的 PDF 文件。');
-      return;
-    }
     try {
       const db = await openResumeDB();
       const tx = db.transaction('resume', 'readwrite');
