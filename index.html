@@ -101,7 +101,7 @@ button {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
-  animation: shinySweep 2.5s ease-out forwards;
+  animation: shinySweep 1.8s ease-out 0.2s forwards;
 }
 
 @keyframes shinySweep {
@@ -5296,17 +5296,6 @@ function initHeroEvilEye() {
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   }
   tick();
-
-  // Pause rendering when the home view is not visible (performance)
-  var viewHome = document.getElementById('view-home');
-  if (viewHome && window.IntersectionObserver) {
-    new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (en.isIntersecting && !running) { running = true; tick(); }
-        else if (!en.isIntersecting && running) { running = false; if (rafId) { cancelAnimationFrame(rafId); rafId = null; } }
-      });
-    }).observe(viewHome);
-  }
 }
 
 
