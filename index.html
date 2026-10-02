@@ -2296,7 +2296,7 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
     <canvas id="heroEvilEye" aria-hidden="true"></canvas>
     <div class="scroll-velocity-text" id="scrollVelocityText">
       <div class="sv-track">
-        <span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span>
+        <span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span>
       </div>
     </div>
     <div class="hero-social">
@@ -5346,7 +5346,6 @@ function initScrollVelocity() {
   var lastScrollY = window.scrollY;
   var scrollVelocity = 0;
   var smoothVelocity = 0;
-  var direction = 1;
   var baseVelocity = 100;
   function animate(time) {
     var delta = 16;
@@ -5355,13 +5354,13 @@ function initScrollVelocity() {
     lastScrollY = currentScrollY;
     smoothVelocity += (scrollVelocity - smoothVelocity) * 0.1;
     var velocityFactor = Math.max(0, Math.min(5, Math.abs(smoothVelocity) / 200));
-    if (smoothVelocity < 0) direction = 1;
-    else if (smoothVelocity > 0) direction = -1;
-    var moveBy = direction * baseVelocity * (delta / 1000);
-    moveBy += direction * moveBy * velocityFactor;
+    var moveBy = baseVelocity * (delta / 1000);
+    moveBy += moveBy * velocityFactor;
     baseX += moveBy;
-    var copyWidth = track.children[0].offsetWidth * track.children.length;
-    if (baseX < -copyWidth / 2) baseX = 0;
+    var halfWidth = track.scrollWidth / 2;
+    if (halfWidth > 0 && baseX >= halfWidth) {
+      baseX = 0;
+    }
     track.style.transform = 'translateX(' + baseX + 'px)';
     requestAnimationFrame(animate);
   }
