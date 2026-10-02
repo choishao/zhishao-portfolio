@@ -840,29 +840,21 @@ button {
   padding-top: 16px;
   text-align: left;
 }
-/* ===== Gallery 媒体墙（等宽网格） ===== */
+/* ===== Gallery 媒体墙（方形网格） ===== */
 .gallery-page {
-  max-width: 1280px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 70px 40px 100px;
-}
-.gallery-title {
-  font-size: 32px;
-  font-weight: 400;
-  color: var(--gray-light);
-  letter-spacing: 2px;
-  margin-bottom: 44px;
+  padding: 0;
 }
 .medias {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
+  gap: 0;
 }
 .media {
   position: relative;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
-  border-radius: 10px;
   background: #111;
 }
 .media img {
@@ -870,6 +862,21 @@ button {
   height: 100%;
   object-fit: cover;
   display: block;
+}
+.media-info {
+  padding: 10px 0 20px;
+  text-align: left;
+}
+.media-year {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 4px;
+}
+.media-title {
+  font-size: 15px;
+  color: #fff;
+  font-weight: 500;
+}
   user-select: none;
 }
 .gallery-del-btn {
@@ -2449,7 +2456,6 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
   <!-- ===== View: Gallery 媒体墙 ===== -->
   <section class="view" id="view-gallery">
     <div class="gallery-page">
-      <div class="gallery-title" data-editable="galleryTitle">媒体墙</div>
       <div class="medias" id="galleryGrid"></div>
       <div class="file-upload-zone" id="galleryAddBtn" data-target="gallery" onclick="addGalleryMedia()" style="display:none;">
         <p class="fu-title">上传图片</p>
@@ -2778,9 +2784,13 @@ function renderGalleryGrid(container, items) {
   container.innerHTML = items.map(function (src, i) {
     const key = 'gallery_' + i;
     const imgSrc = imgs[key] || src;
-    return '<div class="media">'
+    return '<div class="media-wrap">'
       + (editMode ? delBtnHtml('gal_' + i, function () { removeGalleryMedia(i); }) : '')
-      + '<img src="' + imgSrc + '" alt="" loading="lazy" data-image-key="' + key + '"></div>';
+      + '<div class="media"><img src="' + imgSrc + '" alt="" loading="lazy" data-image-key="' + key + '"></div>'
+      + '<div class="media-info">'
+      + '<div class="media-year" data-editable="gallery_year_' + i + '">' + (siteContent['gallery_year_' + i] || '2026') + '</div>'
+      + '<div class="media-title" data-editable="gallery_title_' + i + '">' + (siteContent['gallery_title_' + i] || '作品 ' + (i+1)) + '</div>'
+      + '</div></div>';
   }).join('');
   const addBtn = document.getElementById('galleryAddBtn');
   if (addBtn) addBtn.style.display = editMode ? 'block' : 'none';
