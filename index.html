@@ -1320,7 +1320,7 @@ body.edit-mode .editable-image-wrap:hover::after { opacity: 1; }
   opacity: 0;
   transform: translateY(60px);
 }
-#view-about.active .about-page-content {
+.about-page-content.animate-in {
   animation: aboutTextUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1s forwards;
 }
 #view-about.active .drag-stage {
@@ -1444,14 +1444,9 @@ body[data-page="about"] .wake-slider { display: block; }
   overflow: hidden;
   z-index: 1;
   display: none;
-  opacity: 0;
-  transform: translateY(60px);
 }
 .drag-stage.active {
   display: block;
-}
-#view-about.active .drag-stage.active {
-  animation: aboutTextUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1s forwards;
 }
 .drag-card-el {
   position: absolute;
@@ -3476,6 +3471,9 @@ function showView(path) {
       if (window._aboutPage) window._aboutPage = 1;
       var ds = document.getElementById('dragStage');
       if (ds) ds.classList.remove('active');
+      document.querySelectorAll('#view-about .about-page-content').forEach(function(el){ el.classList.remove('animate-in'); });
+      var p1 = document.querySelector('#aboutPage1 .about-page-content');
+      if (p1) setTimeout(function(){ p1.classList.add('animate-in'); }, 100);
     }, 100);
   }
 }
@@ -3500,7 +3498,7 @@ function showView(path) {
     if (dir > 0 && window._aboutPage < 3) {
       window._aboutPage++;
       hs.classList.remove('page2','page3');
-      if (window._aboutPage === 2) hs.classList.add('page2');
+      if (window._aboutPage === 2) { hs.classList.add('page2'); var p2 = document.querySelector('#aboutPage2 .about-page-content'); if (p2) setTimeout(function(){ p2.classList.add('animate-in'); }, 200); }
       else if (window._aboutPage === 3) hs.classList.add('page3');
       var ds = document.getElementById('dragStage');
       if (ds) ds.classList.toggle('active', window._aboutPage === 3);
