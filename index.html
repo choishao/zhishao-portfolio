@@ -436,6 +436,11 @@ button {
 .scroll-velocity-text .sv-track {
   display: inline-flex;
   will-change: transform;
+  animation: svScroll 20s linear infinite;
+}
+@keyframes svScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 .scroll-velocity-text .sv-track span {
   flex-shrink: 0;
@@ -5335,31 +5340,7 @@ function initHeroEvilEye() {
 }
 
 function initScrollVelocity() {
-  var track = document.querySelector('#scrollVelocityText .sv-track');
-  if (!track) return;
-  var baseX = 0;
-  var lastScrollY = window.scrollY;
-  var scrollVelocity = 0;
-  var smoothVelocity = 0;
-  var baseVelocity = 100;
-  function animate(time) {
-    var delta = 16;
-    var currentScrollY = window.scrollY;
-    scrollVelocity = currentScrollY - lastScrollY;
-    lastScrollY = currentScrollY;
-    smoothVelocity += (scrollVelocity - smoothVelocity) * 0.1;
-    var velocityFactor = Math.max(0, Math.min(5, Math.abs(smoothVelocity) / 200));
-    var moveBy = baseVelocity * (delta / 1000);
-    moveBy += moveBy * velocityFactor;
-    baseX += moveBy;
-    var halfWidth = track.scrollWidth / 2;
-    if (halfWidth > 0 && baseX >= halfWidth) {
-      baseX = 0;
-    }
-    track.style.transform = 'translateX(' + baseX + 'px)';
-    requestAnimationFrame(animate);
-  }
-  requestAnimationFrame(animate);
+  // Pure CSS seamless loop, no JS needed
 }
 
 </script>
