@@ -3431,10 +3431,17 @@ function showView(path) {
   window.scrollTo(0, 0);
   if (path === 'home') {
     setTimeout(function() {
-      var c = document.getElementById('heroEvilEye');
-      if (c) { c.width = c.width; c.height = c.height; }
-      window.dispatchEvent(new Event('resize'));
-    }, 50);
+      var old = document.getElementById('heroEvilEye');
+      if (old) old.remove();
+      var home = document.getElementById('view-home');
+      if (home) {
+        var c = document.createElement('canvas');
+        c.id = 'heroEvilEye';
+        c.setAttribute('aria-hidden', 'true');
+        home.insertBefore(c, home.firstChild);
+        requestAnimationFrame(function() { initHeroEvilEye(); });
+      }
+    }, 200);
   }
   if (path === 'home') setTimeout(fitHeroTitle, 60);
   if (path === 'about') {
