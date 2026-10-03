@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -380,6 +380,16 @@ button {
 /* ===== Main Content ===== */
 #main {
   min-height: 100vh;
+}
+#view-gallery {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 1;
+  background: #000;
 }
 
 .view {
@@ -840,31 +850,34 @@ button {
   padding-top: 16px;
   text-align: left;
 }
-/* ===== Gallery 媒体墙（方形网格） ===== */
+/* ===== Gallery 媒体墙（瀑布流） ===== */
 .gallery-page {
   max-width: 100%;
   margin: 0 auto;
-  padding: 0;
+  padding: 60px 0 50px;
 }
 .medias {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0;
+  column-count: 4;
+  column-gap: 5px;
+}
+.media-wrap {
+  break-inside: avoid;
+  margin-bottom: 5px;
+  display: inline-block;
+  width: 100%;
 }
 .media {
   position: relative;
-  aspect-ratio: 1 / 1;
   overflow: hidden;
   background: #111;
 }
 .media img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
   display: block;
 }
 .media-info {
-  padding: 10px 0 20px;
+  padding: 8px 5px 16px;
   text-align: left;
 }
 .media-year {
@@ -901,11 +914,11 @@ body.edit-mode .gallery-del-btn { display: flex; }
 body.edit-mode .gallery-del-btn:hover { background: rgba(0,0,0,0.9); }
 .gallery-add-btn { margin-top: 44px; }
 @media (max-width: 1024px) {
-  .medias { grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .medias { column-count: 3; column-gap: 5px; }
 }
 @media (max-width: 640px) {
   .gallery-page { padding: 44px 16px 80px; }
-  .medias { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .medias { column-count: 2; column-gap: 5px; }
 }
 
 
