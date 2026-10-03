@@ -854,7 +854,7 @@ button {
 .gallery-page {
   max-width: 100%;
   margin: 0 auto;
-  padding: 60px 0 50px;
+  padding: 60px 10px 50px;
 }
 .medias {
   column-count: 4;
@@ -875,6 +875,28 @@ button {
   width: 100%;
   height: auto;
   display: block;
+  cursor: zoom-in;
+}
+/* Lightbox */
+#lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+}
+#lightbox.open { display: flex; }
+#lightbox img {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
 }
 .media-info {
   padding: 8px 5px 16px;
@@ -2799,7 +2821,7 @@ function renderGalleryGrid(container, items) {
     const imgSrc = imgs[key] || src;
     return '<div class="media-wrap">'
       + (editMode ? delBtnHtml('gal_' + i, function () { removeGalleryMedia(i); }) : '')
-      + '<div class="media"><img src="' + imgSrc + '" alt="" loading="lazy" data-image-key="' + key + '"></div>'
+      + '<div class="media"><img src="' + imgSrc + '" alt="" loading="lazy" data-image-key="' + key + '" onclick="openLightbox(this.src)"></div>'
       + '<div class="media-info">'
       + '<div class="media-year" data-editable="gallery_year_' + i + '">' + (siteContent['gallery_year_' + i] || '2026') + '</div>'
       + '<div class="media-title" data-editable="gallery_title_' + i + '">' + (siteContent['gallery_title_' + i] || '作品 ' + (i+1)) + '</div>'
@@ -5360,6 +5382,18 @@ function initScrollVelocity() {
   // Pure CSS seamless loop, no JS needed
 }
 
+</script>
+
+<div id="lightbox" onclick="closeLightbox()"><img id="lightboxImg" src="" alt=""></div>
+<script>
+function openLightbox(src) {
+  var lb = document.getElementById('lightbox');
+  document.getElementById('lightboxImg').src = src;
+  lb.classList.add('open');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+}
 </script>
 
 </body>
