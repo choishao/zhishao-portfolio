@@ -2347,7 +2347,8 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
 
   <!-- ===== View: Home ===== -->
   <section class="view active" id="view-home">
-    <canvas id="heroEvilEye" aria-hidden="true"></canvas>
+    <div id="homeBgImg" style="position:absolute;inset:0;background:url('https://aka.doubaocdn.com/s/a7ntm7ypPw') center/cover no-repeat;z-index:0;"></div>
+    <canvas id="heroEvilEye" aria-hidden="true" style="display:none;"></canvas>
     <div class="scroll-velocity-text" id="scrollVelocityText">
       <div class="sv-track">
         <span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span>
@@ -3499,9 +3500,14 @@ function showView(path) {
         var c = document.createElement('canvas');
         c.id = 'heroEvilEye';
         c.setAttribute('aria-hidden', 'true');
+        c.style.display = 'none';
         home.insertBefore(c, home.firstChild);
         requestAnimationFrame(function() { initHeroEvilEye(); });
       }
+      // Reset to image background
+      homeBgIsImage = true;
+      var bg = document.getElementById('homeBgImg');
+      if (bg) bg.style.display = 'block';
     }, 200);
   }
   if (path === 'home') setTimeout(fitHeroTitle, 60);
@@ -5394,6 +5400,24 @@ function openLightbox(src) {
 function closeLightbox() {
   document.getElementById('lightbox').classList.remove('open');
 }
+// Home background toggle: image <-> galaxy
+var homeBgIsImage = true;
+document.addEventListener('click', function(e) {
+  if (!document.getElementById('view-home').classList.contains('active')) return;
+  if (e.target.closest('a, button, .scroll-velocity-text, .hero-social, nav, .bottom-bar, #menu-overlay')) return;
+  e.preventDefault();
+  var bg = document.getElementById('homeBgImg');
+  var canvas = document.getElementById('heroEvilEye');
+  if (homeBgIsImage) {
+    bg.style.display = 'none';
+    canvas.style.display = 'block';
+    if (typeof initHeroEvilEye === 'function') initHeroEvilEye();
+  } else {
+    bg.style.display = 'block';
+    canvas.style.display = 'none';
+  }
+  homeBgIsImage = !homeBgIsImage;
+});
 </script>
 
 </body>
