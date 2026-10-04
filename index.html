@@ -4871,7 +4871,20 @@ function adminAction(action) {
   if (action === 'edit') {
     adminEditPage(page.route);
   } else if (action === 'duplicate') {
-    alert('复制页面：' + page.name + '（功能开发中）');
+    if (page.type === 'work' && page.id.indexOf('detail-') === 0) {
+      var srcIdx = parseInt(page.id.replace('detail-', ''));
+      var srcItem = siteContent.workItems[srcIdx];
+      if (srcItem) {
+        var copy = JSON.parse(JSON.stringify(srcItem));
+        copy.title = (srcItem.title || '作品') + ' 副本';
+        siteContent.workItems.splice(srcIdx + 1, 0, copy);
+        if (typeof saveSiteContent === 'function') saveSiteContent();
+        renderAdminDashboard();
+        showSaveToast('已复制作品「' + copy.title + '」');
+      }
+    } else {
+      alert('系统页面不可复制');
+    }
     hideAdminContextMenu();
   } else if (action === 'copy') {
     var url = window.location.origin + window.location.pathname + '#/' + page.route;
