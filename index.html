@@ -4201,21 +4201,21 @@ function handleImageFile(file, key) {
     reader.readAsDataURL(file);
     return;
   }
-  // 图片：直接存 Blob
-  putImage(key, file).then(function() {
-    var src = imgCache[key];
-    var imgEl = document.querySelector('img[data-image-key="' + key + '"]');
-    if (imgEl && src) imgEl.src = src;
-    // Re-render work grid if this is a work cover image
-    if (key.indexOf('work_') === 0) {
-      var gi = parseInt(key.split('_')[1], 10);
-      var grid = document.getElementById('workGrid');
-      if (grid && !isNaN(gi)) renderWorkGrid(grid, siteContent.workItems);
-    }
-    unsavedChanges = true;
-    updateEditStatus();
-    showSaveToast('图片已上传');
-  });
+  // 图片：立即显示，后台异步保存
+  if (file instanceof Blob) {
+    var url = URL.createObjectURL(file);
+    imgCache[key] = url;
+  }
+  var src = imgCache[key];
+  var imgEl = document.querySelector('img[data-image-key="' + key + '"]');
+  if (imgEl && src) imgEl.src = src;
+  // 同时更新所有同 key 的 img（作品网格+详情页）
+  document.querySelectorAll('img[data-image-key="' + key + '"]').forEach(function(el) { el.src = src; });
+  // 异步写入 IndexedDB
+  putImage(key, file);
+  unsavedChanges = true;
+  updateEditStatus();
+  showSaveToast('图片已上传');
 }
 
 function uploadImageByKey(key) {
