@@ -3844,17 +3844,52 @@ function openImgDB() {
 
 // 写入单张图片：data 为 File/Blob（原画质）或字符串(dataURL)
 function putImage(key, data) {
-  imgCache[key] = (data instanceof Blob) ? URL.createObjectURL(data) : data;
-  return openImgDB().then(function (db) {
-    return new Promise(function (resolve, reject) {
-      var tx = db.transaction(IMG_DB_STORE, 'readwrite');
-      tx.objectStore(IMG_DB_STORE).put({ key: key, value: data });
-      tx.oncomplete = function () { db.close(); resolve(); };
-      tx.onerror = function (e) { db.close(); reject(e); };
+  // Auto-compress large images before storing
+  var processed = compressImageIfNeeded(data).then(function(compressed) {
+    var finalData = compressed || data;
+    imgCache[key] = (finalData instanceof Blob) ? URL.createObjectURL(finalData) : finalData;
+    return openImgDB().then(function (db) {
+      return new Promise(function (resolve, reject) {
+        var tx = db.transaction(IMG_DB_STORE, 'readwrite');
+        tx.objectStore(IMG_DB_STORE).put({ key: key, value: finalData });
+        tx.oncomplete = function () { db.close(); resolve(); };
+        tx.onerror = function (e) { db.close(); reject(e); };
+      });
+    }).catch(function (e) {
+      console.error('putImage failed', e);
+      alert('图片保存失败：浏览器存储不可用或磁盘空间不足。可清理浏览器站点数据后重试。');
     });
-  }).catch(function (e) {
-    console.error('putImage failed', e);
-    alert('图片保存失败：浏览器存储不可用或磁盘空间不足。可清理浏览器站点数据后重试。');
+  });
+  // For immediate display, also create object URL for original if Blob
+  if (data instanceof Blob && !imgCache[key]) {
+    imgCache[key] = URL.createObjectURL(data);
+  }
+  return processed;
+}
+
+// Compress image: max width 2000px, JPEG quality 0.85
+function compressImageIfNeeded(data) {
+  if (!(data instanceof Blob) || !data.type || data.type.indexOf('image/') !== 0) return Promise.resolve(null);
+  // Skip small images (< 500KB)
+  if (data.size < 500 * 1024) return Promise.resolve(null);
+  return new Promise(function(resolve) {
+    var img = new Image();
+    var url = URL.createObjectURL(data);
+    img.onload = function() {
+      URL.revokeObjectURL(url);
+      var MAX_W = 2000;
+      var w = img.naturalWidth, h = img.naturalHeight;
+      if (w <= MAX_W && data.size < 1024 * 1024) { resolve(null); return; }
+      var ratio = Math.min(1, MAX_W / w);
+      var nw = Math.round(w * ratio), nh = Math.round(h * ratio);
+      var canvas = document.createElement('canvas');
+      canvas.width = nw; canvas.height = nh;
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, nw, nh);
+      canvas.toBlob(function(blob) { resolve(blob); }, 'image/jpeg', 0.85);
+    };
+    img.onerror = function() { URL.revokeObjectURL(url); resolve(null); };
+    img.src = url;
   });
 }
 
