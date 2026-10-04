@@ -4333,6 +4333,24 @@ function saveAllContent() {
 }
 
 function resetAllContent() {
+  // If on a work detail page, only reset that work's images
+  var detailView = document.getElementById('view-work-detail');
+  if (detailView && detailView.classList.contains('active') && typeof currentDetailIndex === 'number' && siteContent.workItems[currentDetailIndex]) {
+    var item = siteContent.workItems[currentDetailIndex];
+    if (!confirm('确定要恢复当前作品「' + (item.title || '') + '」的所有图片为默认值吗？此操作不可撤销。')) return;
+    // Reset cover
+    if (item.cover) { deleteImage(item.cover); item.cover = ''; }
+    // Reset detail images
+    if (item.images) {
+      item.images.forEach(function(src) { if (src && src.indexOf('data:') !== 0) deleteImage(src); });
+      item.images = [];
+    }
+    saveSiteContent();
+    renderWorkDetail(currentDetailIndex);
+    showSaveToast('当前作品图片已恢复默认');
+    clearThumbDB();
+    return;
+  }
   if (!confirm('确定要恢复所有文字和图片为默认值吗？此操作不可撤销。')) return;
   localStorage.removeItem(CONTENT_KEY);
   clearAllImages();
