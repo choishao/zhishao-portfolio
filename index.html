@@ -3795,6 +3795,13 @@ function toggleMenu() {
 
 // ===== Shiny Splash =====
 function startSplash() {
+  // Skip splash for admin/edit pages
+  var h = (window.location.hash || '');
+  if (h.indexOf('#/edit') === 0 || h.indexOf('#/work/detail/') === 0) {
+    var sp = document.getElementById('splash');
+    if (sp) sp.style.display = 'none';
+    return;
+  }
   // 3秒后自动淡出进入网站
   setTimeout(() => {
     const splash = document.getElementById('splash');
