@@ -3984,6 +3984,8 @@ function setupEditables() {
           if (navMatch) {
             e.preventDefault();
             location.hash = '/' + navMatch[1];
+            // If inside menu overlay, close the menu after navigation
+            if (el.closest('#menu-overlay')) toggleMenu();
           }
         }
       }
