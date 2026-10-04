@@ -2536,7 +2536,6 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
 <!-- Context Menu -->
 <div class="admin-context-menu" id="adminContextMenu">
   <div class="admin-context-menu-item" onclick="adminAction('edit')">&#9998; 编辑</div>
-  <div class="admin-context-menu-item" onclick="adminAction('duplicate')">&#128203; 重复</div>
   <div class="admin-context-menu-item" onclick="adminAction('copy')">&#128279; 复制链接</div>
   <div class="admin-context-menu-divider"></div>
   <div class="admin-context-menu-item danger" onclick="adminAction('delete')">&#128465; 删除</div>
@@ -4639,6 +4638,8 @@ var adminContextTarget = null;
 function getAdminPages() {
   var pages = adminPages.slice();
   pages.forEach(function(p){ if (p.id === 'moodboard') p.name = (siteContent && siteContent.moodboardName) || 'Moodboard'; });
+  // Add fixed template page (not deletable, used to create new work items)
+  pages.unshift({ id: 'work-template', name: '作品模板 / 新建作品', route: 'work/detail/0', type: 'template', thumb: '' });
   if (siteContent && siteContent.workItems) {
     siteContent.workItems.forEach(function(item, idx) {
       pages.push({ id: 'detail-' + idx, name: item.title || ('作品 ' + (idx + 1)), route: 'work/detail/' + idx, type: 'work', thumb: item.cover || '' });
@@ -4666,6 +4667,16 @@ function renderAdminDashboard() {
       : (page.thumb
           ? '<img src="' + page.thumb + '" alt="' + page.name + '">'
           : '<div class="admin-thumb-preview">' + page.name + '</div>');
+    if (page.type === 'template') {
+      // Template card: click to create new work, no context menu
+      html += '<div class="admin-page-card" data-page-id="' + page.id + '" style="border:1px dashed #555;">'
+        + '<div class="admin-thumb" onclick="createWorkFromTemplate()" style="display:flex;align-items:center;justify-content:center;cursor:pointer;">'
+        + '<div style="text-align:center;color:#888;font-size:13px;">'
+        + '<div style="font-size:32px;margin-bottom:8px;">+</div>'
+        + '新建作品项目</div></div>'
+        + '<div class="admin-card-footer"><span class="admin-card-name" style="color:#888;">' + page.name + '</span></div></div>';
+      return;
+    }
     html += '<div class="admin-page-card" data-page-id="' + page.id + '">'
       + '<div class="card-actions"><button class="card-menu-btn" onclick="event.stopPropagation();showAdminContextMenu(event,\'' + page.id + '\')">&#8942;</button></div>'
       + '<div class="admin-thumb" onclick="adminEditPage(\'' + page.route + '\')">' + thumbContent + '</div>'
@@ -4898,6 +4909,24 @@ document.addEventListener('click', function(e) {
   }
 });
 
+function createWorkFromTemplate() {
+  if (!siteContent.workItems || !siteContent.workItems.length) {
+    alert('请先至少有一个作品作为模板');
+    return;
+  }
+  var src = siteContent.workItems[0];
+  var copy = JSON.parse(JSON.stringify(src));
+  copy.title = '新作品';
+  copy.img = '';
+  copy.gallery = [];
+  siteContent.workItems.push(copy);
+  var existing = getContent();
+  existing.workItems = siteContent.workItems;
+  localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
+  renderAdminDashboard();
+  showSaveToast('已创建新作品，请上传封面和详情图');
+}
+
 function adminAction(action) {
   if (!adminContextTarget) return;
   var pages = getAdminPages();
@@ -4908,27 +4937,6 @@ function adminAction(action) {
   if (!page) { hideAdminContextMenu(); return; }
   if (action === 'edit') {
     adminEditPage(page.route);
-  } else if (action === 'duplicate') {
-    if (page.type === 'work' && page.id.indexOf('detail-') === 0) {
-      var srcIdx = parseInt(page.id.replace('detail-', ''));
-      var srcItem = siteContent.workItems[srcIdx];
-      if (srcItem) {
-        var copy = JSON.parse(JSON.stringify(srcItem));
-        copy.title = (srcItem.title || '作品') + ' 副本';
-        // Reset image references: old IDB keys won't match new index
-        copy.img = '';
-        copy.gallery = [];
-        siteContent.workItems.splice(srcIdx + 1, 0, copy);
-        var existing = getContent();
-        existing.workItems = siteContent.workItems;
-        localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
-        renderAdminDashboard();
-        showSaveToast('已复制作品「' + copy.title + '」，请上传封面和详情图');
-      }
-    } else {
-      alert('系统页面不可复制');
-    }
-    hideAdminContextMenu();
   } else if (action === 'copy') {
     var url = window.location.origin + window.location.pathname + '#/' + page.route;
     if (navigator.clipboard) {
