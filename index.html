@@ -3801,11 +3801,12 @@ function toggleMenu() {
 
 // ===== Shiny Splash =====
 function startSplash() {
-  // Skip splash for admin/edit pages
   var h = (window.location.hash || '');
-  if (h.indexOf('#/edit') === 0 || h.indexOf('#/work/detail/') === 0) {
+  var s = window.location.search || '';
+  // Skip splash for admin/edit pages, detail pages, or when opened in edit mode
+  if (h.indexOf('#/edit') === 0 || h.indexOf('#/work/detail/') === 0 || s.indexOf('mode=edit') !== -1) {
     var sp = document.getElementById('splash');
-    if (sp) sp.style.display = 'none';
+    if (sp) { sp.style.display = 'none'; sp.style.visibility = 'hidden'; sp.style.pointerEvents = 'none'; }
     return;
   }
   // 3秒后自动淡出进入网站
