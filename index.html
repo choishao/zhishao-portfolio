@@ -2523,9 +2523,6 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
     <div class="admin-topbar-right">
       <input type="text" placeholder="搜索页面..." oninput="searchAdminPages(this.value)" style="padding:6px 12px;border-radius:8px;border:1px solid #333;background:#1a1a1a;color:#fff;font-size:13px;width:180px;">
       <div class="admin-tool-btn" onclick="openFontManager()" style="color:#fff;cursor:pointer;font-size:13px;">字体管理</div>
-      <div class="admin-tool-btn" onclick="exportBackup()" style="color:#fff;cursor:pointer;font-size:13px;">导出备份</div>
-      <div class="admin-tool-btn" onclick="document.getElementById('restoreBackupInput').click()" style="color:#fff;cursor:pointer;font-size:13px;">恢复备份</div>
-      <input type="file" id="restoreBackupInput" accept=".json" style="display:none" onchange="importBackup(this)">
       <div class="admin-tool-btn" onclick="uploadResume()" style="color:#fff;cursor:pointer;font-size:13px;">上传简历</div>
       <button onclick="exitAdminToSite()" title="返回网站">&#8962;</button>
       <button class="admin-exit-btn" onclick="exitAdminToSite()">退出后台</button>
@@ -5470,91 +5467,6 @@ document.addEventListener('click', function(e) {
   }
   homeBgIsImage = !homeBgIsImage;
 });
-
-// ===== Backup / Restore =====
-async function exportBackup() {
-  try {
-    var content = localStorage.getItem(CONTENT_KEY) || '{}';
-    var images = {};
-    var db = await openImgDB();
-    return new Promise(function(resolve) {
-      var tx = db.transaction(IMG_DB_STORE, 'readonly');
-      var req = tx.objectStore(IMG_DB_STORE).getAll();
-      req.onsuccess = async function() {
-        var records = req.result || [];
-        for (var i = 0; i < records.length; i++) {
-          var rec = records[i];
-          if (rec.value instanceof Blob) {
-            var b64 = await new Promise(function(res) {
-              var r = new FileReader();
-              r.onloadend = function() { res(r.result); };
-              r.readAsDataURL(rec.value);
-            });
-            images[rec.key] = b64;
-          } else if (rec.value) {
-            images[rec.key] = rec.value;
-          }
-        }
-        db.close();
-        var backup = { version: 1, date: new Date().toISOString(), content: JSON.parse(content), images: images };
-        var blob = new Blob([JSON.stringify(backup)], { type: 'application/json' });
-        var a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'portfolio-backup-' + new Date().toISOString().slice(0,10) + '.json';
-        a.click();
-        showSaveToast('备份已导出，共 ' + Object.keys(images).length + ' 张图片');
-        resolve();
-      };
-    });
-  } catch(e) {
-    alert('导出失败: ' + e.message);
-  }
-}
-
-async function importBackup(input) {
-  var file = input.files[0];
-  if (!file) return;
-  if (!confirm('恢复备份将覆盖当前所有内容和图片，确定继续吗？')) { input.value = ''; return; }
-  try {
-    var text = await file.text();
-    var backup = JSON.parse(text);
-    if (!backup.content) { alert('备份文件格式不正确'); return; }
-    // Write content to localStorage
-    localStorage.setItem(CONTENT_KEY, JSON.stringify(backup.content));
-    // Restore images to IDB
-    var images = backup.images || {};
-    var db = await openImgDB();
-    await new Promise(function(resolve, reject) {
-      var tx = db.transaction(IMG_DB_STORE, 'readwrite');
-      var store = tx.objectStore(IMG_DB_STORE);
-      store.clear();
-      var keys = Object.keys(images);
-      if (keys.length === 0) { resolve(); return; }
-      var done = 0;
-      keys.forEach(function(key) {
-        var val = images[key];
-        if (typeof val === 'string' && val.indexOf('data:') === 0) {
-          // Convert dataURL back to Blob
-          var parts = val.split(',');
-          var mime = parts[0].match(/:(.*?);/)[1];
-          var bstr = atob(parts[1]);
-          var arr = new Uint8Array(bstr.length);
-          for (var i = 0; i < bstr.length; i++) arr[i] = bstr.charCodeAt(i);
-          store.put(arr, key);
-        } else {
-          store.put(val, key);
-        }
-      });
-      tx.oncomplete = function() { db.close(); resolve(); };
-      tx.onerror = function() { reject(tx.error); };
-    });
-    showSaveToast('备份已恢复，页面将刷新');
-    setTimeout(function() { location.reload(); }, 1500);
-  } catch(e) {
-    alert('恢复失败: ' + e.message);
-  }
-  input.value = '';
-}
 </script>
 
 </body>
