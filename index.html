@@ -4352,7 +4352,9 @@ function resetAllContent() {
       item.images.forEach(function(src) { if (src && src.indexOf('data:') !== 0) deleteImage(src); });
       item.images = [];
     }
-    saveSiteContent();
+    var existing2 = getContent();
+    existing2.workItems = siteContent.workItems;
+    localStorage.setItem(CONTENT_KEY, JSON.stringify(existing2));
     renderWorkDetail(currentDetailIndex);
     showSaveToast('当前作品图片已恢复默认');
     clearThumbDB();
@@ -4902,10 +4904,15 @@ function adminAction(action) {
       if (srcItem) {
         var copy = JSON.parse(JSON.stringify(srcItem));
         copy.title = (srcItem.title || '作品') + ' 副本';
+        // Reset image references: old IDB keys won't match new index
+        copy.img = '';
+        copy.gallery = [];
         siteContent.workItems.splice(srcIdx + 1, 0, copy);
-        if (typeof saveSiteContent === 'function') saveSiteContent();
+        var existing = getContent();
+        existing.workItems = siteContent.workItems;
+        localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
         renderAdminDashboard();
-        showSaveToast('已复制作品「' + copy.title + '」');
+        showSaveToast('已复制作品「' + copy.title + '」，请上传封面和详情图');
       }
     } else {
       alert('系统页面不可复制');
