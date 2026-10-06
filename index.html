@@ -3074,13 +3074,13 @@ var _delCallbacks = {};
 function delBtnHtml(id, onConfirm) {
   _delCallbacks[id] = onConfirm;
   return '<div class="dlt" data-del="' + id + '">'
-    + '<button class="dlt__btn" type="button" aria-label="删除">'
+    + '<button class="dlt__btn" type="button" aria-label="删除" onclick="event.stopPropagation();var cb=_delCallbacks[\'' + id + '\'];if(cb)cb();">'
     + '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
     + '<path d="M19 8v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8"/>'
     + '<g class="dlt__lid"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></g>'
     + '</svg></button>'
     + '<span class="dlt__actions">'
-    + '<button class="dlt__yes" type="button" aria-label="确认删除">\u2713</button>'
+    + '<button class="dlt__yes" type="button" aria-label="确认删除" onclick="event.stopPropagation();var cb=_delCallbacks[\'' + id + '\'];if(cb)cb();">\u2713</button>'
     + '<button class="dlt__no" type="button" aria-label="取消">\u00d7</button>'
     + '</span></div>';
 }
