@@ -3102,9 +3102,9 @@ document.addEventListener('click', function (e) {
     root.classList.remove('open');
   } else if (e.target.closest('.dlt__btn')) {
     e.stopPropagation();
-    var wasOpen = root.classList.contains('open');
-    document.querySelectorAll('.dlt.open').forEach(function (o) { if (o !== root) o.classList.remove('open'); });
-    root.classList.toggle('open', !wasOpen);
+    // Direct delete on single click
+    var cb = _delCallbacks[id];
+    if (cb) cb();
   }
 });
 // 加载失败的图自动从数据中移除（未识别链接）
