@@ -4933,14 +4933,15 @@ function adminAction(action) {
     } else { prompt('复制以下链接：', url); }
     hideAdminContextMenu();
   } else if (action === 'delete') {
-    if (confirm('确定删除页面「' + page.name + '」吗？')) {
-      if (page.type === 'work' && page.id.indexOf('detail-') === 0) {
-        var idx = parseInt(page.id.replace('detail-', ''));
-        siteContent.workItems.splice(idx, 1);
-        if (typeof saveSiteContent === 'function') saveSiteContent();
-        renderAdminDashboard();
-      } else { alert('系统页面不可删除'); }
-    }
+    if (page.type === 'work' && page.id.indexOf('detail-') === 0) {
+      var idx = parseInt(page.id.replace('detail-', ''));
+      siteContent.workItems.splice(idx, 1);
+      var existing = getContent();
+      existing.workItems = siteContent.workItems;
+      localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
+      renderAdminDashboard();
+      showSaveToast('已删除作品「' + page.name + '」');
+    } else { alert('系统页面不可删除'); }
     hideAdminContextMenu();
   }
 }
