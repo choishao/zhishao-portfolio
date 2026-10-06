@@ -4639,8 +4639,6 @@ var adminContextTarget = null;
 function getAdminPages() {
   var pages = adminPages.slice();
   pages.forEach(function(p){ if (p.id === 'moodboard') p.name = (siteContent && siteContent.moodboardName) || 'Moodboard'; });
-  // Add fixed template page (not deletable, used to create new work items)
-  pages.unshift({ id: 'work-template', name: '作品模板 / 新建作品', route: 'work/detail/0', type: 'template', thumb: '' });
   if (siteContent && siteContent.workItems) {
     siteContent.workItems.forEach(function(item, idx) {
       pages.push({ id: 'detail-' + idx, name: item.title || ('作品 ' + (idx + 1)), route: 'work/detail/' + idx, type: 'work', thumb: item.cover || '' });
@@ -4668,16 +4666,6 @@ function renderAdminDashboard() {
       : (page.thumb
           ? '<img src="' + page.thumb + '" alt="' + page.name + '">'
           : '<div class="admin-thumb-preview">' + page.name + '</div>');
-    if (page.type === 'template') {
-      // Template card: click to create new work, no context menu
-      html += '<div class="admin-page-card" data-page-id="' + page.id + '" style="border:1px dashed #555;">'
-        + '<div class="admin-thumb" onclick="createWorkFromTemplate()" style="display:flex;align-items:center;justify-content:center;cursor:pointer;">'
-        + '<div style="text-align:center;color:#888;font-size:13px;">'
-        + '<div style="font-size:32px;margin-bottom:8px;">+</div>'
-        + '新建作品项目</div></div>'
-        + '<div class="admin-card-footer"><span class="admin-card-name" style="color:#888;">' + page.name + '</span></div></div>';
-      return;
-    }
     html += '<div class="admin-page-card" data-page-id="' + page.id + '">'
       + '<div class="card-actions"><button class="card-menu-btn" onclick="event.stopPropagation();showAdminContextMenu(event,\'' + page.id + '\')">&#8942;</button></div>'
       + '<div class="admin-thumb" onclick="adminEditPage(\'' + page.route + '\')">' + thumbContent + '</div>'
