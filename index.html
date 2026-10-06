@@ -3799,7 +3799,7 @@ function startSplash() {
   var h = (window.location.hash || '');
   var s = window.location.search || '';
   // Skip splash for admin/edit pages, detail pages, or when opened in edit mode
-  if (h.indexOf('#/edit') === 0 || h.indexOf('#/work/detail/') === 0 || s.indexOf('mode=edit') !== -1) {
+  if (h.indexOf('#/edit') === 0 || h.indexOf('#/work/detail/') === 0 || h.indexOf('#/admin') === 0 || s.indexOf('mode=edit') !== -1) {
     var sp = document.getElementById('splash');
     if (sp) { sp.style.display = 'none'; sp.style.visibility = 'hidden'; sp.style.pointerEvents = 'none'; }
     return;
