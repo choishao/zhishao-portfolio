@@ -2548,7 +2548,7 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
   </div>
   <div class="edit-toolbar-right">
     <button class="edit-btn edit-btn-exit" onclick="exitEditMode()">退出编辑</button>
-    <button class="edit-btn edit-btn-save" onclick="saveAllContent()">保存</button>
+    <button class="edit-btn edit-btn-save" onclick="publishToGitHub()">发布</button>
   </div>
 </div>
 <div id="editSaveToast">已保存</div>
@@ -4393,29 +4393,227 @@ function resetAllContent() {
 document.addEventListener('keydown', (e) => {
   if ((e.ctrlKey || e.metaKey) && e.key === 's' && editMode) {
     e.preventDefault();
-    saveAllContent();
+    publishToGitHub();
   }
 });
 
-document.addEventListener('DOMContentLoaded', () => {
+// ===== GitHub 发布：content.json 同步到云端 =====
+const GH_REPO = 'choishao/zhishao-portfolio';
+const GH_BRANCH = 'main';
+const CONTENT_JSON_URL = 'https://choishao.github.io/zhishao-portfolio/content.json';
+function getGHToken() { return localStorage.getItem('zhishao_gh_token') || ''; }
+
+// 压缩图片到 dataURL（maxWidth 1600px, JPEG 0.82）
+function compressImageToDataURL(blobOrUrl, maxW, quality) {
+  return new Promise(function (resolve, reject) {
+    var url = blobOrUrl;
+    if (blobOrUrl instanceof Blob) url = URL.createObjectURL(blobOrUrl);
+    var img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = function () {
+      var canvas = document.createElement('canvas');
+      var w = img.naturalWidth, h = img.naturalHeight;
+      var maxWidth = maxW || 1600;
+      if (w > maxWidth) { h = Math.round(h * maxWidth / w); w = maxWidth; }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      var q = quality || 0.82;
+      resolve(canvas.toDataURL('image/jpeg', q));
+      if (blobOrUrl instanceof Blob) URL.revokeObjectURL(url);
+    };
+    img.onerror = function () { resolve(null); };
+    img.src = url;
+  });
+}
+
+// 收集所有图片 blob/URL → 压缩 base64
+async function collectAllImagesBase64() {
+  var result = {};
+  var keys = Object.keys(imgCache);
+  for (var i = 0; i < keys.length; i++) {
+    var k = keys[i];
+    var v = imgCache[k];
+    if (!v) continue;
+    // 已是 dataURL 且是图片，直接存（PDF dataURL 也保留）
+    if (v.indexOf('data:') === 0) {
+      result[k] = v;
+      continue;
+    }
+    // blob: URL → fetch → compress
+    try {
+      var resp = await fetch(v);
+      var blob = await resp.blob();
+      if (blob.type === 'application/pdf') {
+        // PDF 直接转 dataURL（不压缩）
+        var dr = new FileReader();
+        var dataUrl = await new Promise(function (res) { dr.onload = function() { res(dr.result); }; dr.readAsDataURL(blob); });
+        result[k] = dataUrl;
+      } else {
+        var compressed = await compressImageToDataURL(blob);
+        if (compressed) result[k] = compressed;
+      }
+    } catch (e) {
+      console.warn('compress image failed:', k, e);
+    }
+  }
+  return result;
+}
+
+// 推送 content.json 到 GitHub
+async function publishToGitHub() {
+  var token = getGHToken();
+  if (!token) {
+    var t = prompt('请输入 GitHub Token（仅保存在本浏览器，用于自动发布）:');
+    if (!t) { showSaveToast('未设置 Token'); return; }
+    localStorage.setItem('zhishao_gh_token', t.trim());
+    token = t.trim();
+  }
+  showSaveToast('正在发布...');
+  var textData = collectTextContent();
+  var existing = getContent();
+  for (var key in textData) existing[key] = textData[key];
+  existing.categories = siteContent.categories;
+  // work items dynamic fields
+  document.querySelectorAll('.project-item').forEach(function (item) {
+    var idx = parseInt(item.dataset.idx);
+    if (isNaN(idx) || !existing.workItems[idx]) return;
+    var titleEl = item.querySelector('[data-editable^="work_title_"]');
+    var metaEl = item.querySelector('[data-editable^="work_meta_"]');
+    var descEl = item.querySelector('[data-editable^="work_desc_"]');
+    if (titleEl) existing.workItems[idx].title = titleEl.textContent;
+    if (metaEl) {
+      var parts = metaEl.textContent.split(' / ');
+      existing.workItems[idx].year = parts[0] || '';
+      existing.workItems[idx].client = parts[1] || '';
+    }
+    if (descEl) existing.workItems[idx].desc = descEl.textContent;
+  });
+  document.querySelectorAll('#workGrid .work-card').forEach(function (card) {
+    var titleEl = card.querySelector('[data-editable^="feat_title_"]');
+    if (!titleEl) return;
+    var idx = parseInt(titleEl.dataset.editable.replace('feat_title_', ''));
+    if (isNaN(idx) || !existing.workItems[idx]) return;
+    var authorEl = card.querySelector('[data-editable^="feat_author_"]');
+    var yearEl = card.querySelector('[data-editable^="feat_year_"]');
+    if (authorEl) existing.workItems[idx].author = authorEl.textContent;
+    if (yearEl) existing.workItems[idx].year = yearEl.textContent.trim();
+  });
+  ['workExperience', 'projectExperience'].forEach(function (arrKey, colIdx) {
+    var prefix = colIdx === 0 ? 'workexp_' : 'projexp_';
+    var listId = colIdx === 0 ? 'workExperienceList' : 'projectList';
+    document.querySelectorAll('#' + listId + ' .history-item').forEach(function (item, idx) {
+      if (!existing[arrKey][idx]) return;
+      var nameEl = item.querySelector('[data-editable="' + prefix + 'name_' + idx + '"]');
+      var metaEl = item.querySelector('[data-editable="' + prefix + 'meta_' + idx + '"]');
+      if (nameEl) existing[arrKey][idx].name = nameEl.textContent;
+      if (metaEl) existing[arrKey][idx].meta = metaEl.textContent;
+    });
+  });
+  // 收集图片
+  var images = await collectAllImagesBase64();
+  var payload = { content: existing, images: images, updated: new Date().toISOString() };
+  var jsonStr = JSON.stringify(payload);
+  var b64 = btoa(unescape(encodeURIComponent(jsonStr)));
+  // GET 当前文件 SHA
+  var headers = {
+    'Authorization': 'token ' + token,
+    'Accept': 'application/vnd.github.v3+json'
+  };
+  var sha = null;
+  try {
+    var resp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/content.json?ref=' + GH_BRANCH, { headers: headers });
+    if (resp.ok) { var cur = await resp.json(); sha = cur.sha; }
+  } catch (e) {}
+  var body = { message: 'publish: ' + new Date().toLocaleString(), content: b64, branch: GH_BRANCH };
+  if (sha) body.sha = sha;
+  var putResp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/content.json', {
+    method: 'PUT',
+    headers: headers,
+    body: JSON.stringify(body)
+  });
+  if (!putResp.ok) {
+    var errText = await putResp.text();
+    showSaveToast('发布失败: ' + putResp.status);
+    throw new Error('GitHub push failed: ' + errText);
+  }
+  // 同时保存到本地 localStorage
+  localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
+  siteContent = existing;
+  unsavedChanges = false;
+  updateEditStatus();
+  showSaveToast('已发布到云端');
+}
+
+// 从 GitHub 拉取 content.json
+async function fetchContentFromGitHub() {
+  try {
+    var resp = await fetch(CONTENT_JSON_URL + '?t=' + Date.now(), { cache: 'no-store' });
+    if (!resp.ok) return null;
+    var data = await resp.json();
+    return data;
+  } catch (e) {
+    console.warn('fetch content.json failed', e);
+    return null;
+  }
+}
+
+// 应用云端内容
+function applyCloudContent(data) {
+  if (!data || !data.content) return;
+  // 合并文字内容
+  var existing = getContent();
+  for (var k in data.content) {
+    existing[k] = data.content[k];
+  }
+  localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
+  siteContent = existing;
+  // 应用图片
+  if (data.images) {
+    for (var ik in data.images) {
+      imgCache[ik] = data.images[ik];
+    }
+  }
+  imgReady = true;
   applyContent();
   applyImages();
-  const hash = location.hash.replace('#/', '') || 'home';
-  showView(hash);
-  loadImagesFromIDB();
-  loadCustomFonts();
-  loadThumbsFromIDB();
-  fitHeroTitle();
-  initHeroEvilEye();
-  initScrollVelocity();
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitHeroTitle);
-  window.addEventListener('resize', fitHeroTitle);
-  // Auto-enter edit mode if opened via ?mode=edit (from admin dashboard new tab)
-  if (window.location.search.indexOf('mode=edit') !== -1) {
-    setTimeout(function() { enterEditMode(); }, 150);
-  }
-  // 简历按钮 WebGL 扫光效果
-  initResumeSpecular();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  var cloudImages = null;
+  // 先尝试从 GitHub 拉取云端内容
+  fetchContentFromGitHub().then(function (cloud) {
+    if (cloud) {
+      cloudImages = cloud.images || null;
+      applyCloudContent(cloud);
+    }
+  }).finally(function () {
+    // 再走本地初始化
+    applyContent();
+    applyImages();
+    const hash = location.hash.replace('#/', '') || 'home';
+    showView(hash);
+    loadImagesFromIDB();
+    loadCustomFonts();
+    loadThumbsFromIDB();
+    fitHeroTitle();
+    initHeroEvilEye();
+    initScrollVelocity();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitHeroTitle);
+    window.addEventListener('resize', fitHeroTitle);
+    if (window.location.search.indexOf('mode=edit') !== -1) {
+      setTimeout(function() { enterEditMode(); }, 150);
+    }
+    initResumeSpecular();
+    // IDB 加载完成后，云端图片优先覆盖
+    setTimeout(function () {
+      if (cloudImages) {
+        for (var ik in cloudImages) {
+          imgCache[ik] = cloudImages[ik];
+        }
+        applyImages();
+      }
+    }, 500);
+  });
 });
 
 // ===== Resume Specular Button (ReactBits SpecularButton -> 原生 WebGL) =====
