@@ -2140,11 +2140,7 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
     }, TOTAL*1000 + 200);
   }
 
-  if (document.readyState === 'complete') {
-    buildSplash();
-  } else {
-    window.addEventListener('load', buildSplash);
-  }
+  buildSplash();
 })();
 </script>
 
