@@ -2304,11 +2304,6 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
   </defs>
 </svg>
 
-<!-- ===== Shiny Text Splash Screen ===== -->
-<div id="splash">
-  <span class="shiny-splash-text">CIAO DESIGN</span>
-</div>
-
 <!-- ===== Top Navigation ===== -->
 <nav class="top-nav">
   <div class="logo" onclick="navigate('home')" data-editable="logoText">ZHISHAOCUI</div>
@@ -2350,7 +2345,6 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
 
   <!-- ===== View: Home ===== -->
   <section class="view active" id="view-home">
-    <div id="homeBgImg" style="position:absolute;inset:0;background:url('https://aka.doubaocdn.com/s/a7ntm7ypPw') center/cover no-repeat;z-index:0;"></div>
     <canvas id="heroEvilEye" aria-hidden="true" style="display:none;"></canvas>
     <div class="scroll-velocity-text" id="scrollVelocityText">
       <div class="sv-track">
@@ -3793,26 +3787,11 @@ function toggleMenu() {
   btn.classList.toggle('active');
 }
 
-// ===== Shiny Splash =====
-function startSplash() {
-  var h = (window.location.hash || '');
-  var s = window.location.search || '';
-  // Skip splash for admin/edit pages, detail pages, or when opened in edit mode
-  if (h.indexOf('#/edit') === 0 || h.indexOf('#/work/detail/') === 0 || h.indexOf('#/admin') === 0 || s.indexOf('mode=edit') !== -1) {
-    var sp = document.getElementById('splash');
-    if (sp) { sp.style.display = 'none'; sp.style.visibility = 'hidden'; sp.style.pointerEvents = 'none'; }
-    return;
-  }
-  // 3秒后自动淡出进入网站
-  setTimeout(() => {
-    const splash = document.getElementById('splash');
-    splash.classList.add('hidden');
-    setTimeout(() => { splash.style.display = 'none'; }, 800);
-  }, 3000);
-}
+// ===== Shiny Splash (disabled) =====
+function startSplash() {}
 
-// 页面加载后自动启动 splash
-window.addEventListener('load', startSplash);
+// 页面加载后自动启动 splash (disabled)
+// window.addEventListener('load', startSplash);
 
 // ===== Admin Form =====
 // ===== WYSIWYG Edit Mode =====
