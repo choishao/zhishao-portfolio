@@ -2291,6 +2291,7 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
 #view-moodboard .moodboard-back:hover { background:rgba(255,255,255,0.2); }
 
 </style>
+<script type="module" src="https://thrine.app/embed/v1.js"></script>
 </head>
 <body>
 
@@ -2346,10 +2347,8 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
   <!-- ===== View: Home ===== -->
   <section class="view active" id="view-home">
     <canvas id="heroEvilEye" aria-hidden="true" style="display:none;"></canvas>
-    <div class="scroll-velocity-text" id="scrollVelocityText">
-      <div class="sv-track">
-        <span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span>
-      </div>
+    <div id="home3d" style="position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;">
+      <model-embed project="e_57f96e987e71dd78eac1" style="display:block;width:100%;aspect-ratio:1941/1191;"></model-embed>
     </div>
     <div class="hero-social">
       <a href="#" aria-label="Instagram" data-social="instagram" onclick="return handleSocialClick(event, 'instagram')">
