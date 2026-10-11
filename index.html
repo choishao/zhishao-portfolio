@@ -2291,7 +2291,6 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
 #view-moodboard .moodboard-back:hover { background:rgba(255,255,255,0.2); }
 
 </style>
-<script type="module" src="https://thrine.app/embed/v1.js"></script>
 </head>
 <body>
 
@@ -2304,6 +2303,11 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
     </filter>
   </defs>
 </svg>
+
+<!-- ===== Shiny Text Splash Screen ===== -->
+<div id="splash">
+  <span class="shiny-splash-text">CIAO DESIGN</span>
+</div>
 
 <!-- ===== Top Navigation ===== -->
 <nav class="top-nav">
@@ -2346,9 +2350,12 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
 
   <!-- ===== View: Home ===== -->
   <section class="view active" id="view-home">
+    <div id="homeBgImg" style="position:absolute;inset:0;background:url('https://aka.doubaocdn.com/s/a7ntm7ypPw') center/cover no-repeat;z-index:0;"></div>
     <canvas id="heroEvilEye" aria-hidden="true" style="display:none;"></canvas>
-    <div id="home3d" style="position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;">
-      <model-embed project="e_57f96e987e71dd78eac1" style="display:block;width:100%;aspect-ratio:1941/1191;"></model-embed>
+    <div class="scroll-velocity-text" id="scrollVelocityText">
+      <div class="sv-track">
+        <span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span><span>CIAO DESIGN&nbsp;&nbsp;</span>
+      </div>
     </div>
     <div class="hero-social">
       <a href="#" aria-label="Instagram" data-social="instagram" onclick="return handleSocialClick(event, 'instagram')">
@@ -3786,11 +3793,26 @@ function toggleMenu() {
   btn.classList.toggle('active');
 }
 
-// ===== Shiny Splash (disabled) =====
-function startSplash() {}
+// ===== Shiny Splash =====
+function startSplash() {
+  var h = (window.location.hash || '');
+  var s = window.location.search || '';
+  // Skip splash for admin/edit pages, detail pages, or when opened in edit mode
+  if (h.indexOf('#/edit') === 0 || h.indexOf('#/work/detail/') === 0 || h.indexOf('#/admin') === 0 || s.indexOf('mode=edit') !== -1) {
+    var sp = document.getElementById('splash');
+    if (sp) { sp.style.display = 'none'; sp.style.visibility = 'hidden'; sp.style.pointerEvents = 'none'; }
+    return;
+  }
+  // 3秒后自动淡出进入网站
+  setTimeout(() => {
+    const splash = document.getElementById('splash');
+    splash.classList.add('hidden');
+    setTimeout(() => { splash.style.display = 'none'; }, 800);
+  }, 3000);
+}
 
-// 页面加载后自动启动 splash (disabled)
-// window.addEventListener('load', startSplash);
+// 页面加载后自动启动 splash
+window.addEventListener('load', startSplash);
 
 // ===== Admin Form =====
 // ===== WYSIWYG Edit Mode =====
@@ -5353,8 +5375,6 @@ function loadCustomFonts() {
 // ===== Hero Dynamic Background: Galaxy (native WebGL) =====
 // ============================================================
 function initHeroEvilEye() {
-  // Disabled: using Thrine 3D model instead
-  return;
   var canvas = document.getElementById('heroEvilEye');
   if (!canvas) return;
   var gl = null;
@@ -5631,10 +5651,23 @@ function openLightbox(src) {
 function closeLightbox() {
   document.getElementById('lightbox').classList.remove('open');
 }
-// Home background toggle disabled (no background image)
+// Home background toggle: image <-> galaxy
+var homeBgIsImage = true;
 document.addEventListener('click', function(e) {
   if (!document.getElementById('view-home').classList.contains('active')) return;
-  if (e.target.closest('a, button, .hero-social, nav, .bottom-bar, #menu-overlay, model-embed')) return;
+  if (e.target.closest('a, button, .scroll-velocity-text, .hero-social, nav, .bottom-bar, #menu-overlay')) return;
+  e.preventDefault();
+  var bg = document.getElementById('homeBgImg');
+  var canvas = document.getElementById('heroEvilEye');
+  if (homeBgIsImage) {
+    bg.style.display = 'none';
+    canvas.style.display = 'block';
+    if (typeof initHeroEvilEye === 'function') initHeroEvilEye();
+  } else {
+    bg.style.display = 'block';
+    canvas.style.display = 'none';
+  }
+  homeBgIsImage = !homeBgIsImage;
 });
 </script>
 
