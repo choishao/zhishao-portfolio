@@ -5353,6 +5353,8 @@ function loadCustomFonts() {
 // ===== Hero Dynamic Background: Galaxy (native WebGL) =====
 // ============================================================
 function initHeroEvilEye() {
+  // Disabled: using Thrine 3D model instead
+  return;
   var canvas = document.getElementById('heroEvilEye');
   if (!canvas) return;
   var gl = null;
@@ -5629,23 +5631,10 @@ function openLightbox(src) {
 function closeLightbox() {
   document.getElementById('lightbox').classList.remove('open');
 }
-// Home background toggle: image <-> galaxy
-var homeBgIsImage = true;
+// Home background toggle disabled (no background image)
 document.addEventListener('click', function(e) {
   if (!document.getElementById('view-home').classList.contains('active')) return;
-  if (e.target.closest('a, button, .scroll-velocity-text, .hero-social, nav, .bottom-bar, #menu-overlay')) return;
-  e.preventDefault();
-  var bg = document.getElementById('homeBgImg');
-  var canvas = document.getElementById('heroEvilEye');
-  if (homeBgIsImage) {
-    bg.style.display = 'none';
-    canvas.style.display = 'block';
-    if (typeof initHeroEvilEye === 'function') initHeroEvilEye();
-  } else {
-    bg.style.display = 'block';
-    canvas.style.display = 'none';
-  }
-  homeBgIsImage = !homeBgIsImage;
+  if (e.target.closest('a, button, .hero-social, nav, .bottom-bar, #menu-overlay, model-embed')) return;
 });
 </script>
 
