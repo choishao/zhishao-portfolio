@@ -4492,27 +4492,65 @@ async function publishToGitHub() {
   var payload = { content: existing, images: images, updated: new Date().toISOString() };
   var jsonStr = JSON.stringify(payload);
   var b64 = btoa(unescape(encodeURIComponent(jsonStr)));
-  // GET 当前文件 SHA
   var headers = {
     'Authorization': 'token ' + token,
-    'Accept': 'application/vnd.github.v3+json'
+    'Accept': 'application/vnd.github.v3+json',
+    'Content-Type': 'application/json'
   };
-  var sha = null;
+  // Use Git Data API (supports files >1MB) instead of Contents API
   try {
-    var resp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/content.json?ref=' + GH_BRANCH, { headers: headers });
-    if (resp.ok) { var cur = await resp.json(); sha = cur.sha; }
-  } catch (e) {}
-  var body = { message: 'publish: ' + new Date().toLocaleString(), content: b64, branch: GH_BRANCH };
-  if (sha) body.sha = sha;
-  var putResp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/content.json', {
-    method: 'PUT',
-    headers: headers,
-    body: JSON.stringify(body)
-  });
-  if (!putResp.ok) {
-    var errText = await putResp.text();
-    showSaveToast('发布失败: ' + putResp.status);
-    throw new Error('GitHub push failed: ' + errText);
+    // 1. Create blob
+    var blobResp = await fetch('https://api.github.com/repos/' + GH_REPO + '/git/blobs', {
+      method: 'POST', headers: headers,
+      body: JSON.stringify({ content: b64, encoding: 'base64' })
+    });
+    if (!blobResp.ok) throw new Error('blob: ' + blobResp.status);
+    var blob = await blobResp.json();
+
+    // 2. Get current commit
+    var refResp = await fetch('https://api.github.com/repos/' + GH_REPO + '/git/ref/heads/' + GH_BRANCH, { headers: headers });
+    if (!refResp.ok) throw new Error('ref: ' + refResp.status);
+    var ref = await refResp.json();
+    var commitSha = ref.object.sha;
+
+    // 3. Get current commit to find tree
+    var commitResp = await fetch('https://api.github.com/repos/' + GH_REPO + '/git/commits/' + commitSha, { headers: headers });
+    if (!commitResp.ok) throw new Error('commit: ' + commitResp.status);
+    var commit = await commitResp.json();
+    var baseTreeSha = commit.tree.sha;
+
+    // 4. Create new tree
+    var treeResp = await fetch('https://api.github.com/repos/' + GH_REPO + '/git/trees', {
+      method: 'POST', headers: headers,
+      body: JSON.stringify({
+        base_tree: baseTreeSha,
+        tree: [{ path: 'content.json', mode: '100644', type: 'blob', sha: blob.sha }]
+      })
+    });
+    if (!treeResp.ok) throw new Error('tree: ' + treeResp.status);
+    var tree = await treeResp.json();
+
+    // 5. Create commit
+    var newCommitResp = await fetch('https://api.github.com/repos/' + GH_REPO + '/git/commits', {
+      method: 'POST', headers: headers,
+      body: JSON.stringify({
+        message: 'publish: ' + new Date().toLocaleString(),
+        tree: tree.sha,
+        parents: [commitSha]
+      })
+    });
+    if (!newCommitResp.ok) throw new Error('newcommit: ' + newCommitResp.status);
+    var newCommit = await newCommitResp.json();
+
+    // 6. Update branch ref
+    var updateResp = await fetch('https://api.github.com/repos/' + GH_REPO + '/git/refs/heads/' + GH_BRANCH, {
+      method: 'PATCH', headers: headers,
+      body: JSON.stringify({ sha: newCommit.sha })
+    });
+    if (!updateResp.ok) throw new Error('update: ' + updateResp.status);
+  } catch (e) {
+    showSaveToast('发布失败: ' + e.message);
+    throw e;
   }
   // 同时保存到本地 localStorage
   localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
