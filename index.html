@@ -5602,13 +5602,16 @@ function initHeroEvilEye() {
 
   var rafId = null;
   function resize() {
-    var w = canvas.clientWidth || canvas.parentElement.clientWidth || window.innerWidth;
-    var h = canvas.clientHeight || canvas.parentElement.clientHeight || window.innerHeight;
-    if (canvas.width !== w || canvas.height !== h) {
-      canvas.width = w;
-      canvas.height = h;
-      gl.viewport(0, 0, w, h);
-    }
+    try {
+      if (!canvas || !canvas.parentElement) return;
+      var w = canvas.clientWidth || canvas.parentElement.clientWidth || window.innerWidth;
+      var h = canvas.clientHeight || canvas.parentElement.clientHeight || window.innerHeight;
+      if (w > 0 && h > 0 && (canvas.width !== w || canvas.height !== h)) {
+        canvas.width = w;
+        canvas.height = h;
+        gl.viewport(0, 0, w, h);
+      }
+    } catch (e) {}
   }
   resize();
   window.addEventListener('resize', resize);
@@ -5623,11 +5626,13 @@ function initHeroEvilEye() {
   function tick() {
     if (!running) return;
     rafId = requestAnimationFrame(tick);
+    try {
     resize();
     mouse.x += (mouse.tx - mouse.x) * 0.05;
     mouse.y += (mouse.ty - mouse.y) * 0.05;
     mouse.active += (mouse.tActive - mouse.active) * 0.05;
     var t = (performance.now() - startTime) / 1000;
+    if (!canvas.width || !canvas.height) return;
     gl.uniform1f(uTime, t);
     gl.uniform3f(uRes, canvas.width, canvas.height, canvas.width / canvas.height);
     gl.uniform2f(uFocal, params.focal[0], params.focal[1]);
@@ -5647,6 +5652,7 @@ function initHeroEvilEye() {
     gl.clearColor(0, 0, 0, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
+    } catch (e) { running = false; }
   }
   tick();
 }
