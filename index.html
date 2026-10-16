@@ -3496,14 +3496,13 @@ function showView(path) {
         var c = document.createElement('canvas');
         c.id = 'heroEvilEye';
         c.setAttribute('aria-hidden', 'true');
-        c.style.display = 'none';
+        c.style.cssText = 'display:block;position:absolute;inset:0;z-index:0;width:100%;height:100%;';
         home.insertBefore(c, home.firstChild);
         requestAnimationFrame(function() { initHeroEvilEye(); });
       }
-      // Reset to image background
-      homeBgIsImage = true;
+      homeBgIsImage = false;
       var bg = document.getElementById('homeBgImg');
-      if (bg) bg.style.display = 'block';
+      if (bg) bg.style.display = 'none';
     }, 200);
   }
   if (path === 'home') setTimeout(fitHeroTitle, 60);
