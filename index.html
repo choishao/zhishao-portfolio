@@ -5712,13 +5712,13 @@ document.addEventListener('click', function(e) {
 </script>
 
 <script>
-// ===== Starfield background =====
+// ===== Galaxy Starfield Background =====
 setTimeout(function(){
   var sc = document.getElementById('starfield');
   if(!sc) return;
   var sctx = sc.getContext('2d');
   var DPR = Math.min(window.devicePixelRatio||1, 2);
-  var stars = [], W, H;
+  var stars = [], nebulas = [], W, H;
 
   function resize(){
     var r = sc.parentElement.getBoundingClientRect();
@@ -5726,14 +5726,37 @@ setTimeout(function(){
     sc.width = W*DPR; sc.height = H*DPR;
     sc.style.width = W+'px'; sc.style.height = H+'px';
     if(stars.length === 0){
-      var count = Math.floor(W*H/3000);
+      // Background nebula glows
+      var nebColors = ['rgba(40,30,80,0.35)','rgba(20,40,70,0.3)','rgba(60,20,60,0.25)','rgba(20,50,70,0.3)'];
+      for(var n=0;n<5;n++){
+        nebulas.push({
+          x: Math.random()*W, y: Math.random()*H,
+          r: 150+Math.random()*200,
+          color: nebColors[n%nebColors.length]
+        });
+      }
+      // Small dim stars
+      var count = Math.floor(W*H/2500);
       for(var i=0;i<count;i++){
         stars.push({
           x: Math.random()*W, y: Math.random()*H,
-          r: Math.random()*1.5+0.3,
-          base: Math.random()*0.5+0.3,
-          tw: Math.random()*0.02+0.005,
+          r: Math.random()*1.2+0.3,
+          base: Math.random()*0.4+0.2,
+          tw: Math.random()*0.03+0.008,
           phase: Math.random()*Math.PI*2
+        });
+      }
+      // Bright stars with glow
+      var bright = Math.floor(W*H/20000);
+      for(var i=0;i<bright;i++){
+        stars.push({
+          x: Math.random()*W, y: Math.random()*H,
+          r: Math.random()*1.8+1.2,
+          base: 0.7+Math.random()*0.3,
+          tw: Math.random()*0.04+0.01,
+          phase: Math.random()*Math.PI*2,
+          glow: true,
+          hue: Math.random()
         });
       }
     }
@@ -5741,12 +5764,42 @@ setTimeout(function(){
 
   function draw(){
     sctx.setTransform(DPR,0,0,DPR,0,0);
-    sctx.fillStyle = '#0a0a12';
+    // Deep space gradient
+    var bg = sctx.createLinearGradient(0,0,0,H);
+    bg.addColorStop(0, '#0a0a1a');
+    bg.addColorStop(0.5, '#0d0d22');
+    bg.addColorStop(1, '#080814');
+    sctx.fillStyle = bg;
     sctx.fillRect(0,0,W,H);
+
+    // Nebula glows
+    for(var n=0;n<nebulas.length;n++){
+      var nb = nebulas[n];
+      var g = sctx.createRadialGradient(nb.x,nb.y,0,nb.x,nb.y,nb.r);
+      g.addColorStop(0, nb.color);
+      g.addColorStop(1, 'rgba(0,0,0,0)');
+      sctx.fillStyle = g;
+      sctx.fillRect(nb.x-nb.r, nb.y-nb.r, nb.r*2, nb.r*2);
+    }
+
+    // Stars
     for(var i=0;i<stars.length;i++){
       var s = stars[i];
       s.phase += s.tw;
-      var alpha = s.base + Math.sin(s.phase)*0.3;
+      var alpha = s.base + Math.sin(s.phase)*0.25;
+      if(alpha < 0.05) alpha = 0.05;
+
+      if(s.glow){
+        // Glow
+        var gr = s.r*4;
+        var gg = sctx.createRadialGradient(s.x,s.y,0,s.x,s.y,gr);
+        var col = s.hue < 0.3 ? '200,220,255' : s.hue < 0.6 ? '255,240,200' : '255,255,255';
+        gg.addColorStop(0, 'rgba('+col+','+(alpha*0.5)+')');
+        gg.addColorStop(1, 'rgba('+col+',0)');
+        sctx.fillStyle = gg;
+        sctx.fillRect(s.x-gr, s.y-gr, gr*2, gr*2);
+      }
+
       sctx.beginPath();
       sctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
       sctx.fillStyle = 'rgba(255,255,255,'+alpha+')';
