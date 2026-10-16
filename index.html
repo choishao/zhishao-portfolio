@@ -3419,27 +3419,29 @@ function uploadResume() {
   input.click();
 }
 async function downloadResume() {
+  // 优先使用本地预览（编辑时刚上传未发布的版本）
   try {
     const db = await openResumeDB();
     const tx = db.transaction('resume', 'readonly');
     const req = tx.objectStore('resume').get('resume');
-    req.onsuccess = () => {
-      if (req.result && req.result.data) {
-        const url = URL.createObjectURL(req.result.data);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = req.result.name || 'ZHISHAOCUI_Resume.pdf';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      } else {
-        alert('简历 PDF 即将上线，敬请期待。');
-      }
-    };
-  } catch(err) {
-    alert('简历 PDF 即将上线，敬请期待。');
-  }
+    const local = await new Promise((resolve) => {
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => resolve(null);
+    });
+    if (local && local.data) {
+      const url = URL.createObjectURL(local.data);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = local.name || 'ZHISHAOCUI_Resume.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      return;
+    }
+  } catch(e) {}
+  // 否则直接下载仓库里的静态简历文件
+  window.open('resume.pdf', '_blank');
 }
 
 // ===== Navigation =====
