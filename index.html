@@ -1376,7 +1376,7 @@ body.edit-mode .editable-image-wrap:hover::after { opacity: 1; }
   animation: aboutTextUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1s forwards;
 }
 #view-about.active .drag-stage {
-  animation: aboutTextUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1s forwards;
+  opacity: 1;
 }
 @keyframes aboutTextUp {
   to { opacity: 1; transform: translateY(0); }
@@ -1494,7 +1494,7 @@ body[data-page="about"] .wake-slider { display: block; }
   height: 100vh;
   background: #000;
   overflow: hidden;
-  z-index: 1;
+  z-index: 20;
   display: none;
 }
 .drag-stage.active {
@@ -2478,7 +2478,9 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
       </div>
     </div>
     <div class="about-page" id="aboutPage3" style="background:#000; flex:0 0 100vw; width:100vw;">
-      <div class="drag-stage" id="dragStage"></div>
+      <div class="drag-stage" id="dragStage">
+        <div id="petBottomTitle" style="position:absolute;left:0;bottom:24px;width:100%;text-align:center;font-family:var(--font-display);font-weight:900;font-size:8.5vw;line-height:0.85;letter-spacing:1px;color:#fff;text-transform:uppercase;white-space:nowrap;overflow:hidden;padding:0 5px 0;pointer-events:none;z-index:1;">MY PET</div>
+      </div>
     </div>
     </div>
     <div class="wake-slider" id="wakeSlider">
@@ -3699,11 +3701,11 @@ function showView(path) {
   const stage = document.getElementById('dragStage');
   if (!stage) return;
   const cardData = [
-    { title: '', x: 0.18, y: 0.18, rot: -6 },
-    { title: '', x: 0.42, y: 0.1, rot: 8 },
-    { title: '', x: 0.62, y: 0.25, rot: -4 },
-    { title: '', x: 0.28, y: 0.55, rot: 10 },
-    { title: '', x: 0.55, y: 0.6, rot: -8 },
+    { title: '', x: 0.5, y: 0.46, rot: -6 },
+    { title: '', x: 0.5, y: 0.46, rot: 8 },
+    { title: '', x: 0.5, y: 0.46, rot: -4 },
+    { title: '', x: 0.5, y: 0.46, rot: 10 },
+    { title: '', x: 0.5, y: 0.46, rot: -8 },
   ];
   const cards = [];
   cardData.forEach((d, i) => {
