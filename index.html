@@ -2396,11 +2396,16 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
     <script>
     (function(){
       var el = document.getElementById('homeCiaoTitle');
+      var canvas = document.createElement('canvas');
+      var ctx = canvas.getContext('2d');
       function fit(){
         var target = window.innerWidth - 10;
-        var fs = parseFloat(getComputedStyle(el).fontSize);
+        var fs = 100;
         el.style.fontSize = fs + 'px';
-        var w = el.scrollWidth;
+        var family = getComputedStyle(el).fontFamily;
+        var weight = getComputedStyle(el).fontWeight;
+        ctx.font = weight + ' ' + fs + 'px ' + family;
+        var w = ctx.measureText(el.textContent).width;
         if (w > 0) {
           var newFs = fs * (target / w);
           el.style.fontSize = newFs + 'px';
@@ -2410,7 +2415,7 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
       if (document.fonts && document.fonts.ready) { document.fonts.ready.then(fit); }
       window.addEventListener('load', fit);
       setTimeout(fit, 100);
-      setTimeout(fit, 500);
+      setTimeout(fit, 600);
     })();
     </script>
     <div class="hero-social" style="position:relative;z-index:2;margin-top:0;padding-bottom:10px;">
