@@ -4514,6 +4514,11 @@ async function collectAllImagesBase64() {
       result[k] = v;
       continue;
     }
+    // 已是远程 URL 或 assets/ 相对路径引用（导出到独立文件的图）：直接保留，不重新压缩
+    if (v.indexOf('http') === 0 || v.indexOf('assets/') === 0 || v.indexOf('/') === 0) {
+      result[k] = v;
+      continue;
+    }
     // 非本次新上传的 blob: URL（来自 IndexedDB 加载的旧图）：跳过，不重新压缩
     if (v.indexOf('blob:') === 0 && !dirtyImageKeys.has(k)) {
       continue;
