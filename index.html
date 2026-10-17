@@ -3111,8 +3111,9 @@ function renderWorkDetail(idx) {
   galleryContainer.innerHTML = list.map(function (ent, vi) {
     var keyAttr = ent.key ? ' data-image-wrap="' + ent.key + '"' : '';
     var imgKeyAttr = ent.key ? ' data-image-key="' + ent.key + '"' : '';
+    var lazyAttr = vi === 0 ? '' : ' loading="lazy"';
     var imgTag = '<div class="editable-image-wrap"' + keyAttr + ' style="display:block;">' +
-      '<img src="' + ent.src + '" alt="Image ' + (vi + 1) + '"' + imgKeyAttr +
+      '<img src="' + ent.src + '" alt="Image ' + (vi + 1) + '"' + imgKeyAttr + lazyAttr +
       ' onerror="handleDetailImgError(this,' + vi + ')"></div>';
     var dragAttrs = editMode && vi > 0
       ? ' draggable="true" data-vi="' + vi + '" ondragstart="detailDragStart(event,' + vi + ')" ondragover="detailDragOver(event)" ondragleave="detailDragLeave(event)" ondrop="detailDrop(event,' + vi + ')"'
