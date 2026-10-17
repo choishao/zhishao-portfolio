@@ -3887,6 +3887,8 @@ let editMode = false;
 let unsavedChanges = false;
 let imgCache = {};
 let imgReady = false;
+// 本次会话中用户新上传/替换过的图 key，发布时才重新 base64 化
+const dirtyImageKeys = new Set();
 
 // ===== 图片存储：IndexedDB（支持高像素 + 大量图片，不再压缩画质） =====
 function openImgDB() {
@@ -3906,6 +3908,7 @@ function openImgDB() {
 // 写入单张图片：data 为 File/Blob（原画质）或字符串(dataURL)
 function putImage(key, data) {
   imgCache[key] = (data instanceof Blob) ? URL.createObjectURL(data) : data;
+  dirtyImageKeys.add(key);
   return openImgDB().then(function (db) {
     return new Promise(function (resolve, reject) {
       var tx = db.transaction(IMG_DB_STORE, 'readwrite');
@@ -4496,7 +4499,9 @@ function compressImageToDataURL(blobOrUrl, maxW, quality) {
   });
 }
 
-// 收集所有图片 blob/URL → 压缩 base64
+// 收集图片：只打包"本次新上传/替换"的 blob: URL（压缩成 base64）；
+// 已经是 data: 的（上次 content.json 遗留）直接保留；IndexedDB 加载的旧 blob: URL 跳过，
+// 避免每次发布都把 135 张作品图重新 canvas 压缩导致浏览器卡死。
 async function collectAllImagesBase64() {
   var result = {};
   var keys = Object.keys(imgCache);
@@ -4504,17 +4509,20 @@ async function collectAllImagesBase64() {
     var k = keys[i];
     var v = imgCache[k];
     if (!v) continue;
-    // 已是 dataURL 且是图片，直接存（PDF dataURL 也保留）
+    // 已是 dataURL：直接保留（来自上次发布的 content.json）
     if (v.indexOf('data:') === 0) {
       result[k] = v;
       continue;
     }
-    // blob: URL → fetch → compress
+    // 非本次新上传的 blob: URL（来自 IndexedDB 加载的旧图）：跳过，不重新压缩
+    if (v.indexOf('blob:') === 0 && !dirtyImageKeys.has(k)) {
+      continue;
+    }
+    // 本次新上传的 blob: URL → fetch → compress
     try {
       var resp = await fetch(v);
       var blob = await resp.blob();
       if (blob.type === 'application/pdf') {
-        // PDF 直接转 dataURL（不压缩）
         var dr = new FileReader();
         var dataUrl = await new Promise(function (res) { dr.onload = function() { res(dr.result); }; dr.readAsDataURL(blob); });
         result[k] = dataUrl;
@@ -4648,6 +4656,7 @@ async function publishToGitHub() {
   localStorage.setItem(CONTENT_KEY, JSON.stringify(existing));
   siteContent = existing;
   unsavedChanges = false;
+  dirtyImageKeys.clear();
   updateEditStatus();
   showSaveToast('✓ 已发布到 GitHub，约 1 分钟后线上生效（请强刷 Ctrl+F5 查看）', 'success');
 }
