@@ -2117,6 +2117,9 @@ body.edit-mode .client-slot:hover {
 #editSaveToast.show {
   transform: translateX(-50%) translateY(0);
 }
+#editSaveToast.toast-success { background: #16a34a; font-size: 14px; padding: 14px 28px; }
+#editSaveToast.toast-error { background: #dc2626; font-size: 14px; padding: 14px 28px; }
+#editSaveToast.toast-info { background: #1a1a1a; }
 
 /* ===== Work card delete (edit mode) ===== */
 .work-card { position: relative; }
@@ -4329,11 +4332,17 @@ function pickLocalUpload(key) {
   input.click();
 }
 
-function showSaveToast(msg) {
+function showSaveToast(msg, type) {
   const toast = document.getElementById('editSaveToast');
   toast.textContent = msg || '已保存';
+  toast.classList.remove('toast-info', 'toast-success', 'toast-error');
   toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 2000);
+  if (type === 'success') toast.classList.add('toast-success');
+  else if (type === 'error') toast.classList.add('toast-error');
+  else toast.classList.add('toast-info');
+  var dur = type === 'error' ? 5000 : (type === 'success' ? 4000 : 2000);
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => toast.classList.remove('show'), dur);
 }
 
 function collectTextContent() {
@@ -4525,11 +4534,11 @@ async function publishToGitHub() {
   var token = getGHToken();
   if (!token) {
     var t = prompt('请输入 GitHub Token（仅保存在本浏览器，用于自动发布）:');
-    if (!t) { showSaveToast('未设置 Token'); return; }
+    if (!t) { showSaveToast('未设置 Token，发布已取消', 'error'); return; }
     localStorage.setItem('zhishao_gh_token', t.trim());
     token = t.trim();
   }
-  showSaveToast('正在发布...');
+  showSaveToast('正在发布到 GitHub…', 'info');
   var textData = collectTextContent();
   var existing = getContent();
   for (var key in textData) existing[key] = textData[key];
@@ -4632,7 +4641,7 @@ async function publishToGitHub() {
     });
     if (!updateResp.ok) throw new Error('update: ' + updateResp.status);
   } catch (e) {
-    showSaveToast('发布失败: ' + e.message);
+    showSaveToast('发布失败: ' + e.message + '（请截图反馈）', 'error');
     throw e;
   }
   // 同时保存到本地 localStorage
@@ -4640,7 +4649,7 @@ async function publishToGitHub() {
   siteContent = existing;
   unsavedChanges = false;
   updateEditStatus();
-  showSaveToast('已发布到云端');
+  showSaveToast('✓ 已发布到 GitHub，约 1 分钟后线上生效（请强刷 Ctrl+F5 查看）', 'success');
 }
 
 // 从 GitHub 拉取 content.json
