@@ -4697,30 +4697,30 @@ function applyCloudContent(data) {
 
 document.addEventListener('DOMContentLoaded', () => {
   var cloudImages = null;
-  // 先尝试从 GitHub 拉取云端内容
+  // 先用本地默认内容立即渲染页面，不要等云端 content.json 下载完
+  applyContent();
+  applyImages();
+  const hash = location.hash.replace('#/', '') || 'home';
+  showView(hash);
+  loadImagesFromIDB();
+  loadCustomFonts();
+  loadThumbsFromIDB();
+  fitHeroTitle();
+  initHeroEvilEye();
+  initScrollVelocity();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitHeroTitle);
+  window.addEventListener('resize', fitHeroTitle);
+  if (window.location.search.indexOf('mode=edit') !== -1) {
+    setTimeout(function() { enterEditMode(); }, 150);
+  }
+  initResumeSpecular();
+  // 后台异步拉取云端内容，完成后再覆盖
   fetchContentFromGitHub().then(function (cloud) {
     if (cloud) {
       cloudImages = cloud.images || null;
       applyCloudContent(cloud);
     }
-  }).finally(function () {
-    // 再走本地初始化
-    applyContent();
-    applyImages();
-    const hash = location.hash.replace('#/', '') || 'home';
-    showView(hash);
-    loadImagesFromIDB();
-    loadCustomFonts();
-    loadThumbsFromIDB();
-    fitHeroTitle();
-    initHeroEvilEye();
-    initScrollVelocity();
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitHeroTitle);
-    window.addEventListener('resize', fitHeroTitle);
-    if (window.location.search.indexOf('mode=edit') !== -1) {
-      setTimeout(function() { enterEditMode(); }, 150);
-    }
-    initResumeSpecular();
+  }).catch(function(e){ console.warn('cloud content fetch failed', e); }).finally(function () {
     // IDB 加载完成后，云端图片优先覆盖
     setTimeout(function () {
       if (cloudImages) {
