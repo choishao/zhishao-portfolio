@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -24,7 +24,7 @@
 
 /* ===== CSS Variables ===== */
 :root {
-  --font-cargo: 'ABITE', 'Space Grotesk', sans-serif;
+  --font-cargo: 'ABITE', sans-serif;
   --black: #000000;
   --white: #ffffff;
   --gray: #888888;
@@ -34,7 +34,7 @@
   --off-white: #f5f5f5;
   --crt-green: #33ff66;
   --crt-amber: #ffaa33;
-  --font-display: 'ABITE', 'Impact', sans-serif;
+  --font-display: 'ABITE', sans-serif;
   --font-body: 'PingFang SC', sans-serif;
   --font-display-custom: '';
   --font-body-custom: '';
@@ -2370,7 +2370,16 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
     (function(){
       function showCiaoTitle(){
         var t = document.getElementById('homeCiaoTitle');
-        if(t) t.classList.add('show');
+        if(!t) return;
+        function reveal(){ t.classList.add('show'); }
+        if(document.fonts && document.fonts.ready){
+          Promise.all([
+            document.fonts.load('900 100px "ABITE"'),
+            document.fonts.ready
+          ]).then(reveal).catch(reveal);
+        } else {
+          reveal();
+        }
       }
       function drawHomePortrait(){
         var p = document.querySelector('#homeHeroSvg .polyline');
@@ -2628,7 +2637,7 @@ h1, h2, h3, h4, h5, h6, .hero-title, .display-text, .big-title, .crt-line, .work
       <div class="font-section">
         <div class="font-section-label">英文字体 / English Font (标题展示用)</div>
         <div class="font-current">
-          <span class="font-current-name" id="currentEnFontName">默认: Impact</span>
+          <span class="font-current-name" id="currentEnFontName">默认: ABITE</span>
           <span class="font-current-preview" id="currentEnFontPreview" style="font-family:var(--font-display);">Aa</span>
           <button class="font-reset-btn" onclick="resetFont('en')">恢复默认</button>
         </div>
@@ -5385,9 +5394,9 @@ function resetFont(type) {
     
     var root = document.documentElement;
     if (type === 'en') {
-      root.style.setProperty('--font-display', "'Impact', 'PingFang SC', sans-serif");
+      root.style.setProperty('--font-display', "'ABITE', 'PingFang SC', sans-serif");
       customFonts.en = null;
-      document.getElementById('currentEnFontName').textContent = '默认: Impact';
+      document.getElementById('currentEnFontName').textContent = '默认: ABITE';
       document.getElementById('currentEnFontPreview').style.fontFamily = "var(--font-display)";
     } else {
       root.style.setProperty('--font-body', "'PingFang SC', sans-serif");
@@ -5782,7 +5791,7 @@ setTimeout(function(){
   function getFontSize(W, H){
     // Fit text width to 92% of viewport, also constrain by height
     var testSize = 100;
-    tctx.font = '900 ' + testSize + 'px "Impact", "PingFang SC", sans-serif';
+    tctx.font = '900 ' + testSize + 'px "ABITE", sans-serif';
     var totalW = 0;
     for(var i=0;i<TEXT.length;i++){
       totalW += tctx.measureText(TEXT[i]).width;
@@ -5803,7 +5812,7 @@ setTimeout(function(){
   function measureLetters(W, H){
     letters = [];
     var fontSize = getFontSize(W, H);
-    tctx.font = '900 ' + fontSize + 'px "Impact", "PingFang SC", sans-serif';
+    tctx.font = '900 ' + fontSize + 'px "ABITE", sans-serif';
     tctx.textBaseline = 'middle';
     var widths = [];
     var totalW = 0;
@@ -5839,7 +5848,7 @@ setTimeout(function(){
     var lensY = (mouseY > -999) ? mouseY : autoLensY;
 
     var fontSize = getFontSize(W, H);
-    tctx.font = '900 ' + fontSize + 'px "Impact", "PingFang SC", sans-serif';
+    tctx.font = '900 ' + fontSize + 'px "ABITE", sans-serif';
     tctx.textAlign = 'center';
     tctx.textBaseline = 'middle';
 
