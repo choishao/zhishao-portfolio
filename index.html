@@ -3593,6 +3593,27 @@ function showView(path) {
     }, 200);
   }
   if (path === 'home') setTimeout(fitHeroTitle, 60);
+  if (path === 'home') {
+    setTimeout(function() {
+      var p = document.querySelector('#homeHeroSvg .polyline');
+      var ciao = document.getElementById('homeCiaoTitle');
+      if (p) {
+        try {
+          var len = p.getTotalLength();
+          p.style.transition = 'none';
+          p.style.strokeDasharray = len;
+          p.style.strokeDashoffset = len;
+          p.getBoundingClientRect();
+          p.style.transition = 'stroke-dashoffset 3s cubic-bezier(0.65,0,0.35,1)';
+          p.style.strokeDashoffset = '0';
+        } catch(e){}
+      }
+      if (ciao) {
+        ciao.classList.remove('show');
+        setTimeout(function(){ ciao.classList.add('show'); }, 3100);
+      }
+    }, 100);
+  }
   if (path === 'about') {
     setTimeout(() => {
       const hs = document.getElementById('aboutHScroll');
